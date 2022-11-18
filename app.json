@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "schiavoni",
+    "slug": "schiavoni",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
