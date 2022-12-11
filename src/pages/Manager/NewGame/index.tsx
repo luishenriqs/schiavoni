@@ -30,7 +30,6 @@ export function NewGame({navigation}: {navigation: any}) {
       position,
       points,
       date: format(new Date(), 'dd/MM/yyyy'),
-      createdAt: firestore.FieldValue.serverTimestamp()
     })
     .then(() => {
       Alert.alert('Result added successfully')
