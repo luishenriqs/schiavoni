@@ -1,6 +1,4 @@
-import styled, { css } from "styled-components/native";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
-import { RFPercentage } from "react-native-responsive-fontsize";
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
@@ -9,18 +7,5 @@ export const Container = styled.View`
 `;
 
 export const Content = styled.View`
-  width: 100%;
-  flex-direction: row;
-  height: ${getStatusBarHeight() + RFPercentage(9)}px;
-  align-items: center;
-  justify-content: center;
-  padding: 25px 15px 0;
-`;
-
-export const Title = styled.Text`
-  ${({ theme }) => css`
-    color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.LG};
-    font-family: ${theme.FONT_FAMILY.medium};
-  `};
+  padding: 25px 0;
 `;
