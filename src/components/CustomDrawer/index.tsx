@@ -1,4 +1,5 @@
 import React from 'react';
+import auth from '@react-native-firebase/auth';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { Octicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
@@ -15,6 +16,10 @@ import {
 
 export function CustomDrawer(props: any) {
     const { COLORS } = useTheme();
+
+    function handleLogout() {
+        auth().signOut();
+      }
 
     return (
         <Container>
@@ -47,7 +52,11 @@ export function CustomDrawer(props: any) {
                             size={20}
                             color={COLORS.gray_600}
                         />
-                        <TextButton>Log Out</TextButton>
+                        <TextButton
+                            onPress={handleLogout}
+                        >
+                            Log Out
+                        </TextButton>
                     </ButtonContent>
                 </ButtonBottom>
             </DrawerListContent>

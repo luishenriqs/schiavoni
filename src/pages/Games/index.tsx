@@ -28,7 +28,7 @@ export function Games({navigation}: {navigation: any}) {
   useEffect(() => {
     const subscribe = firestore()
     .collection('game_result')
-    .where('position', '==', 4)
+    .where('season', '==', 2)
     //.limit(2)
     //.orderBy('quantity', 'desc')
     //.startAt(5)

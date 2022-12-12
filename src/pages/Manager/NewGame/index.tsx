@@ -17,6 +17,8 @@ import {
 } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
+  const [season, setSeason] = useState(0)
+  const [game, setGame] = useState(0)
   const [name, setName] = useState('')
   const [position, setPosition] = useState(0)
   const [points, setPoints] = useState(0)
@@ -26,6 +28,8 @@ export function NewGame({navigation}: {navigation: any}) {
     .collection('game_result')
     .doc('Game ' + new Date())
     .set({
+      season,
+      game,
       name,
       position,
       points,
@@ -56,6 +60,16 @@ export function NewGame({navigation}: {navigation: any}) {
         }}
       >
         <Content>
+          <Input 
+            placeholder='Season'
+            keyboardType='numeric'
+            onChangeText={(value) => setSeason(Number(value))}
+          />
+          <Input 
+            placeholder='Game'
+            keyboardType='numeric'
+            onChangeText={(value) => setGame(Number(value))}
+          />
           <Input 
             placeholder='Name'
             autoCorrect={false}
