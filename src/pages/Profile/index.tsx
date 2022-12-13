@@ -1,5 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import storage from '@react-native-firebase/storage'
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
 import { useAuth } from '@hooks/useAuth';
@@ -10,22 +12,27 @@ import {
   Container, 
   Content,
   Update,
-  Title,
   Status,
   Progress,
   Transferred
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
-  const [image, setImage] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  const [profileImageURL, setProfileImageURL] = useState('');
+  const [progressProfileImage, setProgressProfileImage] = useState('0');
+  const [bytesTransferredProfileImage, setBytesTransferredProfileImage] = useState('123 transferred from 521');
+  
   const [avatar, setAvatar] = useState('');
-  const [bytesTransferred, setBytesTransferred] = useState('123 transferred from 521');
-  const [progress, setProgress] = useState('0');
+  const [avatarURL, setAvatarURL] = useState('');
+  const [progressAvatar, setProgressAvatar] = useState('0');
+  const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('123 transferred from 521');
+  
 
   const { user } = useAuth();
   console.log('USER NO PROFILE ', user)
 
-  async function handlePickImage() {
+  async function handlePickProfileImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status == 'granted') {
@@ -35,11 +42,11 @@ export function Profile({navigation}: {navigation: any}) {
         quality: 1,
       });
 
-      // if (!result.canceled) {
-      //   setImage(result.uri);
-      // }
+      if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+      }
     }
-  };
+  }; 
 
   async function handlePickAvatar() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -51,38 +58,59 @@ export function Profile({navigation}: {navigation: any}) {
         quality: 1,
       });
 
-      // if (!result.canceled) {
-      //   setAvatar(result.uri);
-      // }
+      if (!result.canceled) {
+        setAvatar(result.assets[0].uri);
+      }
     }
   };
 
-  // async function handleUpload() {
-  //   const fileName = new Date().getTime();
-  //   const MIME = image.match(/\.(?:.(?!\.))+$/);
-  //   const reference = storage().ref(`/Images/${fileName}${MIME}`);
+  async function handleProfileImageUpload() {
+    const fileName = 'Profile_Image_' + user.name;
+    const MIME = profileImage.match(/\.(?:.(?!\.))+$/);
+    const reference = storage().ref(`/ProfileImage/${fileName}${MIME}`);
 
-  //   const uploadTask = reference.putFile(image);
+    const uploadTask = reference.putFile(profileImage);
 
-  //   uploadTask.on('state_changed', taskSnapshot => {
-  //     const percentage = ((taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100).toFixed(0);
-  //     setProgress(percentage);
+    uploadTask.on('state_changed', taskSnapshot => {
+      const percentage = ((taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100).toFixed(0);
+      setProgressProfileImage(percentage);
       
-  //     setBytesTransferred(`${taskSnapshot.bytesTransferred} transferido de ${taskSnapshot.totalBytes}`);
-  //   });
-  //   uploadTask.then(async () => {
-  //     const url = await reference.getDownloadURL();
-  //     setImageURL(url);
-  //     Alert.alert('Upload sent successfully');
-  //   });
-  //   uploadTask.catch(error => console.error(error));
-  // };
+      setBytesTransferredProfileImage(`${taskSnapshot.bytesTransferred} transferido de ${taskSnapshot.totalBytes}`);
+    });
+    uploadTask.then(async () => {
+      const url = await reference.getDownloadURL();
+      setProfileImageURL(url);
+      Alert.alert('Imagem de perfil atualizada com sucesso!');
+    });
+    uploadTask.catch(error => console.error(error));
+  };
+  
+  async function handleProfileAvatarUpload() {
+    const fileName = 'Avatar_' + user.name;
+    const MIME = avatar.match(/\.(?:.(?!\.))+$/);
+    const reference = storage().ref(`/Avatar/${fileName}${MIME}`);
+
+    const uploadTask = reference.putFile(avatar);
+
+    uploadTask.on('state_changed', taskSnapshot => {
+      const percentage = ((taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100).toFixed(0);
+      setProgressAvatar(percentage);
+      
+      setBytesTransferredAvatar(`${taskSnapshot.bytesTransferred} transferido de ${taskSnapshot.totalBytes}`);
+    });
+    uploadTask.then(async () => {
+      const url = await reference.getDownloadURL();
+      setAvatarURL(url);
+      Alert.alert('Avatar atualizado com sucesso!');
+    });
+    uploadTask.catch(error => console.error(error));
+  };
 
   return (
     <Container>
       <Header
-        title='Profile'
-        text='Diego Souza'
+        picture='uri do player'
+        title={user.name}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
@@ -92,39 +120,40 @@ export function Profile({navigation}: {navigation: any}) {
       <Content>
         <Update>
           <Photo 
-            uri={image} 
-            onPress={handlePickImage}
-            text='Select a new profile picture'
+            uri={profileImage} 
+            onPress={handlePickProfileImage}
+            text='Selecione sua imagem de perfil'
             size={120}
           />
           <ButtonEditable
-            title="Update your profile picture"
-            onPress={() => console.log('handleUpload')}
+            title="Atualize sua imagem de perfil"
+            onPress={handleProfileImageUpload}
             width={120}
             length={120}
           />
         </Update>
         <Status>
-          <Progress>{progress}%</Progress>
-          <Transferred>'{bytesTransferred}'</Transferred>
+          <Progress>{progressProfileImage}%</Progress>
+          <Transferred>'{bytesTransferredProfileImage}'</Transferred>
         </Status>
+
         <Update>
           <Photo 
             uri={avatar} 
             onPress={handlePickAvatar} 
-            text='Select a new avatar'
+            text='Selecione o seu avatar'
             size={120}
           />
           <ButtonEditable
-            title="Update your avatar"
-            onPress={() => console.log('handleUpload')}
+            title="Atualize seu avatar"
+            onPress={handleProfileAvatarUpload}
             width={120}
             length={120}
           />
         </Update>
         <Status>
-          <Progress>{progress}%</Progress>
-          <Transferred>'{bytesTransferred}'</Transferred>
+          <Progress>{progressAvatar}%</Progress>
+          <Transferred>'{bytesTransferredAvatar}'</Transferred>
         </Status>
       </Content>
     </Container>

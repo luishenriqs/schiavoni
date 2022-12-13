@@ -15,16 +15,11 @@ export type GamesProps = {
   name: string;
   points: number;
   position: number;
-}
-
-type Props = {
-  data: GamesProps;
-}
+};
 
 export function Games({navigation}: {navigation: any}) {
   const [games, setGames] = useState<GamesProps[]>([]);
 
-  // Estratégia de leitura "Real Time"
   useEffect(() => {
     const subscribe = firestore()
     .collection('game_result')

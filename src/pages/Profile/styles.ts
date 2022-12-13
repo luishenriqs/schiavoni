@@ -14,14 +14,6 @@ export const Content = styled.View`
   margin-right: 20px;
 `;
 
-export const Title = styled.Text`
-  ${({ theme }) => css`
-    color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.LG};
-    font-family: ${theme.FONT_FAMILY.medium};
-  `};
-`;
-
 export const Update = styled.View`
   flex-direction: row;
   align-items: center;

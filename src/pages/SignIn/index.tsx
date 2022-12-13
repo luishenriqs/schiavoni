@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     KeyboardAvoidingView, 
     TouchableOpacityProps,
@@ -6,6 +6,7 @@ import {
     Alert
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore'
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,20 +27,49 @@ import {
 
 type Props = TouchableOpacityProps;
 
+export type PlayersProps = {
+  id: string;
+  avatar: string;
+  email: string;
+  isAdmin: boolean;
+  name: string;
+  profile: string;
+};
+
 export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [avatar, setAvatar] = useState('');
-  const [profile, setProfile] = useState('');
+  const [players, setPlayers] = useState<PlayersProps[]>([]);
 
   const { signIn } = useAuth();
 
+  useEffect(() => {
+    const subscribe = firestore()
+    .collection('players')
+    .where('email', '==', email)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            id: doc.id,
+          ...doc.data()
+          }
+        }) as PlayersProps[]
+        setPlayers(data)
+      },
+    }) 
+    return () => subscribe()
+  }, [email])
+
   function setContext(user: any) {
     const id = user.uid
+    const name = players[0].name
     const email = user.email
+    const isAdmin = players[0].isAdmin
+    const avatar = players[0].avatar
+    const profile = players[0].profile
 
     signIn(
       id,
@@ -51,7 +81,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     )
   };
   
-
   function handleSignInWithEmailAndPassword() {
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')

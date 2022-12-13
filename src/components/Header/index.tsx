@@ -3,13 +3,16 @@ import {
   Container, 
   HeaderWrapper, 
   HeaderContent,
+  IconContainer,
   Icon, 
   Title, 
-  AdditionalText, 
+  AdditionalText,
+  Image,
   Empty
 } from './styles';
 
 interface HeaderProps {
+  picture?: string;
   title: string;
   text?: string;
   headerSize: 'big' | 'small';
@@ -17,6 +20,7 @@ interface HeaderProps {
 }
 
 export function Header({
+  picture,
   title, 
   text, 
   headerSize, 
@@ -26,9 +30,14 @@ export function Header({
     <Container>
       <HeaderWrapper headerSize={headerSize}>
         <HeaderContent>
-          <Empty/>
+          {picture
+          ? <Image source={{uri: 'https://avatars.githubusercontent.com/u/63956850?v=4'}}/>
+          : <Empty/>
+        }
           <Title>{title}</Title>
-          <Icon size={30} name="menu" onPress={onPress} />
+          <IconContainer>
+            <Icon size={30} name="menu" onPress={onPress} />
+          </IconContainer>
         </HeaderContent>
 
         {text && (

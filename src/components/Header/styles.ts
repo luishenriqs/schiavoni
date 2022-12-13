@@ -30,12 +30,7 @@ export const HeaderContent = styled.View`
   height: ${getStatusBarHeight() + RFPercentage(9)}px;
   align-items: center;
   justify-content: space-between;
-  padding: 25px 15px 0;
-`;
-
-export const Icon = styled(MaterialCommunityIcons)`
-  color: ${({ theme }) => theme.COLORS.gray_100};
-  padding-bottom: 5px;
+  padding: 35px 15px 0;
 `;
 
 export const Title = styled.Text`
@@ -55,7 +50,26 @@ export const AdditionalText = styled.Text`
   margin-bottom: 15px;
 `;
 
+export const IconContainer = styled.View`
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Icon = styled(MaterialCommunityIcons)`
+  color: ${({ theme }) => theme.COLORS.gray_100};
+  padding-bottom: 5px;
+`;
+
 export const Empty = styled.View`
   width: 28px;
   height: 35px;
+`;
+
+export const Image = styled.Image`
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
 `;
