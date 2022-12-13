@@ -9,6 +9,7 @@ import auth from '@react-native-firebase/auth';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useAuth } from '@hooks/useAuth';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
@@ -30,13 +31,30 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const { signIn } = useAuth();
+
+    /* ####################### DADOS DO USUÁRIO ####################### */
+    /* ####################### DADOS DO USUÁRIO ####################### */
+    /* ####################### DADOS DO USUÁRIO ####################### */
+    const id = '1'
+    const name = 'Sorahia'
+    const avatar = 'Avatar_Sorahia'
+    const profile = 'Profile_Sorahia'
+    /* ################################################################ */
+
   function handleSignInWithEmailAndPassword() {
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
     } else {
       auth()
         .signInWithEmailAndPassword(email, password)
-        .then(({ user }) => console.log(user))
+        .then(({ user }) => signIn(
+          id,
+          name,
+          email,
+          avatar,
+          profile
+        ))
         .catch((error) => {
           console.error(error)
           if (error.code === 'auth/user-not-found') {

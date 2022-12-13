@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import React, { useState, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
+import { useAuth } from '@hooks/useAuth';
 import { ButtonEditable } from '@components/ButtonEditable';
 import { PsopImage } from '@components/PsopImage';
 import PSOPLogo from '@assets/psop/PSOPLogo.svg';
@@ -22,6 +22,9 @@ export function Profile({navigation}: {navigation: any}) {
   const [bytesTransferred, setBytesTransferred] = useState('123 transferred from 521');
   const [progress, setProgress] = useState('0');
 
+  const { user } = useAuth();
+  console.log('USER NO PROFILE ', user)
+
   async function handlePickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -32,9 +35,9 @@ export function Profile({navigation}: {navigation: any}) {
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
+      // if (!result.canceled) {
+      //   setImage(result.uri);
+      // }
     }
   };
 
@@ -48,9 +51,9 @@ export function Profile({navigation}: {navigation: any}) {
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setAvatar(result.uri);
-      }
+      // if (!result.canceled) {
+      //   setAvatar(result.uri);
+      // }
     }
   };
 

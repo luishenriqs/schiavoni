@@ -19,7 +19,7 @@ export function CustomDrawer(props: any) {
 
     function handleLogout() {
         auth().signOut();
-      }
+    }
 
     return (
         <Container>
@@ -45,18 +45,14 @@ export function CustomDrawer(props: any) {
                         <TextButton>Terms of use</TextButton>
                     </ButtonContent>
                 </ButtonBottom>
-                <ButtonBottom onPress={() => {console.log('LogOut')}}>
+                <ButtonBottom onPress={handleLogout}>
                     <ButtonContent>
                         <Octicons 
                             name='sign-out'
                             size={20}
                             color={COLORS.gray_600}
                         />
-                        <TextButton
-                            onPress={handleLogout}
-                        >
-                            Log Out
-                        </TextButton>
+                        <TextButton>Log Out</TextButton>
                     </ButtonContent>
                 </ButtonBottom>
             </DrawerListContent>

@@ -28,7 +28,7 @@ export function AddGallery({navigation}: {navigation: any}) {
         quality: 1,
       });
 
-      if (!result.cancelled) {
+      if (!result.canceled) {
         setImage(result.uri);
       }
     }

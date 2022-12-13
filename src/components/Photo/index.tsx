@@ -1,6 +1,5 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
-
 import { Container, EmptyPhotoContainer, Image, EmptyPhotoText } from './styles';
 
 type Props = TouchableOpacityProps & {

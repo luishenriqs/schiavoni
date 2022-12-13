@@ -9,19 +9,18 @@ type User = {
 }
 
 export function Routes() {
-  const [user, setUser] = useState<User | null>(null);
+  const [authUser, setAuthUser] = useState<User | null>(null);
 
   useEffect(() => {
     const subscribe = auth().onAuthStateChanged(userInfo => {
-      console.log('USER AUTH ', userInfo);
-      setUser(userInfo);
+      setAuthUser(userInfo);
     });
 
     return subscribe;
   }, [])
   return(
       <NavigationContainer>
-          {user ? <AppRoutes /> : <AuthRoutes />}
+          {authUser ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
   )
 }
