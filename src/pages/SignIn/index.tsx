@@ -27,20 +27,30 @@ import {
 type Props = TouchableOpacityProps;
 
 export function SignIn({navigation}: {navigation: any}, { }: Props) {
-    const theme = useTheme();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const theme = useTheme();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [avatar, setAvatar] = useState('');
+  const [profile, setProfile] = useState('');
 
-    const { signIn } = useAuth();
+  const { signIn } = useAuth();
 
-    /* ####################### DADOS DO USUÁRIO ####################### */
-    /* ####################### DADOS DO USUÁRIO ####################### */
-    /* ####################### DADOS DO USUÁRIO ####################### */
-    const id = '1'
-    const name = 'Sorahia'
-    const avatar = 'Avatar_Sorahia'
-    const profile = 'Profile_Sorahia'
-    /* ################################################################ */
+  function setContext(user: any) {
+    const id = user.uid
+    const email = user.email
+
+    signIn(
+      id,
+      name,
+      email,
+      isAdmin,
+      avatar,
+      profile
+    )
+  };
+  
 
   function handleSignInWithEmailAndPassword() {
     if (!email || !email) {
@@ -48,13 +58,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     } else {
       auth()
         .signInWithEmailAndPassword(email, password)
-        .then(({ user }) => signIn(
-          id,
-          name,
-          email,
-          avatar,
-          profile
-        ))
+        .then(({ user }) => setContext(user))
         .catch((error) => {
           console.error(error)
           if (error.code === 'auth/user-not-found') {

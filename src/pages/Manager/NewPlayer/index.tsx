@@ -5,6 +5,7 @@ import {
   Alert
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore'
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import PSOPLogo from '@assets/psop/PSOPLogo.svg';
@@ -17,38 +18,59 @@ import {
 } from './styles';
 
 export function NewPlayer({navigation}: {navigation: any}) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isActive, setIsActive] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   function handleSelectAdmin() {
-    isActive ? setIsActive(false) : setIsActive(true);
-  }
+    isAdmin ? setIsAdmin(false) : setIsAdmin(true);
+  };
+
+  function createNewPlayer(
+    name: string,
+    email: string, 
+    password: string,
+    isAdmin: boolean
+  ) {
+    firestore()
+    .collection('players')
+    .doc(email + '-' + new Date())
+    .set({
+      name,
+      email,
+      isAdmin,
+      avatar: '',
+      profile: ''
+    })
+    .catch((error) => console.error(error))
+
+    auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(() => { Alert.alert('Novo player criado com sucesso!') })
+    .catch(erro => {
+      console.error(erro.code)
+      if (erro.code === 'auth/email-already-in-use') {
+        return Alert.alert('Esse email já existe em nosso sistema!');
+      };
+
+      if (erro.code === 'auth/invalid-email') {
+        return Alert.alert('Email inválido!');
+      };
+
+      if (erro.code === 'auth/weak-password') {
+        return Alert.alert('Senha deve ter no mínimo 6 dígitos');
+      };
+    });
+  };
 
   function handleCreateUserAccount() {
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
     } else {
-      auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => { Alert.alert('Novo player criado com sucesso!') })
-        .catch(erro => {
-          console.error(erro.code)
-          if (erro.code === 'auth/email-already-in-use') {
-            return Alert.alert('Esse email já existe em nosso sistema!');
-          };
-  
-          if (erro.code === 'auth/invalid-email') {
-            return Alert.alert('Email inválido!');
-          };
-  
-          if (erro.code === 'auth/weak-password') {
-            return Alert.alert('Senha deve ter no mínimo 6 dígitos');
-          };
-        });
+      createNewPlayer(name, email, password, isAdmin)
     }
   };
-
 
   return (
     <Container>
@@ -69,11 +91,11 @@ export function NewPlayer({navigation}: {navigation: any}) {
         }}
       >
         <Content>
-          {/* <Input 
+          <Input 
             placeholder='Name'
             autoCorrect={false}
-            autoCapitalize='none'
-          /> */}
+            onChangeText={(value) => setName(value)}
+          />
           <Input 
             placeholder='Email'
             keyboardType='email-address'
@@ -86,18 +108,17 @@ export function NewPlayer({navigation}: {navigation: any}) {
             secureTextEntry
             onChangeText={(value) => setPassword(value)}
           />
-          {/* <ButtonRadio 
+          <ButtonRadio 
             title='Admin'
-            type={isActive}
+            type={isAdmin}
             onPress={handleSelectAdmin}
-          /> */}
+          />
           <Button 
             title='Add New Player'
             onPress={handleCreateUserAccount}
           />
         </Content>
       </KeyboardAvoidingView>
-
     </Container>
   );
 };

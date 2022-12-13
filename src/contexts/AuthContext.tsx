@@ -8,6 +8,7 @@ export type AuthContextDataProps = {
       id: string,
       name: string,
       email: string,
+      isAdmin: boolean,
       avatar: string,
       profile: string
     ) => void;
@@ -24,6 +25,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     id: '',
     name: '',
     email: '',
+    isAdmin: false,
     avatar: '',
     profile: ''
   })
@@ -32,6 +34,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     id: string,
     name: string,
     email: string,
+    isAdmin: boolean,
     avatar: string,
     profile: string
     ) {
@@ -39,6 +42,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       id,
       name,
       email,
+      isAdmin,
       avatar,
       profile,
     })
