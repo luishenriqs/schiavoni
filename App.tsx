@@ -2,8 +2,9 @@ import 'react-native-gesture-handler';
 /* Necessária a instalação para android: ==> yarn add intl */
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import { Routes } from '@routes/index.routes';
 import { Loading } from '@components/Loading';
 import { AuthContextProvider } from '@contexts/AuthContext';
@@ -18,6 +19,10 @@ export default function App() {
     Roboto_500Medium,
     Roboto_700Bold
   });
+
+  useEffect(() => {
+    auth().signOut();
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
