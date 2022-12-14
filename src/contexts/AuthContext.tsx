@@ -4,14 +4,7 @@ import { UserDTO } from '@dtos/userDTO'
 
 export type AuthContextDataProps = {
     user: UserDTO;
-    signIn: (
-      id: string,
-      name: string,
-      email: string,
-      isAdmin: boolean,
-      avatar: string,
-      profile: string
-    ) => void;
+    setUserContext: (userData: UserDTO) => void;
 };
 
 type AuthContextProviderProps = {
@@ -22,6 +15,7 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState({
+    doc_id: '',
     id: '',
     name: '',
     email: '',
@@ -30,26 +24,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     profile: ''
   })
 
-  function signIn(
-    id: string,
-    name: string,
-    email: string,
-    isAdmin: boolean,
-    avatar: string,
-    profile: string
-    ) {
-    setUser({
-      id,
-      name,
-      email,
-      isAdmin,
-      avatar,
-      profile,
-    })
+  function setUserContext(userData: UserDTO) {
+    setUser(userData)
   }
   
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
+    <AuthContext.Provider value={{ user, setUserContext }}>
         {children}
       </AuthContext.Provider>
   )

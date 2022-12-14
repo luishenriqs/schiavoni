@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,6 +16,7 @@ import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
+import { UserDTO } from '@dtos/userDTO'
 import {
     Container,
     Header,
@@ -27,23 +29,16 @@ import {
 
 type Props = TouchableOpacityProps;
 
-export type PlayersProps = {
-  id: string;
-  avatar: string;
-  email: string;
-  isAdmin: boolean;
-  name: string;
-  profile: string;
-};
-
 export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [players, setPlayers] = useState<PlayersProps[]>([]);
+  const [players, setPlayers] = useState<UserDTO[]>([]);
 
-  const { signIn } = useAuth();
+  const { setUserContext } = useAuth();
 
+  // RECUPERA DADOS DO CURRENT USER
+  // ???????????????????????????? PODE HAVER EXTRATÉGIA MELHOR...
   useEffect(() => {
     const subscribe = firestore()
     .collection('players')
@@ -56,29 +51,37 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
             id: doc.id,
           ...doc.data()
           }
-        }) as PlayersProps[]
+        }) as UserDTO[]
         setPlayers(data)
       },
     }) 
     return () => subscribe()
-  }, [email])
+  }, [email]);
 
-  function setContext(user: any) {
-    const id = user.uid
-    const name = players[0].name
-    const email = user.email
-    const isAdmin = players[0].isAdmin
-    const avatar = players[0].avatar
-    const profile = players[0].profile
+  // PERSISTINDO DADOS DO USUÁRIO NO ASYNC STORAGE
+  const dataKey = `@storage_Schiavoni:playerData:${email}`;
+  const setAsyncStorageData = async (userData: UserDTO) => {
+    try {
+      await AsyncStorage.setItem(dataKey, JSON.stringify(userData));
+    } catch (e) {
+      Alert.alert('Houve um erro ao persistir os dados do player!');
+      console.error(e);
+    };
+  };
 
-    signIn(
-      id,
-      name,
-      email,
-      isAdmin,
-      avatar,
-      profile
-    )
+  function persistUserData(user: any) {
+    const userData = {
+      doc_id: players[0].id,
+      id: user.uid,
+      name: players[0].name,
+      email: user.email,
+      isAdmin: players[0].isAdmin,
+      avatar: players[0].avatar,
+      profile: players[0].profile,
+    };
+
+    setUserContext(userData); // CONTEXTO
+    setAsyncStorageData(userData); // ASYNC STORAGE
   };
   
   function handleSignInWithEmailAndPassword() {
@@ -87,7 +90,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     } else {
       auth()
         .signInWithEmailAndPassword(email, password)
-        .then(({ user }) => setContext(user))
+        .then(({ user }) => persistUserData(user))
         .catch((error) => {
           console.error(error)
           if (error.code === 'auth/user-not-found') {

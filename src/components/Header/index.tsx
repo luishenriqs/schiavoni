@@ -31,7 +31,7 @@ export function Header({
       <HeaderWrapper headerSize={headerSize}>
         <HeaderContent>
           {picture
-          ? <Image source={{uri: 'https://avatars.githubusercontent.com/u/63956850?v=4'}}/>
+          ? <Image source={{uri: picture}}/>
           : <Empty/>
         }
           <Title>{title}</Title>

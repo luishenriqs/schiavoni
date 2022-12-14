@@ -20,9 +20,9 @@ export default function App() {
     Roboto_700Bold
   });
 
-  useEffect(() => {
-    auth().signOut();
-  },[])
+  // useEffect(() => {
+  //   auth().signOut();
+  // },[])
 
   return (
     <ThemeProvider theme={theme}>

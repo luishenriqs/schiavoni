@@ -1,4 +1,5 @@
 export type UserDTO = {
+  doc_id: string;
   id: string;
   name: string;
   email: string;

@@ -15,7 +15,7 @@ import {
 
 export function AddGallery({navigation}: {navigation: any}) {
   const [image, setImage] = useState('');
-  const [bytesTransferred, setBytesTransferred] = useState('123 transferred from 521');
+  const [bytesTransferred, setBytesTransferred] = useState('0 transferido de 0');
   const [progress, setProgress] = useState('0');
 
   async function handlePickImage() {
@@ -29,7 +29,7 @@ export function AddGallery({navigation}: {navigation: any}) {
       });
 
       if (!result.canceled) {
-        setImage(result.uri);
+        setImage(result.assets[0].uri);
       }
     }
   };
