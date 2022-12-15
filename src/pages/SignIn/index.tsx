@@ -31,14 +31,14 @@ type Props = TouchableOpacityProps;
 
 export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
+  const { setUserContext } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [players, setPlayers] = useState<UserDTO[]>([]);
 
-  const { setUserContext } = useAuth();
-
   // RECUPERA DADOS DO CURRENT USER
-  // ???????????????????????????? PODE HAVER EXTRATÉGIA MELHOR...
+  // ???????????????????????????? PODE HAVER EXTRATÉGIA MELHOR...Async Storage?
   useEffect(() => {
     const subscribe = firestore()
     .collection('players')

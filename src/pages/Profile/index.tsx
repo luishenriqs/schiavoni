@@ -125,7 +125,7 @@ export function Profile({navigation}: {navigation: any}) {
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
         setProfileImageURL(url);
-        Alert.alert('Imagem de perfil atualizada com sucesso!');
+        Alert.alert('Sucesso! Faça um novo login para carregar a alteração.');
       });
       uploadTask.catch(error => console.error(error));
     } else {
@@ -150,7 +150,7 @@ export function Profile({navigation}: {navigation: any}) {
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
         setAvatarURL(url);
-        Alert.alert('Avatar atualizado com sucesso!');
+        Alert.alert('Sucesso! Faça um novo login para carregar a alteração.');
       });
       uploadTask.catch(error => console.error(error));
     } else {

@@ -64,8 +64,8 @@ export const Icon = styled(MaterialCommunityIcons)`
 `;
 
 export const Empty = styled.View`
-  width: 28px;
-  height: 35px;
+  width: 60px;
+  height: 60px;
 `;
 
 export const Image = styled.Image`
