@@ -1,5 +1,6 @@
 import React from "react";
 import { FlatList, KeyboardAvoidingView } from "react-native";
+import { useAuth } from '@hooks/useAuth';
 import { SvgProps } from 'react-native-svg';
 import { Header } from '@components/Header';
 import { LeaderCard } from '@components/LeaderCard';
@@ -17,11 +18,7 @@ import TeamRoger from '@assets/teams/teamRoger.svg';
 import TeamLeandro from '@assets/teams/teamLeandro.svg';
 import TeamMarcio from '@assets/psop/PSOPLogo.svg';
 import TeamEdnelson from '@assets/psop/PSOPLogo.svg';
-import {
-  Container, 
-  Content, 
-  LabelContainer,
-} from './styles';
+import { Container, Content } from './styles';
 
 interface IRankingProps {
   id: string,
@@ -29,17 +26,6 @@ interface IRankingProps {
   name: string;
   points: number;
   img: React.FC<SvgProps>;
-};
-
-enum Game {
-  'Após a primeira etapa' = 1,
-  'Após a segunda etapa' = 2,
-  'Após a terceira etapa' = 3,
-  'Após a quarta etapa' = 4,
-  'Após a quinta etapa' = 5,
-  'Após a sexta etapa' = 6,
-  'Após a sétima etapa' = 7,
-  'Após a oitava etapa' = 9,
 };
 
 enum WeeksLead {
@@ -140,7 +126,7 @@ const ranking = {
 // ****************************
 
 export function PSOP({navigation}: {navigation: any}) {
-
+  const { user } = useAuth();
 /* ****************** [ORDERING RANKING LIST] *********************** */
   // First: ordering the values;
   const disordered:number[] = [];
@@ -180,7 +166,7 @@ export function PSOP({navigation}: {navigation: any}) {
         <Header
           title='PSOP'
           text='Patos Series Of Poker'
-          // text={Game[ranking.game]}
+          picture={user.profile}
           headerSize={'big'}
           onPress={() => navigation.openDrawer()}
         />
@@ -208,6 +194,5 @@ export function PSOP({navigation}: {navigation: any}) {
         </Content>
       </Container>
     </KeyboardAvoidingView>
-
   );
 };

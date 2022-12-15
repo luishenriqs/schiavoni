@@ -1,5 +1,6 @@
 import React from "react";
 import { FlatList, KeyboardAvoidingView } from "react-native";
+import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { CardPlayers } from "@components/CardPlayers";
 import { LabelPlayers } from "@components/LabelPlayers";
@@ -97,6 +98,8 @@ const playersInfo = {
 // ****************************
 
 export function Players({navigation}: {navigation: any}) {
+  const { user } = useAuth();
+  
   return (
     <KeyboardAvoidingView style={{flex: 1}} enabled>
 
@@ -104,6 +107,7 @@ export function Players({navigation}: {navigation: any}) {
       <Header
         title='Players'
         text={'Temporada ' + season}
+        picture={user.profile}
         headerSize={'small'}
         onPress={() => navigation.openDrawer()}
       />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore'
+import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import PSOPLogo from '@assets/psop/PSOPLogo.svg';
@@ -18,6 +19,8 @@ export type GamesProps = {
 };
 
 export function Games({navigation}: {navigation: any}) {
+  const { user } = useAuth();
+  
   const [games, setGames] = useState<GamesProps[]>([]);
 
   useEffect(() => {
@@ -52,6 +55,7 @@ export function Games({navigation}: {navigation: any}) {
       <Header
         title='Games'
         text='Temporada 27'
+        picture={user.profile}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />

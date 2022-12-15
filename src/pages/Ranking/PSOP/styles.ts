@@ -17,12 +17,3 @@ export const Content = styled.View`
   justify-content: center;
   padding: 25px 8px 0;
 `;
-
-export const LabelContainer = styled.View`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 5px;
-  margin: 0 25px;
-`;

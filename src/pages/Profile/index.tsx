@@ -8,8 +8,6 @@ import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
 import { useAuth } from '@hooks/useAuth';
 import { ButtonEditable } from '@components/ButtonEditable';
-import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
 import {
   Container,
   ImageContainer,
