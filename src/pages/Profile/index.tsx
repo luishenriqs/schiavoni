@@ -11,7 +11,7 @@ import { ButtonEditable } from '@components/ButtonEditable';
 import {
   Container,
   ImageContainer,
-  Avatar, 
+  ImageProfileAndAvatar, 
   Content,
   Update,
   Status,
@@ -40,6 +40,8 @@ export function Profile({navigation}: {navigation: any}) {
   const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('0 transferido de 0');
   
   const [modalVisible, setModalVisible] = useState(false);
+
+  const anonymousURL = 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=f3f5e53d-372a-43b4-a0b7-7a7db5462576';
 
   useEffect(() => {
     updateURLs()
@@ -160,8 +162,14 @@ export function Profile({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <ImageContainer>
-        <Avatar source={{uri: user.profile}}/>
-        <Avatar source={{uri: user.avatar}}/>
+        {user.profile 
+          ? <ImageProfileAndAvatar source={{uri: user.profile}}/>
+          : <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+        }
+        {user.avatar 
+          ? <ImageProfileAndAvatar source={{uri: user.avatar}}/>
+          : <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+        }
       </ImageContainer>
       <Content>
         <Update>

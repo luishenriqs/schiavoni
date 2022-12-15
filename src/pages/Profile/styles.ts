@@ -13,7 +13,7 @@ export const ImageContainer = styled.View`
   align-self: center;
 `;
 
-export const Avatar = styled.Image`
+export const ImageProfileAndAvatar = styled.Image`
   width: ${RFValue(130)}px;
   height: ${RFValue(130)}px;
   margin: -65px 10px 0;
