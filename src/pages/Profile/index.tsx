@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Modal } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import * as ImagePicker from 'expo-image-picker';
 import storage from '@react-native-firebase/storage'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
 import { useAuth } from '@hooks/useAuth';
 import { ButtonEditable } from '@components/ButtonEditable';
 import { PsopImage } from '@components/PsopImage';
 import PSOPLogo from '@assets/psop/PSOPLogo.svg';
-import { UserDTO } from '@dtos/userDTO'
 import {
-  Container, 
+  Container,
+  ImageContainer,
+  Avatar, 
   Content,
   Update,
   Status,
   Progress,
-  Transferred
+  Transferred,
+  ModalContainer,
+  ModalView,
+  ModalText,
+  ModalButtonContainer,
+  ModalButtonLogin,
+  ModalButtonCancel,
+  ModalButtonText
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
   const { user } = useAuth();
-  const [userData, setUserData] = useState<UserDTO>({} as UserDTO);
 
   const [profileImage, setProfileImage] = useState('');
   const [profileImageURL, setProfileImageURL] = useState('');
@@ -34,23 +41,7 @@ export function Profile({navigation}: {navigation: any}) {
   const [progressAvatar, setProgressAvatar] = useState('0');
   const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('0 transferido de 0');
   
-  // RECUPERANDO DADOS DO USUÁRIO NO ASYNC STORAGE
-  const dataKey = `@storage_Schiavoni:playerData:${user.email}`;
-  const getAsyncStorageData  = async () => {
-    try {
-      const value = await AsyncStorage.getItem(dataKey)
-      if(value !== null) {
-        setUserData(JSON.parse(value))
-      }
-    } catch (e) {
-      Alert.alert('Houve um erro na recuperação dos dados do player!');
-      console.error(e);
-    };
-  };
-
-  useEffect(() => {
-    getAsyncStorageData()
-  },[])
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     updateURLs()
@@ -125,7 +116,7 @@ export function Profile({navigation}: {navigation: any}) {
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
         setProfileImageURL(url);
-        Alert.alert('Sucesso! Faça um novo login para carregar a alteração.');
+        setModalVisible(true);
       });
       uploadTask.catch(error => console.error(error));
     } else {
@@ -150,7 +141,7 @@ export function Profile({navigation}: {navigation: any}) {
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
         setAvatarURL(url);
-        Alert.alert('Sucesso! Faça um novo login para carregar a alteração.');
+        setModalVisible(true);
       });
       uploadTask.catch(error => console.error(error));
     } else {
@@ -158,17 +149,22 @@ export function Profile({navigation}: {navigation: any}) {
     };
   };
 
+  function handleNewLogin() {
+    auth().signOut();
+    setModalVisible(!modalVisible)
+  };
+
   return (
     <Container>
       <Header
-        picture={userData.profile}
-        title={userData.name}
+        title={user.name}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <ImageContainer>
+        <Avatar source={{uri: user.profile}}/>
+        <Avatar source={{uri: user.avatar}}/>
+      </ImageContainer>
       <Content>
         <Update>
           <Photo 
@@ -208,6 +204,35 @@ export function Profile({navigation}: {navigation: any}) {
           <Transferred>'{bytesTransferredAvatar}'</Transferred>
         </Status>
       </Content>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <ModalContainer>
+          <ModalView>
+            <ModalText>Sucesso!</ModalText>
+            <ModalText>Faça um novo login para carregar a alteração!</ModalText>
+            <ModalButtonContainer>            
+              <ModalButtonLogin
+                onPress={handleNewLogin}
+              >
+                <ModalButtonText>Fazer login</ModalButtonText>
+              </ModalButtonLogin>
+              <ModalButtonCancel
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <ModalButtonText>Cancelar</ModalButtonText>
+              </ModalButtonCancel>
+            </ModalButtonContainer>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
     </Container>
   );
 };

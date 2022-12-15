@@ -36,8 +36,8 @@ export const HeaderContent = styled.View`
 export const Title = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
-    font-family: ${theme.FONT_FAMILY.medium};
+    font-size: ${theme.FONT_SIZE.XXL};
+    font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
 

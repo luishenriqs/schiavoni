@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -37,9 +37,12 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const [password, setPassword] = useState('');
   const [players, setPlayers] = useState<UserDTO[]>([]);
 
-  // RECUPERA DADOS DO CURRENT USER
-  // ???????????????????????????? PODE HAVER EXTRATÉGIA MELHOR...Async Storage?
   useEffect(() => {
+    findUser();
+  }, [email]);
+
+  // RECUPERA DADOS DO CURRENT USER
+  const findUser = () => {
     const subscribe = firestore()
     .collection('players')
     .where('email', '==', email)
@@ -56,19 +59,32 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       },
     }) 
     return () => subscribe()
-  }, [email]);
-
-  // PERSISTINDO DADOS DO USUÁRIO NO ASYNC STORAGE
-  const dataKey = `@storage_Schiavoni:playerData:${email}`;
-  const setAsyncStorageData = async (userData: UserDTO) => {
-    try {
-      await AsyncStorage.setItem(dataKey, JSON.stringify(userData));
-    } catch (e) {
-      Alert.alert('Houve um erro ao persistir os dados do player!');
-      console.error(e);
-    };
   };
 
+  /* ########################### ASYNC STORAGE ########################### */
+  // const dataKey = `@storage_Schiavoni:playerData:${email}`;
+  // const setAsyncStorageData = async (userData: UserDTO) => {
+  //   try {
+  //     await AsyncStorage.setItem(dataKey, JSON.stringify(userData));
+  //   } catch (e) {
+  //     Alert.alert('Houve um erro ao persistir os dados do player!');
+  //     console.error(e);
+  //   };
+  // };
+  // const getAsyncStorageData  = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem(dataKey)
+  //     if(value !== null) {
+  //       //setUserData(JSON.parse(value))
+  //     }
+  //   } catch (e) {
+  //     Alert.alert('Houve um erro na recuperação dos dados do player!');
+  //     console.error(e);
+  //   };
+  // };
+  /* ##################################################################### */
+
+  // PERSISTINDO DADOS DO USUÁRIO NO CONTEXTO
   function persistUserData(user: any) {
     const userData = {
       doc_id: players[0].id,
@@ -80,10 +96,10 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       profile: players[0].profile,
     };
 
-    setUserContext(userData); // CONTEXTO
-    setAsyncStorageData(userData); // ASYNC STORAGE
+    setUserContext(userData);
   };
   
+  // SIGN IN
   function handleSignInWithEmailAndPassword() {
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
