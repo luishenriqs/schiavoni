@@ -17,10 +17,10 @@ export type GamesProps = {
   position: number;
 };
 
-const anonymousURL = 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=f3f5e53d-372a-43b4-a0b7-7a7db5462576';
-
 export function Games({navigation}: {navigation: any}) {
-  const { user } = useAuth();
+  const { user, anonymous } = useAuth();
+
+  const anonymousURL = anonymous.anonymousURL;
   
   const [games, setGames] = useState<GamesProps[]>([]);
 

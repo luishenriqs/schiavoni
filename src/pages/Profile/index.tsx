@@ -4,9 +4,9 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import * as ImagePicker from 'expo-image-picker';
 import storage from '@react-native-firebase/storage'
+import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
-import { useAuth } from '@hooks/useAuth';
 import { ButtonEditable } from '@components/ButtonEditable';
 import {
   Container,
@@ -27,7 +27,7 @@ import {
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
-  const { user } = useAuth();
+  const { user, anonymous } = useAuth();
 
   const [profileImage, setProfileImage] = useState('');
   const [profileImageURL, setProfileImageURL] = useState('');
@@ -41,7 +41,7 @@ export function Profile({navigation}: {navigation: any}) {
   
   const [modalVisible, setModalVisible] = useState(false);
 
-  const anonymousURL = 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=f3f5e53d-372a-43b4-a0b7-7a7db5462576';
+  const anonymousURL = anonymous.anonymousURL;
 
   useEffect(() => {
     updateURLs()

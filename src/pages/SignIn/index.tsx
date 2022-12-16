@@ -37,10 +37,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const [password, setPassword] = useState('');
   const [currentPlayer, setCurrentPlayer] = useState<UserDTO>({} as UserDTO);
 
-  console.log('############################################')
-  console.log('PLAYERS', currentPlayer)
-  console.log('############################################')
-
   useEffect(() => {
     findUser();
   }, [email]);

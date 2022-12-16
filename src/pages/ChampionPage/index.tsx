@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import firestore from '@react-native-firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { UserDTO } from '@dtos/userDTO'
@@ -15,10 +16,11 @@ type IChampion = UserDTO & {
   season: number
 };
 
-const anonymousURL = 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=f3f5e53d-372a-43b4-a0b7-7a7db5462576';
-
 export function ChampionPage({navigation}: {navigation: any}) {
+  const { anonymous } = useAuth();
   const [champion, setChampion] = useState<IChampion>({} as IChampion);
+  
+  const anonymousURL = anonymous.anonymousURL;
 
   useEffect(() => {
     findChampion();
