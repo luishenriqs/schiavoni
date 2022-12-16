@@ -1,18 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import firestore from '@react-native-firebase/firestore'
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
-import TeamBo from '@assets/teams/teamBo.svg';
-import TeamDu from '@assets/teams/teamDu.svg';
-import TeamDiego from '@assets/teams/teamDiego.svg';
-import TeamFilipe from '@assets/teams/teamFilipe.svg';
-import TeamLeoCriado from '@assets/teams/teamLeoCriado.svg';
-import TeamLuisao from '@assets/teams/teamLuisao.svg';
-import TeamPaulinho from '@assets/teams/teamPaulinho.svg';
-import TeamRoger from '@assets/teams/teamRoger.svg';
-import TeamLeandro from '@assets/teams/teamLeandro.svg';
-import TeamMarcio from '@assets/psop/PSOPLogo.svg';
-import TeamEdnelson from '@assets/psop/PSOPLogo.svg';
+import { UserDTO } from '@dtos/userDTO'
 import {
   Container, 
   Content, 
@@ -21,28 +11,52 @@ import {
   Text
 } from './styles';
 
-const mock = {
-  season: '25',
-  champion: 'Luisão',
-  img: TeamLuisao,
+type IChampion = UserDTO & {
+  season: number
+};
 
-}
+const anonymousURL = 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=f3f5e53d-372a-43b4-a0b7-7a7db5462576';
 
 export function ChampionPage({navigation}: {navigation: any}) {
+  const [champion, setChampion] = useState<IChampion>({} as IChampion);
+
+  useEffect(() => {
+    findChampion();
+  }, []);
+
+  // RECUPERA O CAMPEÃO
+  const findChampion = () => {
+    const subscribe = firestore()
+    .collection('champion')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as IChampion[]
+        setChampion(data[0])
+      },
+    }) 
+    return () => subscribe()
+  };
+
   return (
     <Container>
       <Header
         title='The Champion'
-        text={'Temporada ' + mock.season}
+        text={'Temporada ' + champion.season}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
       <PsopImage />
       <Content>
-        <Title>The great champion</Title>
-        <Text>{mock.champion}</Text>
+        <Title>The great PSOP Champion!</Title>
+        <Text>{champion.name}</Text>
         <Imagem 
-          source={require('../../assets/teams/teamLuisao.jpg')} 
+          source={{uri: champion.profile ? champion.profile : anonymousURL}} 
         />
       </Content>
     </Container>

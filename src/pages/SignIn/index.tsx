@@ -35,13 +35,17 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [players, setPlayers] = useState<UserDTO[]>([]);
+  const [currentPlayer, setCurrentPlayer] = useState<UserDTO>({} as UserDTO);
+
+  console.log('############################################')
+  console.log('PLAYERS', currentPlayer)
+  console.log('############################################')
 
   useEffect(() => {
     findUser();
   }, [email]);
 
-  // RECUPERA DADOS DO CURRENT USER
+  //==> RECUPERA DADOS DO USUÁRIO ATUAL
   const findUser = () => {
     const subscribe = firestore()
     .collection('players')
@@ -55,7 +59,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as UserDTO[]
-        setPlayers(data)
+        setCurrentPlayer(data[0])
       },
     }) 
     return () => subscribe()
@@ -84,22 +88,22 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   // };
   /* ##################################################################### */
 
-  // PERSISTINDO DADOS DO USUÁRIO NO CONTEXTO
+  //==> PERSISTINDO DADOS DO USUÁRIO NO CONTEXTO
   function persistUserData(user: any) {
     const userData = {
-      doc_id: players[0].id,
+      doc_id: currentPlayer.id,
       id: user.uid,
-      name: players[0].name,
+      name: currentPlayer.name,
       email: user.email,
-      isAdmin: players[0].isAdmin,
-      avatar: players[0].avatar,
-      profile: players[0].profile,
+      isAdmin: currentPlayer.isAdmin,
+      avatar: currentPlayer.avatar,
+      profile: currentPlayer.profile,
     };
 
     setUserContext(userData);
   };
   
-  // SIGN IN
+  //==> SIGN IN
   function handleSignInWithEmailAndPassword() {
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
