@@ -1,22 +1,8 @@
 import React from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { SvgProps } from 'react-native-svg';
-import {
-    Container,
- } from './styles';
+import { Container } from './styles';
 
-interface IProps {
-    svg: React.FC<SvgProps>
-}
-
-export function PsopImage({
-    svg: Svg,
-}: IProps) {
+export function PsopImage() {
     return (
-        <Container>
-            <Svg 
-                width={RFValue(120)}
-            />
-        </Container>
+        <Container source={require('@assets/logoOficial/PSOPLogo.jpg')}/>
     );
 }

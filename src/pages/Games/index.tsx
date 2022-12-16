@@ -3,7 +3,6 @@ import firestore from '@react-native-firebase/firestore'
 import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
 import { LabelPSOP } from "@components/LabelPSOP";
 import {
   Container, 
@@ -61,9 +60,7 @@ export function Games({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <PsopImage />
       <Content>
         <LabelPSOP />
       </Content>

@@ -6,18 +6,14 @@ import { Header } from '@components/Header';
 import { LeaderCard } from '@components/LeaderCard';
 import { CardRanking }from '@components/CardRanking';
 import { LabelPSOP } from "@components/LabelPSOP";
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
 import TeamBo from '@assets/teams/teamBo.svg';
 import TeamDu from '@assets/teams/teamDu.svg';
 import TeamDiego from '@assets/teams/teamDiego.svg';
 import TeamFilipe from '@assets/teams/teamFilipe.svg';
-import TeamLeoCriado from '@assets/teams/teamLeoCriado.svg';
 import TeamLuisao from '@assets/teams/teamLuisao.svg';
 import TeamPaulinho from '@assets/teams/teamPaulinho.svg';
 import TeamRoger from '@assets/teams/teamRoger.svg';
 import TeamLeandro from '@assets/teams/teamLeandro.svg';
-import TeamMarcio from '@assets/psop/PSOPLogo.svg';
-import TeamEdnelson from '@assets/psop/PSOPLogo.svg';
 import { Container, Content } from './styles';
 
 interface IRankingProps {
@@ -46,13 +42,6 @@ const ranking = {
   game: 5,
   weeksInTheLead: 3,
   rankingList: [
-    {
-      id: '9',
-      position: 9,
-      name: 'Léo Criado',
-      points: 41,
-      img: TeamLeoCriado,
-    },
     {
       id: '2',
       position: 7,
@@ -89,13 +78,6 @@ const ranking = {
       img: TeamRoger,
     },
     {
-      id: '11',
-      position: 11,
-      name: 'Ednelson',
-      points: 30,
-      img: TeamEdnelson,
-    },
-    {
       id: '6',
       position: 6,
       name: 'Filipe Lobanco',
@@ -115,14 +97,7 @@ const ranking = {
       name: 'Paulinho Coelho',
       points: 71,
       img: TeamPaulinho,
-    },
-    {
-      id: '10',
-      position: 10,
-      name: 'Márcio Silva',
-      points: 31,
-      img: TeamMarcio,
-    },
+    }
   ]
 };
 // ****************************
@@ -154,11 +129,8 @@ export function PSOP({navigation}: {navigation: any}) {
   }
 
   // *******[LEADER IMAGE]*******
-  // Initial image value: PSOPLogo;
-  let Leader: React.FC<SvgProps> = PSOPLogo;
-
   if (orderedRankingList[0].name) {
-    Leader = orderedRankingList[0].img;
+    let Leader = orderedRankingList[0].img;
   }
 /* ********************************************************************/
 
@@ -174,7 +146,6 @@ export function PSOP({navigation}: {navigation: any}) {
         />
         <Content>
           <LeaderCard 
-            svg={Leader}
             title='LÍDER:'
             leadersName={orderedRankingList[0].name}
             weeks={WeeksLead[ranking.weeksInTheLead]}

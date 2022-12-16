@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
 import { Header } from '@components/Header';
-import { 
-  Alert,
-  KeyboardAvoidingView, 
-  Platform
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 import { format } from 'date-fns'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
-import {
-  Container, 
-  Content
-} from './styles';
+import { Container, Content } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const [season, setSeason] = useState(0)
@@ -49,9 +41,7 @@ export function NewGame({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <PsopImage />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{

@@ -1,12 +1,7 @@
 import React from 'react';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
-import {
-  Container, 
-  Content, 
-  Title, 
-} from './styles';
+import { Container, Content, Title } from './styles';
 
 export function Squad({navigation}: {navigation: any}) {
   return (
@@ -17,9 +12,7 @@ export function Squad({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <PsopImage />
       <Content>
         <Title>Seleção dos jogadores</Title>
       </Content>

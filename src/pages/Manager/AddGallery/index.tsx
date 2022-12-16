@@ -5,7 +5,6 @@ import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
 import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
 import {
   Container, 
   Content, 
@@ -63,9 +62,7 @@ export function AddGallery({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <PsopImage />
       <Content>
         <Photo 
           uri={image} 

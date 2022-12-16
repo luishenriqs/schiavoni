@@ -8,13 +8,10 @@ import TeamBo from '@assets/teams/teamBo.svg';
 import TeamDu from '@assets/teams/teamDu.svg';
 import TeamDiego from '@assets/teams/teamDiego.svg';
 import TeamFilipe from '@assets/teams/teamFilipe.svg';
-import TeamLeoCriado from '@assets/teams/teamLeoCriado.svg';
 import TeamLuisao from '@assets/teams/teamLuisao.svg';
 import TeamPaulinho from '@assets/teams/teamPaulinho.svg';
 import TeamRoger from '@assets/teams/teamRoger.svg';
 import TeamLeandro from '@assets/teams/teamLeandro.svg';
-import TeamMarcio from '@assets/psop/PSOPLogo.svg';
-import TeamEdnelson from '@assets/psop/PSOPLogo.svg';
 import {
   Container, 
   Content, 
@@ -59,12 +56,6 @@ const playersInfo = {
       power: 3
     },
     {
-      id: '11',
-      name: 'Ednelson',
-      img: TeamEdnelson,
-      power: 2
-    },
-    {
       id: '6',
       name: 'Filipe Lobanco',
       img: TeamFilipe,
@@ -81,18 +72,6 @@ const playersInfo = {
       name: 'Paulinho Coelho',
       img: TeamPaulinho,
       power: 2
-    },
-    {
-      id: '10',
-      name: 'Márcio Silva',
-      img: TeamMarcio,
-      power: 5
-    },
-    {
-      id: '9',
-      name: 'Léo Criado',
-      img: TeamLeoCriado,
-      power: 0
     }
   ]
 };

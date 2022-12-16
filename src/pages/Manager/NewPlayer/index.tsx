@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  KeyboardAvoidingView, 
-  Platform,
-  Alert
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import PSOPLogo from '@assets/psop/PSOPLogo.svg';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonRadio } from '@components/ButtonRadio';
@@ -80,9 +75,7 @@ export function NewPlayer({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <PsopImage />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{

@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTheme } from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { SvgProps } from 'react-native-svg';
 import {
     Container,
     LeaderInfo,
@@ -13,14 +11,12 @@ import {
  } from './styles';
 
 interface IProps {
-    svg: React.FC<SvgProps>
     title: string;
     leadersName: string;
     weeks: string;
 }
 
 export function LeaderCard({
-    svg: Svg,
     title,
     leadersName,
     weeks,
@@ -28,12 +24,9 @@ export function LeaderCard({
     const { COLORS } = useTheme();
     return (
         <Container>
-            <Svg 
-                width={RFValue(128)}
-            />
-            {/* <Imagem 
+            <Imagem 
                 source={require('../../assets/teams/teamLuisao.jpg')} 
-            /> */}
+            />
             <LinearGradient
                 colors={[COLORS.gray_700, COLORS.gray_500, COLORS.gray_700]}
             >

@@ -37,9 +37,7 @@ export function ChampionPage({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage
-        svg={PSOPLogo}
-      />
+      <PsopImage />
       <Content>
         <Title>The great champion</Title>
         <Text>{mock.champion}</Text>
