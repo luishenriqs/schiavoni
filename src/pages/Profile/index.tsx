@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Modal } from 'react-native';
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import storage from '@react-native-firebase/storage'
 import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
-import { ButtonEditable } from '@components/ButtonEditable';
+import { Button } from '@components/Button';
+import { UserDTO } from '@dtos/userDTO'
 import {
   Container,
   ImageContainer,
+  ImageWrapper,
   ImageContent,
   LabelContainer,
   Label,
   ImageProfileAndAvatar, 
-  Content,
-  Update,
   Status,
   Progress,
   Transferred,
@@ -25,51 +25,95 @@ import {
   ModalText,
   ModalButtonContainer,
   ModalButtonLogin,
-  ModalButtonCancel,
   ModalButtonText
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
   const { user, anonymous } = useAuth();
+  const { setUserContext } = useAuth();
 
   const [profileImage, setProfileImage] = useState('');
-  const [profileImageURL, setProfileImageURL] = useState('');
   const [progressProfileImage, setProgressProfileImage] = useState('0');
   const [bytesTransferredProfileImage, setBytesTransferredProfileImage] = useState('0 transferido de 0');
   
   const [avatar, setAvatar] = useState('');
-  const [avatarURL, setAvatarURL] = useState('');
   const [progressAvatar, setProgressAvatar] = useState('0');
   const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('0 transferido de 0');
   
   const [modalVisible, setModalVisible] = useState(false);
-
   const anonymousURL = anonymous.anonymousURL;
 
-  useEffect(() => {
-    updateURLs()
-  },[profileImageURL, avatarURL])
-
-  function updateURLs() {
-    profileImageURL && (
+  //==> ATUALIZA PROFILE URL NO PERFIL
+  const updateProfileImageURL = async (url: string) => {
+    url && (
       firestore()
       .collection('players')
       .doc(user.doc_id)
       .update({
-        profile: profileImageURL 
-      })
-    );
-
-    avatarURL && (
-      firestore()
-      .collection('players')
-      .doc(user.doc_id)
-      .update({
-        avatar: avatarURL 
+        profile: url 
       })
     );
   };
 
+  //==> ATUALIZA AVATAR URL NO PERFIL
+  const updateAvatarURL = async (url: string) => {
+    url && (
+      firestore()
+      .collection('players')
+      .doc(user.doc_id)
+      .update({
+        avatar: url 
+      })
+    );
+  };
+
+  //==> RECUPERA DADOS DO USUÁRIO
+  const fetchUser = async () => {
+    const subscribe = firestore()
+    .collection('players')
+    .where('email', '==', user.email)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+        persistUserData(data[0])
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> PERSISTE DADOS DO USUÁRIO NO CONTEXTO E ASYNC STORAGE
+  const persistUserData = async (currentPlayer: UserDTO) => {
+    const userData = {
+      doc_id: currentPlayer.doc_id,
+      name: currentPlayer.name,
+      email: currentPlayer.email,
+      isAdmin: currentPlayer.isAdmin,
+      avatar: currentPlayer.avatar,
+      profile: currentPlayer.profile,
+    };
+    setAsyncStorageData(userData);
+    setUserContext(userData);
+  };
+
+  const dataKey = `@storage_Schiavoni:playerData`;
+
+  //==> PERSISTE ASYNC STORAGE
+  const setAsyncStorageData = async (userData: UserDTO) => {
+    try {
+      await AsyncStorage.setItem(dataKey, JSON.stringify(userData));
+    } catch (e) {
+      Alert.alert('Houve um erro ao persistir os dados do player!');
+      console.error(e);
+    };
+  };
+
+  //==> SELECIONA NOVA IMAGEM DO PERFIL
   async function handlePickProfileImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -86,6 +130,7 @@ export function Profile({navigation}: {navigation: any}) {
     }
   }; 
 
+  //==> SELECIONA NOVO AVATAR
   async function handlePickAvatar() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -102,6 +147,7 @@ export function Profile({navigation}: {navigation: any}) {
     }
   };
 
+  //==> ATUALIZA NOVA IMAGEM DO PERFIL
   async function handleProfileImageUpload() {
     if (profileImage) {
       const fileName = 'Profile_Image_' + user.name;
@@ -118,7 +164,8 @@ export function Profile({navigation}: {navigation: any}) {
       });
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
-        setProfileImageURL(url);
+        await updateProfileImageURL(url);
+        await fetchUser()
         setModalVisible(true);
       });
       uploadTask.catch(error => console.error(error));
@@ -127,6 +174,7 @@ export function Profile({navigation}: {navigation: any}) {
     };
   };
   
+  //==> ATUALIZA NOVO AVATAR
   async function handleProfileAvatarUpload() {
     if(avatar) {
       const fileName = 'Avatar_' + user.name;
@@ -143,7 +191,8 @@ export function Profile({navigation}: {navigation: any}) {
       });
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
-        setAvatarURL(url);
+        await updateAvatarURL(url);
+        await fetchUser()
         setModalVisible(true);
       });
       uploadTask.catch(error => console.error(error));
@@ -152,112 +201,91 @@ export function Profile({navigation}: {navigation: any}) {
     };
   };
 
-  function handleNewLogin() {
-    auth().signOut();
-    setModalVisible(!modalVisible)
-  };
-
   return (
     <Container>
       <Header
         title={user.name}
-        headerSize={'big'}
+        headerSize={'small'}
         onPress={() => navigation.openDrawer()}
       />
       <ImageContainer>
-        {user.profile
-          ? <ImageContent>
-              <LabelContainer>
-                <Label>Perfil</Label>
-              </LabelContainer>
-              <ImageProfileAndAvatar source={{uri: user.profile}}/>
-            </ImageContent>
-          : <ImageContent>
-              <LabelContainer>
-                <Label>Perfil</Label>
-              </LabelContainer>
-              <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
-            </ImageContent>
-        }
-        {user.avatar 
-          ? <ImageContent>
-              <LabelContainer>
-                <Label>Avatar</Label>
-              </LabelContainer>
-              <ImageProfileAndAvatar source={{uri: user.avatar}}/>
-            </ImageContent>
-          : <ImageContent>
-              <LabelContainer>
-                <Label>Avatar</Label>
-              </LabelContainer>
-              <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
-            </ImageContent>
-        }
-      </ImageContainer>
-      <Content>
-        <Update>
-          <Photo 
-            uri={profileImage} 
-            onPress={handlePickProfileImage}
-            text='Selecione sua imagem de perfil'
-            size={120}
-          />
-          <ButtonEditable
-            title="Atualize sua imagem de perfil"
-            onPress={handleProfileImageUpload}
-            width={120}
-            length={120}
-          />
-        </Update>
+        <LabelContainer>
+          <Label>Perfil</Label>
+        </LabelContainer>
+        <ImageWrapper>
+          {user.profile
+            ? <ImageContent>
+                <ImageProfileAndAvatar source={{uri: user.profile}}/>
+              </ImageContent>
+            : <ImageContent>
+                <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+              </ImageContent>
+          }
+          <ImageContent>
+            <Photo 
+              uri={profileImage} 
+              onPress={handlePickProfileImage}
+              text='Selecione sua imagem de perfil'
+              size={130}
+            />
+          </ImageContent>
+        </ImageWrapper>
+        <Button
+          title="Atualize sua imagem de perfil"
+          onPress={handleProfileImageUpload}
+        />
         <Status>
           <Progress>{progressProfileImage}%</Progress>
           <Transferred>'{bytesTransferredProfileImage}'</Transferred>
         </Status>
-
-        <Update>
-          <Photo 
-            uri={avatar} 
-            onPress={handlePickAvatar} 
-            text='Selecione o seu avatar'
-            size={120}
-          />
-          <ButtonEditable
-            title="Atualize seu avatar"
-            onPress={handleProfileAvatarUpload}
-            width={120}
-            length={120}
-          />
-        </Update>
+      </ImageContainer>
+      
+      <ImageContainer>
+        <LabelContainer>
+          <Label>Avatar</Label>
+        </LabelContainer>
+        <ImageWrapper>
+          {user.avatar
+            ? <ImageContent>
+                <ImageProfileAndAvatar source={{uri: user.avatar}}/>
+              </ImageContent>
+            : <ImageContent>
+                <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+              </ImageContent>
+          }
+          <ImageContent>
+            <Photo 
+              uri={avatar} 
+              onPress={handlePickAvatar}
+              text='Selecione seu novo avatar'
+              size={130}
+            />
+          </ImageContent>
+        </ImageWrapper>
+        <Button
+          title="Atualize seu avatar"
+          onPress={handleProfileAvatarUpload}
+        />
         <Status>
           <Progress>{progressAvatar}%</Progress>
           <Transferred>'{bytesTransferredAvatar}'</Transferred>
         </Status>
-      </Content>
+      </ImageContainer>
 
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
       >
         <ModalContainer>
           <ModalView>
-            <ModalText>Sucesso!</ModalText>
-            <ModalText>Faça um novo login para carregar a alteração!</ModalText>
+            <ModalText>Atualização realizada com sucesso!</ModalText>
             <ModalButtonContainer>            
               <ModalButtonLogin
-                onPress={handleNewLogin}
-              >
-                <ModalButtonText>Fazer login</ModalButtonText>
-              </ModalButtonLogin>
-              <ModalButtonCancel
                 onPress={() => setModalVisible(!modalVisible)}
               >
-                <ModalButtonText>Cancelar</ModalButtonText>
-              </ModalButtonCancel>
+                <ModalButtonText>Fechar</ModalButtonText>
+              </ModalButtonLogin>
             </ModalButtonContainer>
           </ModalView>
         </ModalContainer>

@@ -7,7 +7,7 @@ type Prop = {
 export const Container = styled.View<Prop>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
-  margin: 20px 0;
+  margin: 15px 10px;
 `;
 
 export const EmptyPhotoContainer = styled.View<Prop>`

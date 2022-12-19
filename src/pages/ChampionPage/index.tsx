@@ -26,6 +26,10 @@ export function ChampionPage({navigation}: {navigation: any}) {
     findChampion();
   }, []);
 
+  /* ###################################################################### */
+  /* ################ CRIAR UM CONTEXTO PARA O CAMPEÃO #################### */
+  /* ###################################################################### */
+
   // RECUPERA O CAMPEÃO
   const findChampion = () => {
     const subscribe = firestore()

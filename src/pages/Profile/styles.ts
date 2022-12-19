@@ -8,19 +8,16 @@ export const Container = styled.ScrollView`
 `;
 
 export const ImageContainer = styled.View`
-  flex-direction: row;
+  flex: 1;
   align-items: center;
-  align-self: center;
-`;
-
-export const ImageContent = styled.View`
-  justify-content: flex-start;
+  margin: 15px 15% 0;
 `;
 
 export const LabelContainer = styled.View`
-  width: 100px;
+  flex: 1;
+  width: 100%;
+  max-height: 30px;
   align-self: center;
-  margin: -75px 0 10px;
   border-radius: 5px;
   background: ${({ theme }) => theme.COLORS.gray_300};
 `;
@@ -34,28 +31,26 @@ export const Label = styled.Text`
   align-self: center;
 `;
 
+export const ImageWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+`;
+
+export const ImageContent = styled.View`
+  justify-content: flex-start;
+`;
+
 export const ImageProfileAndAvatar = styled.Image`
   width: ${RFValue(130)}px;
   height: ${RFValue(130)}px;
-  margin: 0px 10px 0;
+  margin: 15px 10px;
   border-radius: 5px;
-`;
-
-export const Content = styled.View`
-  align-items: center;
-  justify-content: center;
-  padding: 20px 15px 0;
-  margin-left: 20px;
-  margin-right: 20px;
-`;
-
-export const Update = styled.View`
-  flex-direction: row;
-  align-items: center;
 `;
 
 export const Status = styled.View`
   flex-direction: row;
+  margin-top: 10px;
   margin-bottom: 20px;
 `;
 
@@ -111,17 +106,6 @@ export const ModalButtonLogin = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.COLORS.green_500};
   margin-top: 15px;
   margin-right: 15px;
-  border-radius: 8px;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const ModalButtonCancel = styled.TouchableOpacity`
-  width: 100px;
-  height: 40px;
-  background-color: ${({ theme }) => theme.COLORS.red_400};
-  margin-top: 15px;
-  margin-left: 15px;
   border-radius: 8px;
   align-items: center;
   justify-content: center;

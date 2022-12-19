@@ -35,7 +35,7 @@ export default function App() {
 
   // SE USUÁRIO PREVIAMENTE AUTENTICADO ==> SIGN OUT
   //===> TODO RELOAD EXIGE NOVO LOGIN
-  //if (initializing && user) auth().signOut();
+  if (initializing && user) auth().signOut();
 
   return (
     <ThemeProvider theme={theme}>
