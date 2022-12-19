@@ -22,7 +22,6 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState({
     doc_id: '',
-    id: '',
     name: '',
     email: '',
     isAdmin: false,
