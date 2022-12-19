@@ -13,17 +13,38 @@ export const ImageContainer = styled.View`
   align-self: center;
 `;
 
+export const ImageContent = styled.View`
+  justify-content: flex-start;
+`;
+
+export const LabelContainer = styled.View`
+  width: 100px;
+  align-self: center;
+  margin: -75px 0 10px;
+  border-radius: 5px;
+  background: ${({ theme }) => theme.COLORS.gray_300};
+`;
+
+export const Label = styled.Text`
+  ${({ theme }) => css`
+    color: ${theme.COLORS.gray_700};
+    font-size: ${theme.FONT_SIZE.XL};
+    font-family: ${theme.FONT_FAMILY.bold};
+  `};
+  align-self: center;
+`;
+
 export const ImageProfileAndAvatar = styled.Image`
   width: ${RFValue(130)}px;
   height: ${RFValue(130)}px;
-  margin: -65px 10px 0;
+  margin: 0px 10px 0;
   border-radius: 5px;
 `;
 
 export const Content = styled.View`
   align-items: center;
   justify-content: center;
-  padding: 25px 15px 0;
+  padding: 20px 15px 0;
   margin-left: 20px;
   margin-right: 20px;
 `;

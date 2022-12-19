@@ -11,6 +11,9 @@ import { ButtonEditable } from '@components/ButtonEditable';
 import {
   Container,
   ImageContainer,
+  ImageContent,
+  LabelContainer,
+  Label,
   ImageProfileAndAvatar, 
   Content,
   Update,
@@ -162,13 +165,33 @@ export function Profile({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <ImageContainer>
-        {user.profile 
-          ? <ImageProfileAndAvatar source={{uri: user.profile}}/>
-          : <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+        {user.profile
+          ? <ImageContent>
+              <LabelContainer>
+                <Label>Perfil</Label>
+              </LabelContainer>
+              <ImageProfileAndAvatar source={{uri: user.profile}}/>
+            </ImageContent>
+          : <ImageContent>
+              <LabelContainer>
+                <Label>Perfil</Label>
+              </LabelContainer>
+              <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+            </ImageContent>
         }
         {user.avatar 
-          ? <ImageProfileAndAvatar source={{uri: user.avatar}}/>
-          : <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+          ? <ImageContent>
+              <LabelContainer>
+                <Label>Avatar</Label>
+              </LabelContainer>
+              <ImageProfileAndAvatar source={{uri: user.avatar}}/>
+            </ImageContent>
+          : <ImageContent>
+              <LabelContainer>
+                <Label>Avatar</Label>
+              </LabelContainer>
+              <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+            </ImageContent>
         }
       </ImageContainer>
       <Content>
