@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
+import { useChampion } from '@hooks/useChampion';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import { UserDTO } from '@dtos/userDTO'
+import { ChampionDTO } from '@dtos/ChampionDTO'
 import {
   Container, 
   Content, 
@@ -12,26 +13,18 @@ import {
   Text
 } from './styles';
 
-type IChampion = UserDTO & {
-  season: number
-};
-
 export function ChampionPage({navigation}: {navigation: any}) {
   const { anonymous } = useAuth();
-  const [champion, setChampion] = useState<IChampion>({} as IChampion);
+  const { champion, setChampionContext } = useChampion();
   
   const anonymousURL = anonymous.anonymousURL;
 
   useEffect(() => {
-    findChampion();
+    fetchChampion();
   }, []);
 
-  /* ###################################################################### */
-  /* ################ CRIAR UM CONTEXTO PARA O CAMPEÃO #################### */
-  /* ###################################################################### */
-
-  // RECUPERA O CAMPEÃO
-  const findChampion = () => {
+  //==> RECUPERA DADOS DO CAMPEÃO
+  const fetchChampion = () => {
     const subscribe = firestore()
     .collection('champion')
     .onSnapshot({
@@ -42,11 +35,25 @@ export function ChampionPage({navigation}: {navigation: any}) {
             doc_id: doc.id,
           ...doc.data()
           }
-        }) as IChampion[]
-        setChampion(data[0])
+        }) as ChampionDTO[]
+        persistChampionData(data[0]);
       },
     }) 
     return () => subscribe()
+  };
+
+  //==> PERSISTE DADOS DO CAMPEÃO NO CONTEXTO
+  const persistChampionData = async (championPlayer: ChampionDTO) => {
+    const championData = {
+      avatar: championPlayer.avatar,
+      doc_id: championPlayer.doc_id,
+      email: championPlayer.email,
+      id: championPlayer.id,
+      name: championPlayer.name,
+      profile: championPlayer.profile,
+      season: championPlayer.season,
+    };
+    setChampionContext(championData);
   };
 
   return (
