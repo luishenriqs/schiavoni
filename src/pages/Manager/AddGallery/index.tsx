@@ -21,6 +21,7 @@ export function AddGallery({navigation}: {navigation: any}) {
   const [bytesTransferred, setBytesTransferred] = useState('0 transferido de 0');
   const [progress, setProgress] = useState('0');
 
+  //==> SELECIONA NOVA IMAGEM DA GALERIA
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -37,21 +38,15 @@ export function AddGallery({navigation}: {navigation: any}) {
     }
   };
 
-  const createNewImageGallery = (
-    url: string,
-    legend: string
-  ) => {
-    firestore()
-    .collection('gallery')
-    .doc(legend + '-' + new Date().getFullYear())
-    .set({
-      url,
-      legend
-    })
-    .catch((error) => console.error(error))
+  //==> CHAMA UPLOAD APÓS VERIFICAÇÕES
+  const handleAddGallery = () => {
+    !legend && Alert.alert('Defina uma legenda!');
+    !image && Alert.alert('Selecione uma imagem!');
+    if(legend && image) handleImageGalleryUpload();
   };
 
-  const handleUpload = async () => {
+  //==> UPLOAD DE NOVA IMAGEM DA GALERIA
+  const handleImageGalleryUpload = async () => {
     const fileName = legend;
     const MIME = image.match(/\.(?:.(?!\.))+$/);
     const reference = storage().ref(`/Gallery/${fileName}${MIME}`);
@@ -66,16 +61,27 @@ export function AddGallery({navigation}: {navigation: any}) {
     });
     uploadTask.then(async () => {
       const url = await reference.getDownloadURL();
-      createNewImageGallery(url, legend);
+      createNewImageGallery(url, legend, MIME);
       Alert.alert('Upload concluído com sucesso!');
     });
     uploadTask.catch(error => console.error(error));
   };
 
-  const handleAddGallery = () => {
-    !legend && Alert.alert('Defina uma legenda!');
-    !image && Alert.alert('Selecione uma imagem!');
-    if(legend && image) handleUpload();
+  //==> REGISTRA URL E LEGENDA DE NOVA IMAGEM DA GALERIA
+  const createNewImageGallery = (
+    url: string,
+    legend: string,
+    MIME: RegExpMatchArray | null
+  ) => {
+    firestore()
+    .collection('gallery')
+    .doc(legend + '-' + new Date().getFullYear())
+    .set({
+      url,
+      legend,
+      MIME
+    })
+    .catch((error) => console.error(error))
   };
 
   return (

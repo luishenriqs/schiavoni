@@ -17,7 +17,7 @@ interface HeaderProps {
   text?: string;
   headerSize: 'big' | 'small';
   onPress(): void;
-}
+};
 
 export function Header({
   picture,

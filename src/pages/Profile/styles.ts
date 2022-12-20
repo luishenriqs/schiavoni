@@ -100,7 +100,7 @@ export const ModalButtonContainer = styled.View`
   flex-direction: row;
 `;
 
-export const ModalButtonLogin = styled.TouchableOpacity`
+export const ModalGreenButton = styled.TouchableOpacity`
   width: 100px;
   height: 40px;
   background-color: ${({ theme }) => theme.COLORS.green_500};

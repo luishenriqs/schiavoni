@@ -24,7 +24,7 @@ import {
   ModalView,
   ModalText,
   ModalButtonContainer,
-  ModalButtonLogin,
+  ModalGreenButton,
   ModalButtonText
 } from './styles';
 
@@ -281,11 +281,11 @@ export function Profile({navigation}: {navigation: any}) {
           <ModalView>
             <ModalText>Atualização realizada com sucesso!</ModalText>
             <ModalButtonContainer>            
-              <ModalButtonLogin
+              <ModalGreenButton
                 onPress={() => setModalVisible(!modalVisible)}
               >
                 <ModalButtonText>Fechar</ModalButtonText>
-              </ModalButtonLogin>
+              </ModalGreenButton>
             </ModalButtonContainer>
           </ModalView>
         </ModalContainer>

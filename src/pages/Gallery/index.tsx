@@ -1,28 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from "react-native";
+import { FlatList, Modal, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import { Container, Content, Memory, Imagem, Legend } from './styles';
+import { ButtonIcon } from '@components/ButtonIcon';
+import { 
+  Container, 
+  Content, 
+  Memory, 
+  Imagem, 
+  LegendWrapper, 
+  Legend, 
+  ModalContainer,
+  ModalView,
+  ModalText,
+  ModalButtonContainer,
+  ModalGreenButton,
+  ModalRedButton,
+  ModalButtonText 
+} from './styles';
 
 type IGallery = {
   doc_id: string;
   url: string;
   legend: string;
+  MIME: RegExpMatchArray | null
 };
 
 export function Gallery({navigation}: {navigation: any}) {
   const { user, anonymous } = useAuth();
-  const [gallery, setGallery] = useState([] as IGallery[])
+  const [modalVisible, setModalVisible] = useState(false);
+  const [id, setId] = useState('');
+  const [path, setPath] = useState('');
+  const [gallery, setGallery] = useState([] as IGallery[]);
 
   const anonymousURL = anonymous.anonymousURL;
+
+  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
+  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
+  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
+  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
+  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
 
   useEffect(() => {
     fetchGallery()
   }, []);
 
-  //==> RECUPERA DADOS DA GALERIA
+  //==> RECUPERA IMAGENS DA GALERIA
   const fetchGallery = async () => {
     const subscribe = firestore()
     .collection('gallery')
@@ -38,7 +64,35 @@ export function Gallery({navigation}: {navigation: any}) {
         setGallery(data)
       },
     }) 
+
     return () => subscribe()
+  };
+
+  //==> SETA PATH E ID E ABRE O MODAL DE DELETE
+  const handleDelete = (image: IGallery) => {
+    setId(image.doc_id)
+    setPath(image.legend + image.MIME)
+    setModalVisible(!modalVisible)
+  };
+
+  //==> DELETA IMAGEM DA GALERIA
+  const deleteImage = async () => {
+    // Deleta registro da URL e Legenda
+    firestore()
+    .collection('gallery')
+    .doc(id)
+    .delete()
+
+    // Deleta imagem do Storage Firebase
+    storage()
+    .ref('Gallery/' + path)
+    .delete()
+    .then(() => {
+      Alert.alert('Imagem deletada com sucesso!')
+    })
+    .catch(error => console.error(error))
+
+    setModalVisible(!modalVisible)
   };
 
   return (
@@ -58,14 +112,48 @@ export function Gallery({navigation}: {navigation: any}) {
           initialNumToRender={2}
           renderItem={({ item }) => (
             <Memory>
-              <Imagem 
-                source={{uri: item.url ? item.url : anonymousURL}} 
-              />
+              <LegendWrapper>
+                <Imagem 
+                  source={{uri: item.url ? item.url : anonymousURL}} 
+                />
+                <ButtonIcon 
+                  onPress={() => handleDelete(item)}
+                  style={{
+                    flexDirection: 'row-reverse',
+                    marginLeft: 50,
+                    marginTop: -50
+                  }}
+                />
+              </LegendWrapper>
               <Legend>{item.legend}</Legend>
             </Memory>
           )}
         />
       </Content>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+      >
+        <ModalContainer>
+          <ModalView>
+            <ModalText>Deseja deletar essa imagem?</ModalText>
+            <ModalButtonContainer>            
+              <ModalGreenButton
+                onPress={deleteImage}
+              >
+                <ModalButtonText>Deletar</ModalButtonText>
+              </ModalGreenButton>
+              <ModalRedButton
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <ModalButtonText>Cancelar</ModalButtonText>
+              </ModalRedButton>
+            </ModalButtonContainer>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
     </Container>
   );
 };
