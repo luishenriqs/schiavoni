@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Alert, Modal } from 'react-native';
-import firestore from '@react-native-firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
-import storage from '@react-native-firebase/storage'
 import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';

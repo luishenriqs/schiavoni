@@ -89,7 +89,8 @@ export function AddGallery({navigation}: {navigation: any}) {
       <PsopImage />
       <Content>
         <Photo 
-          uri={image} 
+          uri={image}
+          text='Selecione uma nova imagem para a galeria'
           onPress={handlePickImage}
         />
         <Input 
