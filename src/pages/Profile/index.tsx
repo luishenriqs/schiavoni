@@ -114,7 +114,7 @@ export function Profile({navigation}: {navigation: any}) {
   };
 
   //==> SELECIONA NOVA IMAGEM DO PERFIL
-  async function handlePickProfileImage() {
+  const handlePickProfileImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status == 'granted') {
@@ -131,7 +131,7 @@ export function Profile({navigation}: {navigation: any}) {
   }; 
 
   //==> SELECIONA NOVO AVATAR
-  async function handlePickAvatar() {
+  const handlePickAvatar = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status == 'granted') {
@@ -148,7 +148,7 @@ export function Profile({navigation}: {navigation: any}) {
   };
 
   //==> ATUALIZA NOVA IMAGEM DO PERFIL
-  async function handleProfileImageUpload() {
+  const handleProfileImageUpload = async () => {
     if (profileImage) {
       const fileName = 'Profile_Image_' + user.name;
       const MIME = profileImage.match(/\.(?:.(?!\.))+$/);
@@ -175,7 +175,7 @@ export function Profile({navigation}: {navigation: any}) {
   };
   
   //==> ATUALIZA NOVO AVATAR
-  async function handleProfileAvatarUpload() {
+  const handleProfileAvatarUpload = async () => {
     if(avatar) {
       const fileName = 'Avatar_' + user.name;
       const MIME = avatar.match(/\.(?:.(?!\.))+$/);

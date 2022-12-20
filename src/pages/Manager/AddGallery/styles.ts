@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   flex: 1;
   width: 100%;
   background: ${({ theme }) => theme.COLORS.gray_600};
@@ -9,7 +9,7 @@ export const Container = styled.View`
 export const Content = styled.View`
   align-items: center;
   justify-content: center;
-  padding: 25px 15px 0;
+  padding: 0 15px;
   margin-left: 20px;
   margin-right: 20px;
 `;
