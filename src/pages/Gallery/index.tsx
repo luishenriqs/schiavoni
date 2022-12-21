@@ -11,8 +11,8 @@ import {
   Container, 
   Content, 
   Memory, 
+  ImageWrapper, 
   Imagem, 
-  LegendWrapper, 
   Legend 
 } from './styles';
 
@@ -25,10 +25,13 @@ type IGallery = {
 
 export function Gallery({navigation}: {navigation: any}) {
   const { user, anonymous } = useAuth();
-  const [modalVisible, setModalVisible] = useState(false);
   const [id, setId] = useState('');
   const [path, setPath] = useState('');
-  const [gallery, setGallery] = useState([] as IGallery[]);
+  const [gallery, setGallery] = useState<IGallery[]>([] as IGallery[]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [lastVisible, setLastVisible] = useState({});
+  const [fetchLength, setFetchLength] = useState(0);
+  let toRender: IGallery[] = [];
 
   const anonymousURL = anonymous.anonymousURL;
 
@@ -36,10 +39,15 @@ export function Gallery({navigation}: {navigation: any}) {
     fetchGallery()
   }, []);
 
-  //==> RECUPERA IMAGENS DA GALERIA
+  useEffect(() => {
+    toRender = [...gallery,...toRender]
+  }, [gallery]);toRender
+
+  //==> BUSCA IMAGENS DA GALERIA
   const fetchGallery = async () => {
     const subscribe = firestore()
     .collection('gallery')
+    .limit(3)
     .onSnapshot({
       error: (e) => console.error(e),
       next: (querySnapshot) => {
@@ -49,10 +57,39 @@ export function Gallery({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as IGallery[]
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+        setFetchLength(data.length)
         setGallery(data)
       },
     }) 
+    return () => subscribe()
+  };
 
+  //==> VERIFICAÇÃO PARA BUSCAR MAIS
+  const loadMore = async () => {
+    if (fetchLength === 3) fetchMoreGallery()
+  };
+
+  //==> BUSCA MAIS IMAGENS DA GALERIA
+  const fetchMoreGallery = async () => {
+    const subscribe = firestore()
+    .collection('gallery')
+    .startAfter(lastVisible)
+    .limit(3)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as IGallery[]
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length-1]);
+        setFetchLength(data.length)
+        setGallery([...gallery, ...data])
+      },
+    }) 
     return () => subscribe()
   };
 
@@ -97,21 +134,24 @@ export function Gallery({navigation}: {navigation: any}) {
         <FlatList
           data={gallery}
           keyExtractor={item => item.doc_id}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.1}
           renderItem={({ item }) => (
             <Memory>
-              <LegendWrapper>
+              <ImageWrapper>
                 <Imagem 
-                  source={{uri: item.url ? item.url : anonymousURL}} 
+                  source={{uri: item.url ? item.url : anonymousURL}}
+                  progressiveRenderingEnabled
                 />
                 <ButtonIcon 
                   onPress={() => handleDelete(item)}
                   style={{
                     flexDirection: 'row-reverse',
-                    marginLeft: 50,
+                    marginLeft: 20,
                     marginTop: -50
                   }}
                 />
-              </LegendWrapper>
+              </ImageWrapper>
               <Legend>{item.legend}</Legend>
             </Memory>
           )}

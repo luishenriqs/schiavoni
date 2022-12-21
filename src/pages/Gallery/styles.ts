@@ -10,14 +10,19 @@ export const Container = styled.View`
 export const Content = styled.View`
   flex: 1;
   width: 100%;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   padding: 25px 15px 0;
 `;
 
 export const Memory = styled.View`
-  margin-bottom: 35px;
+  height: 330px;
+  margin: 16px 0;
+`;
+
+export const ImageWrapper = styled.View`
+  flex: 1;
+  width: 100%;
 `;
 
 export const Imagem = styled(Image)`
@@ -28,11 +33,6 @@ export const Imagem = styled(Image)`
   margin-bottom: 5px;
 `;
 
-export const LegendWrapper = styled.View`
-  flex: 1;
-  width: 100%;
-`;
-
 export const Legend = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
@@ -40,5 +40,4 @@ export const Legend = styled.Text`
     font-family: ${theme.FONT_FAMILY.medium};
   `};
   align-self: center;
-  margin-top: 20px;
 `;
