@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Modal } from 'react-native';
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -19,13 +19,7 @@ import {
   ImageProfileAndAvatar, 
   Status,
   Progress,
-  Transferred,
-  ModalContainer,
-  ModalView,
-  ModalText,
-  ModalButtonContainer,
-  ModalGreenButton,
-  ModalButtonText
+  Transferred
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
@@ -40,7 +34,6 @@ export function Profile({navigation}: {navigation: any}) {
   const [progressAvatar, setProgressAvatar] = useState('0');
   const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('0 transferido de 0');
   
-  const [modalVisible, setModalVisible] = useState(false);
   const anonymousURL = anonymous.anonymousURL;
 
   //==> ATUALIZA PROFILE URL NO PERFIL
@@ -166,7 +159,7 @@ export function Profile({navigation}: {navigation: any}) {
         const url = await reference.getDownloadURL();
         await updateProfileImageURL(url);
         await fetchUser()
-        setModalVisible(true);
+        Alert.alert('Atualização realizada com sucesso!');
       });
       uploadTask.catch(error => console.error(error));
     } else {
@@ -193,7 +186,7 @@ export function Profile({navigation}: {navigation: any}) {
         const url = await reference.getDownloadURL();
         await updateAvatarURL(url);
         await fetchUser()
-        setModalVisible(true);
+        Alert.alert('Atualização realizada com sucesso!');
       });
       uploadTask.catch(error => console.error(error));
     } else {
@@ -271,25 +264,6 @@ export function Profile({navigation}: {navigation: any}) {
           <Transferred>'{bytesTransferredAvatar}'</Transferred>
         </Status>
       </ImageContainer>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      >
-        <ModalContainer>
-          <ModalView>
-            <ModalText>Atualização realizada com sucesso!</ModalText>
-            <ModalButtonContainer>            
-              <ModalGreenButton
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <ModalButtonText>Fechar</ModalButtonText>
-              </ModalGreenButton>
-            </ModalButtonContainer>
-          </ModalView>
-        </ModalContainer>
-      </Modal>
     </Container>
   );
 };

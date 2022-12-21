@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Modal, Alert } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { ButtonIcon } from '@components/ButtonIcon';
+import ModalComponent from '@components/ModalComponent';
 import { 
   Container, 
   Content, 
   Memory, 
   Imagem, 
   LegendWrapper, 
-  Legend, 
-  ModalContainer,
-  ModalView,
-  ModalText,
-  ModalButtonContainer,
-  ModalGreenButton,
-  ModalRedButton,
-  ModalButtonText 
+  Legend 
 } from './styles';
 
 type IGallery = {
@@ -37,12 +31,6 @@ export function Gallery({navigation}: {navigation: any}) {
   const [gallery, setGallery] = useState([] as IGallery[]);
 
   const anonymousURL = anonymous.anonymousURL;
-
-  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
-  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
-  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
-  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
-  /* CORRIGIR EXIBIÇÃO DA GALERIA  */
 
   useEffect(() => {
     fetchGallery()
@@ -109,7 +97,6 @@ export function Gallery({navigation}: {navigation: any}) {
         <FlatList
           data={gallery}
           keyExtractor={item => item.doc_id}
-          initialNumToRender={2}
           renderItem={({ item }) => (
             <Memory>
               <LegendWrapper>
@@ -130,30 +117,15 @@ export function Gallery({navigation}: {navigation: any}) {
           )}
         />
       </Content>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      >
-        <ModalContainer>
-          <ModalView>
-            <ModalText>Deseja deletar essa imagem?</ModalText>
-            <ModalButtonContainer>            
-              <ModalGreenButton
-                onPress={deleteImage}
-              >
-                <ModalButtonText>Deletar</ModalButtonText>
-              </ModalGreenButton>
-              <ModalRedButton
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <ModalButtonText>Cancelar</ModalButtonText>
-              </ModalRedButton>
-            </ModalButtonContainer>
-          </ModalView>
-        </ModalContainer>
-      </Modal>
+      <ModalComponent
+        title='Deletar'
+        text='Deseja deletar essa imagem?'
+        modalVisible={modalVisible}
+        greenButtonText='Deletar'
+        redButtonText='Cancelar'
+        onPressGreenButton={deleteImage}
+        onPressRedButton={() => setModalVisible(!modalVisible)}
+      />
     </Container>
   );
 };

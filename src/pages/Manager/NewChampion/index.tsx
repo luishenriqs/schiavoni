@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { KeyboardAvoidingView, Platform, Alert, Modal } from 'react-native';
+import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 import { Header } from '@components/Header';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
+import ModalComponent from '@components/ModalComponent';
 import { UserDTO } from '@dtos/userDTO'
 import { 
   Container,
   Content,
-  Title,
-  ModalContainer,
-  ModalView,
-  ModalText,
-  ModalButtonContainer,
-  ModalButtonLogin,
-  ModalButtonCancel,
-  ModalButtonText
+  Title
 } from './styles';
 
 type OldChampionProps = UserDTO & {
@@ -67,10 +61,10 @@ export function NewChampion({navigation}: {navigation: any}) {
       next: (querySnapshot) => {
         const data = querySnapshot.docs.map(doc => {
           return {
-            id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
+            doc_id: doc.id,
+            ...doc.data()
+          };
+        }) as unknown as UserDTO[]
         setNewChampion(data[0])
       },
     }) 
@@ -87,7 +81,7 @@ export function NewChampion({navigation}: {navigation: any}) {
       season,
       profile: newChampion.profile,
       avatar: newChampion.avatar,
-      id: newChampion.id,
+      id: newChampion.doc_id,
       email: newChampion.email
     })
     .then(() => {
@@ -137,34 +131,15 @@ export function NewChampion({navigation}: {navigation: any}) {
         </Content>
       </KeyboardAvoidingView>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <ModalContainer>
-          <ModalView>
-            <ModalText>{`${name} é o novo PSOP Champion!`}</ModalText>
-            <ModalText>{`Temporada ${season}`}</ModalText>
-            <ModalButtonContainer>            
-              <ModalButtonLogin
-                onPress={handleAddNewChampion}
-              >
-                <ModalButtonText>{`${name} CHAMPION`}</ModalButtonText>
-              </ModalButtonLogin>
-              <ModalButtonCancel
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <ModalButtonText>Cancelar</ModalButtonText>
-              </ModalButtonCancel>
-            </ModalButtonContainer>
-          </ModalView>
-        </ModalContainer>
-      </Modal>
+      <ModalComponent
+        title={`${name} é o novo PSOP Champion!`}
+        text={`Temporada ${season}`}
+        modalVisible={modalVisible}
+        greenButtonText={`${name} CHAMPION`}
+        redButtonText='Cancelar'
+        onPressGreenButton={handleAddNewChampion}
+        onPressRedButton={() => setModalVisible(!modalVisible)}
+      />
     </Container>
   );
 };
