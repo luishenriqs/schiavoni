@@ -9,6 +9,7 @@ import { Routes } from '@routes/index.routes';
 import { Loading } from '@components/Loading';
 import { AuthContextProvider } from '@contexts/AuthContext';
 import { ChampionContextProvider } from '@contexts/ChampionContext';
+import { AllPlayersContextProvider } from '@contexts/allPlayersContext';
 import { ThemeProvider } from 'styled-components';
 import { useFonts, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import theme from '@global/theme';
@@ -45,11 +46,13 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <ChampionContextProvider>
-        <AuthContextProvider>
-          {fontsLoaded ? <Routes /> : <Loading />}
-        </AuthContextProvider>
-      </ChampionContextProvider>
+      <AllPlayersContextProvider>
+        <ChampionContextProvider>
+          <AuthContextProvider>
+            {fontsLoaded ? <Routes /> : <Loading />}
+          </AuthContextProvider>
+        </ChampionContextProvider>
+      </AllPlayersContextProvider>
     </ThemeProvider>
   );
 };

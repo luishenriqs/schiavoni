@@ -12,6 +12,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@hooks/useAuth';
+import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
@@ -32,6 +33,7 @@ type Props = TouchableOpacityProps;
 export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
   const { setUserContext } = useAuth();
+  const { setAllPlayersContext } = useAllPlayers();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,8 +76,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     };
   };
 
-  /* *** USER *** */
-  /* *** USER *** */
   /* *** USER *** */
 
   //==> RECUPERA USER DO ASYNC STORAGE
@@ -138,8 +138,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   };
 
   /* ***ALL PLAYERS*** */
-  /* ***ALL PLAYERS*** */
-  /* ***ALL PLAYERS*** */
 
   //==> RECUPERA ALL PLAYERS DO ASYNC STORAGE
   const getAllPlayersAsyncStorage  = async () => {
@@ -177,7 +175,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const persistAllPlayers = async (allPlayers: UserDTO[]) => {
     const key = `@storage_Schiavoni:allPlayersData`;
     setAllPlayersAsyncStorage(key, allPlayers);
-    //setAllPlayersContext(allPlayersData);
+    setAllPlayersContext(allPlayers);
   };
 
   //==> PERSISTE ASYNC STORAGE

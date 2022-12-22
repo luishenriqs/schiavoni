@@ -23,9 +23,8 @@ import {
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
-  const { user, anonymous } = useAuth();
-  const { setUserContext } = useAuth();
-
+  const { user, anonymous, setUserContext } = useAuth();
+ 
   const [profileImage, setProfileImage] = useState('');
   const [progressProfileImage, setProgressProfileImage] = useState('0');
   const [bytesTransferredProfileImage, setBytesTransferredProfileImage] = useState('0 transferido de 0');
@@ -36,7 +35,7 @@ export function Profile({navigation}: {navigation: any}) {
   
   const anonymousURL = anonymous.anonymousURL;
 
-  //==> ATUALIZA PROFILE URL NO PERFIL
+  //==> ATUALIZA PROFILE URL NO FIRESTORE
   const updateProfileImageURL = async (url: string) => {
     url && (
       firestore()
@@ -48,7 +47,7 @@ export function Profile({navigation}: {navigation: any}) {
     );
   };
 
-  //==> ATUALIZA AVATAR URL NO PERFIL
+  //==> ATUALIZA AVATAR URL NO FIRESTORE
   const updateAvatarURL = async (url: string) => {
     url && (
       firestore()
@@ -60,8 +59,8 @@ export function Profile({navigation}: {navigation: any}) {
     );
   };
 
-  //==> RECUPERA DADOS DO USUÁRIO
-  const fetchUser = async () => {
+  //==> RECUPERA USER DO FIRESTORE
+  const getUserFirestore = async () => {
     const subscribe = firestore()
     .collection('players')
     .where('email', '==', user.email)
@@ -74,14 +73,14 @@ export function Profile({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as UserDTO[]
-        persistUserData(data[0])
+        persistUser(data[0])
       },
     }) 
     return () => subscribe()
   };
 
-  //==> PERSISTE DADOS DO USUÁRIO NO CONTEXTO E ASYNC STORAGE
-  const persistUserData = async (user: UserDTO) => {
+  //==> PERSISTE USER NO ASYNC STORAGE E CONTEXTO
+  const persistUser = async (user: UserDTO) => {
     const userData = {
       doc_id: user.doc_id,
       name: user.name,
@@ -93,13 +92,12 @@ export function Profile({navigation}: {navigation: any}) {
     setAsyncStorageData(userData);
     setUserContext(userData);
   };
-
-  const dataKey = `@storage_Schiavoni:playerData`;
-
+  
   //==> PERSISTE ASYNC STORAGE
   const setAsyncStorageData = async (userData: UserDTO) => {
+    const Key = `@storage_Schiavoni:playerData`;
     try {
-      await AsyncStorage.setItem(dataKey, JSON.stringify(userData));
+      await AsyncStorage.setItem(Key, JSON.stringify(userData));
     } catch (e) {
       Alert.alert('Houve um erro ao persistir os dados do player!');
       console.error(e);
@@ -158,7 +156,7 @@ export function Profile({navigation}: {navigation: any}) {
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
         await updateProfileImageURL(url);
-        await fetchUser()
+        await getUserFirestore()
         Alert.alert('Atualização realizada com sucesso!');
       });
       uploadTask.catch(error => console.error(error));
@@ -185,7 +183,7 @@ export function Profile({navigation}: {navigation: any}) {
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
         await updateAvatarURL(url);
-        await fetchUser()
+        await getUserFirestore()
         Alert.alert('Atualização realizada com sucesso!');
       });
       uploadTask.catch(error => console.error(error));
