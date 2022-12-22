@@ -15,6 +15,7 @@ export function NewGame({navigation}: {navigation: any}) {
   const [position, setPosition] = useState(0)
   const [points, setPoints] = useState(0)
 
+  //==> REGISTRA UM NOVO RESULTADO INDIVIDUAL
   async function handleAddResult() {
     firestore()
     .collection('game_result')
@@ -29,6 +30,15 @@ export function NewGame({navigation}: {navigation: any}) {
     })
     .then(() => {
       Alert.alert('Result added successfully')
+    })
+    .catch((error) => console.error(error))
+
+    firestore()
+    .collection('current_season')
+    .doc('currentData')
+    .set({
+      season,
+      game
     })
     .catch((error) => console.error(error))
   }

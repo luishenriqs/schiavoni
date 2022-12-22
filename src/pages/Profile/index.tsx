@@ -81,14 +81,14 @@ export function Profile({navigation}: {navigation: any}) {
   };
 
   //==> PERSISTE DADOS DO USUÁRIO NO CONTEXTO E ASYNC STORAGE
-  const persistUserData = async (currentPlayer: UserDTO) => {
+  const persistUserData = async (user: UserDTO) => {
     const userData = {
-      doc_id: currentPlayer.doc_id,
-      name: currentPlayer.name,
-      email: currentPlayer.email,
-      isAdmin: currentPlayer.isAdmin,
-      avatar: currentPlayer.avatar,
-      profile: currentPlayer.profile,
+      doc_id: user.doc_id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      avatar: user.avatar,
+      profile: user.profile,
     };
     setAsyncStorageData(userData);
     setUserContext(userData);

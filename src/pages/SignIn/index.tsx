@@ -35,74 +35,21 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [currentPlayer, setCurrentPlayer] = useState<UserDTO>({} as UserDTO);
+  const [user, setUser] = useState<UserDTO>({} as UserDTO);
+  const [allPlayers, setAllPlayers] = useState<UserDTO[]>({} as UserDTO[]);
 
   useEffect(() => {
-    currentPlayer.email && persistUserData(currentPlayer);
-  }, [currentPlayer]);
+    user.email && persistUser();
+  }, [user]);
 
-  const dataKey = `@storage_Schiavoni:playerData`;
+  useEffect(() => {
+    allPlayers.length > 0 && persistAllPlayers(allPlayers);
+  }, [allPlayers]);
 
-  //==> PERSISTE ASYNC STORAGE
-  const setAsyncStorageData = async (userData: UserDTO) => {
-    try {
-      await AsyncStorage.setItem(dataKey, JSON.stringify(userData));
-    } catch (e) {
-      Alert.alert('Houve um erro ao persistir os dados do player!');
-      console.error(e);
-    };
-  };
-
-  //==> RECUPERA ASYNC STORAGE
-  const getAsyncStorageData  = async () => {
-    try {
-      const value = await AsyncStorage.getItem(dataKey)
-      const result = value && JSON.parse(value)
-      result.email && result.email === email ? setCurrentPlayer(result) : await fetchUser()
-    } catch (e) {
-      Alert.alert('Houve um erro na recuperação dos dados do player!');
-      console.error(e);
-    };
-  };
-
-  //==> RECUPERA DADOS DO USUÁRIO SE ASYNC STORAGE VAZIO
-  const fetchUser = async () => {
-    const subscribe = firestore()
-    .collection('players')
-    .where('email', '==', email)
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-        setCurrentPlayer(data[0])
-      },
-    }) 
-    return () => subscribe()
-  };
-
-  //==> PERSISTE DADOS DO USUÁRIO NO CONTEXTO E ASYNC STORAGE
-  const persistUserData = async (user: any) => {
-    const userData = {
-      doc_id: currentPlayer.doc_id,
-      name: currentPlayer.name,
-      email: currentPlayer.email,
-      isAdmin: currentPlayer.isAdmin,
-      avatar: currentPlayer.avatar,
-      profile: currentPlayer.profile,
-    };
-
-    setAsyncStorageData(userData);
-    setUserContext(userData);
-  };
-  
   //==> SIGN IN
   const handleSignInWithEmailAndPassword = async () => {
-    await getAsyncStorageData();
+    await getUserAsyncStorage();
+    await getAllPlayersAsyncStorage();
 
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
@@ -127,6 +74,123 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     };
   };
 
+  /* *** USER *** */
+  /* *** USER *** */
+  /* *** USER *** */
+
+  //==> RECUPERA USER DO ASYNC STORAGE
+  const getUserAsyncStorage  = async () => {
+    const key = `@storage_Schiavoni:playerData`;
+    try {
+      const value = await AsyncStorage.getItem(key)
+      const result = value && JSON.parse(value)
+      result.email && result.email === email ? setUser(result) : await getUserFirestore()
+    } catch (e) {
+      Alert.alert('Houve um erro na recuperação dos dados do player!');
+      console.error(e);
+    };
+  };
+
+  //==> RECUPERA USER DO FIRESTORE SE ASYNC STORAGE VAZIO
+  const getUserFirestore = async () => {
+    const subscribe = firestore()
+    .collection('players')
+    .where('email', '==', email)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+        setUser(data[0])
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> PERSISTE USER NO ASYNC STORAGE E CONTEXTO
+  const persistUser = async () => {
+    const userData = {
+      doc_id: user.doc_id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      avatar: user.avatar,
+      profile: user.profile,
+    };
+
+    const key = `@storage_Schiavoni:playerData`;
+    setUserAsyncStorage(key, userData);
+    setUserContext(userData);
+  };
+
+  //==> PERSISTE ASYNC STORAGE
+  const setUserAsyncStorage = async (key: string, data: any) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+      Alert.alert('Houve um erro ao persistir os dados dos players!');
+      console.error(e);
+    };
+  };
+
+  /* ***ALL PLAYERS*** */
+  /* ***ALL PLAYERS*** */
+  /* ***ALL PLAYERS*** */
+
+  //==> RECUPERA ALL PLAYERS DO ASYNC STORAGE
+  const getAllPlayersAsyncStorage  = async () => {
+    const key = `@storage_Schiavoni:allPlayersData`;
+    try {
+      const value = await AsyncStorage.getItem(key)
+      const result = value && JSON.parse(value)
+      result.length > 0 ? setAllPlayers(result) : await getAllPlayersFirestore()
+    } catch (e) {
+      Alert.alert('Houve um erro na recuperação dos dados dos players!');
+      console.error(e);
+    };
+  };
+
+  //==> RECUPERA ALL PLAYERS DO FIRESTORE SE ASYNC STORAGE VAZIO
+  const getAllPlayersFirestore = async () => {
+    const subscribe = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+        setAllPlayers(data)
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> PERSISTE ALL PLAYERS NO ASYNC STORAGE E CONTEXTO
+  const persistAllPlayers = async (allPlayers: UserDTO[]) => {
+    const key = `@storage_Schiavoni:allPlayersData`;
+    setAllPlayersAsyncStorage(key, allPlayers);
+    //setAllPlayersContext(allPlayersData);
+  };
+
+  //==> PERSISTE ASYNC STORAGE
+  const setAllPlayersAsyncStorage = async (key: string, data: any) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+      Alert.alert('Houve um erro ao persistir os dados dos players!');
+      console.error(e);
+    };
+  };
+
+  //==> RECUPERA SENHA
   function handleForgotPassword() {
     if (!email) {
       Alert.alert('Informe seu email e senha!')
