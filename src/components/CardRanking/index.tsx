@@ -7,17 +7,19 @@ import {
     NameBox,
     Name,
     Points,
+    ImageContent,
+    ImageProfileAndAvatar
  } from './styles';
 
 interface IProps {
-    svg: React.FC<SvgProps>
+
     position: string;
     name: string;
     points: number;
 }
 
 export function CardRanking({
-    svg: Svg,
+
     position,
     name,
     points,
@@ -28,9 +30,10 @@ export function CardRanking({
                 <Position>{position}</Position>
             </InfoBox>
             <NameBox>
-                <Svg 
-                    width={68}
-                />
+                <ImageContent>
+                    <ImageProfileAndAvatar source={{uri: 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=4beab875-e86c-46ba-b950-7012d7e14557'}}/>
+                </ImageContent>
+
                 {name.length <= 17
                     ? <Name>{name}</Name>
                     : <Name>{name.substring(12, -1)}...</Name>

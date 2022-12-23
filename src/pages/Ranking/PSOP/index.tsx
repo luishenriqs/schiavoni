@@ -3,157 +3,38 @@ import { FlatList, KeyboardAvoidingView, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
-import { SvgProps } from 'react-native-svg';
+import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Header } from '@components/Header';
+import { findNames, findPlayersResults, processRanking } from '@services/rankingServices';
 import { LeaderCard } from '@components/LeaderCard';
 import { CardRanking }from '@components/CardRanking';
 import { LabelPSOP } from "@components/LabelPSOP";
-import TeamBo from '@assets/teams/teamBo.svg';
-import TeamDu from '@assets/teams/teamDu.svg';
-import TeamDiego from '@assets/teams/teamDiego.svg';
-import TeamFilipe from '@assets/teams/teamFilipe.svg';
-import TeamLuisao from '@assets/teams/teamLuisao.svg';
-import TeamPaulinho from '@assets/teams/teamPaulinho.svg';
-import TeamRoger from '@assets/teams/teamRoger.svg';
-import TeamLeandro from '@assets/teams/teamLeandro.svg';
-import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
+import { GameDTO, SeasonDTO, ResultsDTO } from '@dtos/GameDTO'
 import { Container, Content } from './styles';
 
-interface IRankingProps {
-  id: string,
-  position: number;
-  name: string;
-  points: number;
-  img: React.FC<SvgProps>;
+type RankingProps = {
+    player: string;
+    totalPoints: number;
 };
-
-enum WeeksLead {
-  '1º semana na liderança' = 1,
-  '2º semana na liderança' = 2,
-  '3º semana na liderança' = 3,
-  '4º semana na liderança' = 4,
-  '5º semana na liderança' = 5,
-  '6º semana na liderança' = 6,
-  '7º semana na liderança' = 7,
-  '8º semana na liderança' = 8,
-};
-
-// ***********[MOCK]***********
-const ranking = {
-  game: 5,
-  weeksInTheLead: 3,
-  rankingList: [
-    {
-      id: '2',
-      position: 7,
-      name: 'Leandro Jácomo',
-      points: 52,
-      img: TeamLeandro,
-    },
-    {
-      id: '8',
-      position: 8,
-      name: 'Dr. Bó',
-      points: 48,
-      img: TeamBo,
-    },
-    {
-      id: '4',
-      position: 3,
-      name: 'Diego Souza',
-      points: 73,
-      img: TeamDiego,
-    },
-    {
-      id: '3',
-      position: 2,
-      name: 'Dú Schiavoni',
-      points: 86,
-      img: TeamDu,
-    },
-    {
-      id: '5',
-      position: 5,
-      name: 'Roger Prata',
-      points: 69,
-      img: TeamRoger,
-    },
-    {
-      id: '6',
-      position: 6,
-      name: 'Filipe Lobanco',
-      points: 66,
-      img: TeamFilipe,
-    },
-    {
-      id: '1',
-      position: 1,
-      name: 'Luisão',
-      points: 87,
-      img: TeamLuisao,
-    },
-    {
-      id: '7',
-      position: 4,
-      name: 'Paulinho Coelho',
-      points: 71,
-      img: TeamPaulinho,
-    }
-  ]
-};
-// ****************************
 
 export function PSOP({navigation}: {navigation: any}) {
   const { user, anonymous } = useAuth();
+  const { allPlayers } = useAllPlayers();
+
   const [lastGame, setLastGame] = useState(0);
   const [currentSeason, setCurrentSeason] = useState(0);
+  const [games, setGames] = useState<GameDTO[]>([] as GameDTO[]);
+  const [playersCurrentSeason, setPlayersCurrentSeason] = useState<string[]>([])
+  const [playersResult, setPlayersResult] = useState<ResultsDTO[]>([] as ResultsDTO[]);
+  const [ranking, setRanking] = useState<RankingProps[]>([] as RankingProps[]);
   const anonymousURL = anonymous.anonymousURL;
-/* ################################################################### */
-/* ################################################################### */
-
-/* ****************** [ORDERING RANKING LIST] *********************** */
-  // First: ordering the values;
-  const disordered:number[] = [];
-  for (var i = 0; i < ranking.rankingList.length; i++) {
-      disordered.push(ranking.rankingList[i].position)
-  }
-
-  const orderedValue = disordered.sort(order);
-  function order(a: number, b: number) {
-      return b - a;
-  };
-
-  orderedValue.reverse()
-
-  // Second: ordering ranking list array;
-  const orderedRankingList: IRankingProps[] = [] 
-  for (var i = 0; i < ranking.rankingList.length; i++) {
-      const ordered = ranking.rankingList.filter(
-          (ranking: IRankingProps) => Number(
-              ranking.position) === orderedValue[i]
-          );
-      orderedRankingList.push(ordered[0]);
-  }
-
-  // *******[LEADER IMAGE]*******
-  if (orderedRankingList[0].name) {
-    let Leader = orderedRankingList[0].img;
-  }
-/* ******************************************************************* */
-/* ################################################################### */
-/* ################### LÓGICA A SER TRABALHADA ####################### */
-/* ################################################################### */
 
   useEffect(() => {
-    fetchSeason()
+    getCurrentSeason()
   }, []);
 
-  useEffect(() => {
-    fetchGames()
-  }, [currentSeason]);
-
   //==> RECUPERA ESTÁGIO DA ATUAL TEMPORADA
-  const fetchSeason = async () => {
+  const getCurrentSeason = async () => {
   const subscribe = firestore()
   .collection('current_season')
   .onSnapshot({
@@ -167,13 +48,14 @@ export function PSOP({navigation}: {navigation: any}) {
       }) as SeasonDTO[]
       setCurrentSeason(data[0].season);
       setLastGame(data[0].game);
+      getGames(data[0].season)
     },
   }) 
   return () => subscribe()
 };
 
-  //==> RECUPERA DADOS DOS JOGOS DA ATUAL TEMPORADA
-  const fetchGames = async () => {
+  //==> RECUPERA JOGOS DA ATUAL TEMPORADA
+  const getGames = async (currentSeason: number) => {
     const subscribe = firestore()
     .collection('game_result')
     .where('season', '==', currentSeason)
@@ -187,26 +69,33 @@ export function PSOP({navigation}: {navigation: any}) {
           }
         }) as GameDTO[]
 
-        console.log('data ', data);
-
+        setGames(data);
+        getPlayers(data);
       },
     }) 
     return () => subscribe()
   };
 
-  // PRÓXIMOS PASSOS
+  //==> RECUPERA PLAYERS DA ATUAL TEMPORADA
+  const getPlayers = (data: GameDTO[]) => {
+    const players = data.length > 0 && findNames(data);
+    players && setPlayersCurrentSeason(players);
 
-  //==> FILTRA OS NOMES DE TODOS OS JOGADORES QUE JÁ ATUARAM NA TEMPORADA
+    getResults()
+  };
+  
+  //==> FILTRA OS RESULTADOS DE CADA PLAYER NA ATUAL TEMPORADA
+  const getResults = () => {
+    const results = findPlayersResults(playersCurrentSeason, games);
+    setPlayersResult(results);
+    getRanking(results);
+  };
 
-  //==> FILTRA RESULTADOS POR NOME
-
-  //==> SOMA A PONTUAÇÃO DE CADA JOGADOR E ORDENA POSIÇÃO
-
-  //==> PERSISTE PONTUAÇÃO E POSIÇÕES NO CONTEXTO E ASYNC STORAGE
-
-/* ################################################################### */
-/* ################### LÓGICA A SER TRABALHADA ####################### */
-/* ################################################################### */
+  //==> SOMA PONTOS E CLASSIFICA OS PLAYERS
+  const getRanking = (results: ResultsDTO[]) => {
+    const orderedRanking = processRanking(results);
+    setRanking(orderedRanking);
+  };
 
   // //==> PERSISTE DADOS DOS JOGOS NO CONTEXTO E ASYNC STORAGE
   // const persistUserData = async (games: GameDTO) => {
@@ -246,25 +135,29 @@ export function PSOP({navigation}: {navigation: any}) {
           onPress={() => navigation.openDrawer()}
         />
         <Content>
-          <LeaderCard 
-            title='LÍDER:'
-            leadersName={orderedRankingList[0].name}
-            weeks={WeeksLead[ranking.weeksInTheLead]}
-          />
+          {ranking.length > 0 &&
+            <LeaderCard 
+              title='LÍDER:'
+              leadersName={ranking[0].player}
+              weeks={'2'}
+            />
+          }
           <LabelPSOP />
 
-          <FlatList
-            data={orderedRankingList}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <CardRanking 
-                svg={item.img}
-                position={`${item.position} º`}
-                name={item.name}
-                points={item.points}
-              />
-            )}
-          />
+          {ranking.length > 0 &&
+            <FlatList
+              data={ranking}
+              keyExtractor={(item, index) => index + item.player}
+              renderItem={({ item, index }) => (
+                <CardRanking 
+
+                  position={`${index + 1} º`}
+                  name={item.player}
+                  points={item.totalPoints}
+                />
+              )}
+            />
+          }
         </Content>
       </Container>
     </KeyboardAvoidingView>

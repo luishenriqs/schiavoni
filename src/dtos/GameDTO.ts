@@ -13,3 +13,18 @@ export type SeasonDTO = {
   game: number;
   season: number;
 };
+
+export type ResultsDTO = {
+  player: string;
+  results: GameDTO[];
+};
+
+export type RankingProps = {
+  player: string;
+  totalPoints: number;
+};
+
+export type RankingTypes = {
+  lastGame: number;
+  orderedRanking: RankingProps[];
+};

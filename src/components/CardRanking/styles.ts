@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components/native";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export const Container = styled.View`
   flex-direction: row;
@@ -58,4 +59,14 @@ export const Points = styled.Text`
     font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
+`;
+
+export const ImageContent = styled.View`
+  justify-content: flex-start;
+`;
+
+export const ImageProfileAndAvatar = styled.Image`
+  width: ${RFValue(70)}px;
+  height: ${RFValue(70)}px;
+  border-radius: 5px;
 `;

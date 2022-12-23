@@ -13,11 +13,13 @@ import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
+import { findNames, findPlayersResults, processRanking } from '@services/rankingServices';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
 import { UserDTO } from '@dtos/userDTO'
+import { GameDTO, SeasonDTO, ResultsDTO, RankingProps, RankingTypes } from '@dtos/GameDTO'
 import {
     Container,
     Header,
@@ -39,6 +41,12 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
   const [allPlayers, setAllPlayers] = useState<UserDTO[]>({} as UserDTO[]);
+  const [lastGame, setLastGame] = useState(0);
+  const [currentSeason, setCurrentSeason] = useState(0);
+  const [games, setGames] = useState<GameDTO[]>([] as GameDTO[]);
+  const [playersCurrentSeason, setPlayersCurrentSeason] = useState<string[]>([])
+  const [playersResult, setPlayersResult] = useState<ResultsDTO[]>([] as ResultsDTO[]);
+  const [ranking, setRanking] = useState<RankingProps[]>([] as RankingProps[]);
 
   useEffect(() => {
     user.email && persistUser();
@@ -48,10 +56,15 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     allPlayers.length > 0 && persistAllPlayers(allPlayers);
   }, [allPlayers]);
 
+  useEffect(() => {
+    ranking.length > 0 && persistRanking(ranking);
+  }, [ranking]);
+
   //==> SIGN IN
   const handleSignInWithEmailAndPassword = async () => {
     await getUserAsyncStorage();
     await getAllPlayersAsyncStorage();
+    await getRankingAsyncStorage();
 
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
@@ -187,6 +200,114 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       console.error(e);
     };
   };
+
+  /* ***RANKING*** */
+
+  //==> RECUPERA RANKING DO ASYNC STORAGE
+  const getRankingAsyncStorage  = async () => {
+    const key = `@storage_Schiavoni:rankingData`;
+    try {
+      const value = await AsyncStorage.getItem(key)
+      const result = value && JSON.parse(value)
+      !!result && result.lastGame === lastGame ? setRanking(result) : await getCurrentSeason()
+    } catch (e) {
+      Alert.alert('Houve um erro na recuperação dos dados do ranking!');
+      console.error(e);
+    };
+  };
+
+  //==> RECUPERA ESTÁGIO DA ATUAL TEMPORADA SE ASYNC STORAGE VAZIO
+  const getCurrentSeason = async () => {
+    const subscribe = firestore()
+    .collection('current_season')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as SeasonDTO[]
+        setCurrentSeason(data[0].season);
+        setLastGame(data[0].game);
+        getGames(data[0].season)
+      },
+    }) 
+    return () => subscribe()
+  };
+  
+  //==> RECUPERA JOGOS DA ATUAL TEMPORADA
+  const getGames = async (currentSeason: number) => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .where('season', '==', currentSeason)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[]
+
+        setGames(data);
+        getPlayers(data);
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> RECUPERA PLAYERS DA ATUAL TEMPORADA
+  const getPlayers = (games: GameDTO[]) => {
+    const players = games.length > 0 && findNames(games);
+    players && setPlayersCurrentSeason(players);
+
+    players && getResults(players, games);
+  };
+  
+  //==> FILTRA OS RESULTADOS DE CADA PLAYER NA ATUAL TEMPORADA
+  const getResults = (players: string[], games: GameDTO[]) => {
+    const results = findPlayersResults(players, games);
+    setPlayersResult(results);
+    getRanking(results);
+  };
+
+  //==> SOMA PONTOS E CLASSIFICA OS PLAYERS
+  const getRanking = (results: ResultsDTO[]) => {
+    const orderedRanking = processRanking(results);
+    setRanking(orderedRanking);
+  };
+
+  //==> PERSISTE RANKING NO ASYNC STORAGE E CONTEXTO
+  const persistRanking = async (orderedRanking: RankingProps[]) => {
+    const key = `@storage_Schiavoni:rankingData`;
+    const ranking = {
+      lastGame,
+      orderedRanking
+    }
+    setRankingAsyncStorage(key, ranking);
+    //setRankingContext(ranking);
+  };
+
+  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
+  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
+  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
+  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
+  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
+
+  //==> PERSISTE ASYNC STORAGE
+  const setRankingAsyncStorage = async (key: string, ranking: RankingTypes) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(ranking));
+    } catch (e) {
+      Alert.alert('Houve um erro ao persistir os dados do ranking!');
+      console.error(e);
+    };
+  };
+
+  /* ***EMAIL*** */
 
   //==> RECUPERA SENHA
   function handleForgotPassword() {
