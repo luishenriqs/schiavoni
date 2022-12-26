@@ -6,20 +6,22 @@ import {
     LeaderInfo,
     Title,
     LeadersName,
-    Weeks,
+    Text,
     Imagem
  } from './styles';
 
 interface IProps {
     title: string;
     leadersName: string;
-    weeks: string;
+    Season: string;
+    Game: string;
 }
 
 export function LeaderCard({
     title,
     leadersName,
-    weeks,
+    Season,
+    Game
 }: IProps) {
     const { COLORS } = useTheme();
     return (
@@ -36,7 +38,8 @@ export function LeaderCard({
                             ? <LeadersName>{leadersName}</LeadersName>
                             : <LeadersName>{leadersName.substring(12, -1)}...</LeadersName>
                         }
-                    <Weeks>{weeks}</Weeks>
+                    <Text>{Season}</Text>
+                    <Text>{Game}</Text>
                 </LeaderInfo>
             </LinearGradient>
         </Container>

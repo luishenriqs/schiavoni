@@ -21,7 +21,7 @@ export const LeaderInfo = styled.View`
 export const Title = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.SM};
+    font-size: ${theme.FONT_SIZE.LG};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
@@ -34,11 +34,10 @@ export const LeadersName = styled.Text`
   `};
 `;
 
-export const Weeks = styled.Text`
-  font-size: ${RFValue(12)}px;
-  margin-top: 10px;
-  margin-bottom: -15px;
+export const Text = styled.Text`
+  margin-top: 5px;
   ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.medium};
     color: ${theme.COLORS.gold};
   `};

@@ -13,13 +13,15 @@ import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
+import { useChampion } from '@hooks/useChampion';
 import { findNames, findPlayersResults, processRanking } from '@services/rankingServices';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
 import { UserDTO } from '@dtos/userDTO'
-import { GameDTO, SeasonDTO, ResultsDTO, RankingProps, RankingTypes } from '@dtos/GameDTO'
+import { GameDTO, SeasonDTO, ResultsDTO } from '@dtos/GameDTO'
+import { RankingProps, RankingDTO } from '@dtos/RankingDTO'
 import {
     Container,
     Header,
@@ -36,6 +38,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
   const { setUserContext } = useAuth();
   const { setAllPlayersContext } = useAllPlayers();
+  const { setRankingContext } = useChampion();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -288,17 +291,11 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       orderedRanking
     }
     setRankingAsyncStorage(key, ranking);
-    //setRankingContext(ranking);
+    setRankingContext(ranking);
   };
 
-  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
-  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
-  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
-  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
-  /* PRÓXIMA TAREFA ===> CRIAR CONTEXTO PARA RANKING */
-
   //==> PERSISTE ASYNC STORAGE
-  const setRankingAsyncStorage = async (key: string, ranking: RankingTypes) => {
+  const setRankingAsyncStorage = async (key: string, ranking: RankingDTO) => {
     try {
       await AsyncStorage.setItem(key, JSON.stringify(ranking));
     } catch (e) {
