@@ -100,7 +100,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     try {
       const value = await AsyncStorage.getItem(key)
       const result = value && JSON.parse(value)
-      result.email && result.email === email ? setUser(result) : await getUserFirestore()
+      result && result.email && result.email === email ? setUser(result) : await getUserFirestore()
     } catch (e) {
       Alert.alert('Houve um erro na recuperação dos dados do player!');
       console.error(e);
@@ -161,7 +161,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     try {
       const value = await AsyncStorage.getItem(key)
       const result = value && JSON.parse(value)
-      result.length > 0 ? setAllPlayers(result) : await getAllPlayersFirestore()
+      result && result.length > 0 ? setAllPlayers(result) : await getAllPlayersFirestore()
     } catch (e) {
       Alert.alert('Houve um erro na recuperação dos dados dos players!');
       console.error(e);

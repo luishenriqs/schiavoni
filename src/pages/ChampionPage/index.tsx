@@ -20,11 +20,11 @@ export function ChampionPage({navigation}: {navigation: any}) {
   const anonymousURL = anonymous.anonymousURL;
 
   useEffect(() => {
-    fetchChampion();
+    getChampion();
   }, []);
 
   //==> RECUPERA DADOS DO CAMPEÃO
-  const fetchChampion = () => {
+  const getChampion = () => {
     const subscribe = firestore()
     .collection('champion')
     .onSnapshot({

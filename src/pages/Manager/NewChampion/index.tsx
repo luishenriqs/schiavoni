@@ -52,6 +52,7 @@ export function NewChampion({navigation}: {navigation: any}) {
     findChampionProfile();
   }, [name]);
 
+  //==> RECUPERA PERFIL DO NOVO CAMPEÃO
   const findChampionProfile = () => {
     const subscribe = firestore()
     .collection('players')
@@ -126,7 +127,7 @@ export function NewChampion({navigation}: {navigation: any}) {
           />
           <Button 
             title='Novo PSOP Champion'
-            onPress={() => setModalVisible(true)}
+            onPress={() => setModalVisible(!modalVisible)}
           />
         </Content>
       </KeyboardAvoidingView>
