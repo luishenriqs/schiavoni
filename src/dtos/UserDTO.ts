@@ -6,3 +6,8 @@ export type UserDTO = {
   avatar: string;
   profile: string;
 };
+
+export type SquadOfPlayersDTO = {
+  label: string;
+  value: string;
+};

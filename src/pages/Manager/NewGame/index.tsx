@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '@components/Header';
 import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import firestore from '@react-native-firebase/firestore'
-import { format } from 'date-fns'
+import firestore from '@react-native-firebase/firestore';
+import { format } from 'date-fns';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTheme } from 'styled-components';
+import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
-import { ChampionDTO } from '@dtos/ChampionDTO'
+import { ChampionDTO } from '@dtos/ChampionDTO';
+import { SquadOfPlayersDTO } from '@dtos/UserDTO';
+import { getPlayersNames } from '@services/playersServices';
 import { Container, Content } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
+  const { allPlayers } = useAllPlayers();
+  const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
   const [currentSeason, setCurrentSeason] = useState(0);
   const [game, setGame] = useState('');
   const [name, setName] = useState('');
   const [position, setPosition] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    getCurrentSeason();
+    getPlayers();
+  }, []);
 
   //==> SELECT STYLE
   const pickerSelectStyles = {
@@ -39,25 +49,11 @@ export function NewGame({navigation}: {navigation: any}) {
     value: null,
   };
 
-  /* RECUPERAR PLAYERS DO FIRESTORE */
-  /* RECUPERAR PLAYERS DO FIRESTORE */
-  /* RECUPERAR PLAYERS DO FIRESTORE */
-  /* RECUPERAR PLAYERS DO FIRESTORE */
-  /* RECUPERAR PLAYERS DO FIRESTORE */
-
   //==> PLAYERS POSSÍVEIS PARA O SELECT
-  const squadOfPlayers = [
-    { label: 'Luisão', value: 'Luisão' },
-    { label: 'Dú Schiavoni', value: 'Dú Schiavoni' },
-    { label: 'Dr. Bó', value: 'Dr. Bó' },
-    { label: 'Leandro Jácomo', value: 'Leandro Jácomo' },
-    { label: 'Túlio Silva', value: 'Túlio Silva' },
-    { label: 'Ednelson', value: 'Ednelson' },
-    { label: 'Diego Souza', value: 'Diego Souza' },
-    { label: 'Filipe Lobanco', value: 'Filipe Lobanco' },
-    { label: 'Roger Prata', value: 'Roger Prata' },
-    { label: 'Paulinho Coelho', value: 'Paulinho Coelho' },
-  ];
+  const getPlayers = () => {
+    const squadOfPlayers = getPlayersNames(allPlayers);
+    squadOfPlayers && setSquad(squadOfPlayers);
+  };
 
   const positionsPlaceholder = {
     label: 'Selecione uma posição:',
@@ -78,10 +74,6 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '10 - Décimo Colocado', value: '10' }
   ];
 
-  useEffect(() => {
-    getCurrentSeason()
-  }, []);
-
   //==> RECUPERA NÚMERO DA ÚLTIMA TEMPORADA
   const getCurrentSeason = async () => {
     const subscribe = firestore()
@@ -95,7 +87,9 @@ export function NewGame({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as ChampionDTO[]
-        setCurrentSeason(data[0].season + 1);
+        data[0].season 
+          ? setCurrentSeason(data[0].season + 1)
+          : setCurrentSeason(1);
       },
     })
     return () => subscribe()
@@ -196,7 +190,7 @@ export function NewGame({navigation}: {navigation: any}) {
             placeholder={playersPlaceholder}
             onValueChange={(value) => setName(value)}
             style={pickerSelectStyles}
-            items={squadOfPlayers}
+            items={squad}
             value={name}
           />
           <RNPickerSelect

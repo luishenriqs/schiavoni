@@ -42,8 +42,10 @@ export function PSOP({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as SeasonDTO[]
-        setCurrentSeason(data[0].season);
-        setLastGame(data[0].game);
+        data[0].season 
+        ? setCurrentSeason(data[0].season)
+        : setCurrentSeason(1);
+        data[0].game && setLastGame(data[0].game);
       },
     }) 
     return () => subscribe()
