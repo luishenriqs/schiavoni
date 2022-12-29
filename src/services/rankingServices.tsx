@@ -1,6 +1,11 @@
 import { GameDTO, ResultsDTO } from '@dtos/GameDTO'
+import { RankingProps } from '@dtos/RankingDTO'
+import { UserDTO } from '@dtos/UserDTO'
 
-export const findNames = (games: GameDTO[]) => {
+const anonymousURL = 'anonymousURL';
+
+//==> RETORNA NOMES DOS PLAYERS
+const findNames = (games: GameDTO[]) => {
     const names = games.map((el) => {
         return el.name
     });
@@ -8,8 +13,9 @@ export const findNames = (games: GameDTO[]) => {
     return players;
 };
 
-export const findPlayersResults = (playersCurrentSeason: string[], games: GameDTO[]) => {
-    return playersCurrentSeason.map((player) => {
+//==> RETORNA PLAYERS E ARRAY COM SEUS RESULTADOS COMPLETOS (GameDTO[])
+const findPlayersResults = (names: string[], games: GameDTO[]) => {
+    return names.map((player) => {
         const results = games.filter((game) => {
             if (game.name === player) return game;
         });
@@ -21,9 +27,10 @@ export const findPlayersResults = (playersCurrentSeason: string[], games: GameDT
     });
 };
 
-export const processRanking = (results: ResultsDTO[]) => {
+//==> PROCESSA O RANKING
+const processRanking = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
     const resultsObjects: any = []
-    //==> RETORNA APENAS O PLAYER E SEUS PONTOS
+    //==> RETORNA PLAYER E SEUS PONTOS SOMADOS
     const result = results.map((item) => {
         const points = item.results.map((game) => {
             return game.points
@@ -61,12 +68,38 @@ export const processRanking = (results: ResultsDTO[]) => {
         return ordered;
     });
 
+    //==> LIMPEZA DE DADOS (REMOVE ENCADEAMENTO DESNECESSÁRIO)
     const resultList = orderedResult.map((elemt) => {
         elemt.map((item) => {
             resultsObjects.push(item)
         })
         return resultsObjects
+    });
+
+    //==> RECUPERA IMAGE PROFILE
+    resultList[0].map((item: RankingProps) => {
+        const onePlayer = allPlayers.filter((player) => {
+        if (player.name === item.player) return player;
+        })
+        item.profile = onePlayer[0].profile ? onePlayer[0].profile : anonymousURL;
     })
 
     return resultList[0];
+};
+
+//==> RETORNA RANKING
+export const getRanking = (
+    games: GameDTO[], 
+    lastGame: number, 
+    allPlayers: UserDTO[]
+) => {
+    const players = games.length > 0 && findNames(games);
+    const results = players && findPlayersResults(players, games);
+    const orderedRanking = results && processRanking(results, allPlayers);
+
+    const ranking = {
+        lastGame,
+        orderedRanking
+    }
+    return ranking;
 };

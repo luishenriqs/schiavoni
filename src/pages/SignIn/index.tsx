@@ -14,14 +14,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
-import { findNames, findPlayersResults, processRanking } from '@services/rankingServices';
+import { getRanking } from '@services/rankingServices';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
 import { UserDTO } from '@dtos/userDTO'
-import { GameDTO, SeasonDTO, ResultsDTO } from '@dtos/GameDTO'
-import { RankingProps, RankingDTO } from '@dtos/RankingDTO'
+import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
 import {
     Container,
     Header,
@@ -49,7 +48,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const handleSignInWithEmailAndPassword = async () => {
     await getUserAsyncStorage();
     await getAllPlayersFirestore();
-    await getCurrentSeasonFirestore();
 
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
@@ -124,24 +122,20 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     };
 
     const key = `@storage_Schiavoni:playerData`;
-    setUserAsyncStorage(key, userData);
-    setUserContext(userData);
-  };
-
-  //==> PERSISTE USER NO ASYNC STORAGE
-  const setUserAsyncStorage = async (key: string, data: any) => {
     try {
-      await AsyncStorage.setItem(key, JSON.stringify(data));
+      await AsyncStorage.setItem(key, JSON.stringify(userData));
     } catch (e) {
       Alert.alert('Houve um erro ao persistir os dados do usuário!');
       console.error(e);
     };
+    setUserContext(userData);
   };
 
 
   /* ***ALL PLAYERS*** */
   
   //==> RECUPERA ALL PLAYERS DO FIRESTORE
+  //==> CHAMA GET CURRENT SEASON
   const getAllPlayersFirestore = async () => {
     const subscribe: any = firestore()
     .collection('players')
@@ -154,22 +148,19 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as UserDTO[]
-        persistAllPlayers(data)
+        setAllPlayersContext(data);
+        getCurrentSeasonFirestore(data);
       },
     }) 
     return () => subscribe()
-  };
-
-  //==> PERSISTE ALL PLAYERS NO CONTEXTO
-  const persistAllPlayers = async (allPlayers: UserDTO[]) => {
-    setAllPlayersContext(allPlayers);
   };
 
 
   /* ***CURRENT SEASON*** */
 
   //==> RECUPERA CURRENT SEASON DO FIRESTORE
-  const getCurrentSeasonFirestore = async () => {
+  //==> CHAMA GET RANKING FIRESTORE
+  const getCurrentSeasonFirestore = async (allPlayers: UserDTO[]) => {
     const subscribe: any = firestore()
     .collection('current_season')
     .onSnapshot({
@@ -183,30 +174,24 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
         }) as SeasonDTO[]
           const season = data[0].season;
           const game = data[0].game;
-          persistCurrentSeason(season, game);
-          getGamesFirestore(season, game);
+          const currentSeasonData = { season, game };
+          setCurrentSeasonContext(currentSeasonData);
+          getGamesResultsFirestore(season, game, allPlayers);
       },
     }) 
     return () => subscribe()
   };
 
-  //==> PERSISTE CURRENT SEASON NO CONTEXTO
-  const persistCurrentSeason = async (
-    currentSeason: number, 
-    lastGame: number
-  ) => {
-    const currentSeasonData = {
-      season: currentSeason,
-      game: lastGame,
-    };
-    setCurrentSeasonContext(currentSeasonData);
-  };
-
 
   /* ***RANKING*** */
 
-  //==> RECUPERA JOGOS DA ATUAL TEMPORADA DO FIRESTORE
-  const getGamesFirestore = async (currentSeason: number, lastGame: number) => {
+  //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
+  //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
+  const getGamesResultsFirestore = async (
+    currentSeason: number, 
+    lastGame: number,
+    allPlayers: UserDTO[]
+  ) => {
     const subscribe = firestore()
     .collection('game_result')
     .where('season', '==', currentSeason)
@@ -219,40 +204,11 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as GameDTO[]
-        getPlayers(data, lastGame);
+        const ranking = getRanking(data, lastGame, allPlayers);
+        ranking && setRankingContext(ranking);
       },
     }) 
-    return () => subscribe()
-  };
-
-  //==> CHAMA SERVICE FIND NAMES
-  const getPlayers = (games: GameDTO[], lastGame: number) => {
-    const players = games.length > 0 && findNames(games);
-    players && getResults(players, games, lastGame);
-  };
-  
-  //==> CHAMA SERVICE FIND PLAYERS RESULTS
-  const getResults = (players: string[], games: GameDTO[], lastGame: number) => {
-    const results = findPlayersResults(players, games);
-    getRanking(results, lastGame);
-  };
-
-  //==> CHAMA SERVICE PROCESS RANKING
-  const getRanking = (results: ResultsDTO[], lastGame: number) => {
-    const orderedRanking = processRanking(results);
-    persistRanking(orderedRanking, lastGame);
-  };
-
-  //==> PERSISTE RANKING NO CONTEXTO
-  const persistRanking = async (
-    orderedRanking: RankingProps[],
-    lastGame: number
-  ) => {
-    const ranking = {
-      lastGame,
-      orderedRanking
-    }
-    setRankingContext(ranking);
+    return () => subscribe();
   };
 
 
