@@ -101,7 +101,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
 
   //==> RECUPERA USER DO FIRESTORE
   const getUserFirestore = async () => {
-    const subscribe = firestore()
+    const subscribe: any = firestore()
     .collection('players')
     .where('email', '==', email)
     .onSnapshot({
@@ -154,7 +154,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   
   //==> RECUPERA ALL PLAYERS DO FIRESTORE
   const getAllPlayersFirestore = async () => {
-    const subscribe = firestore()
+    const subscribe: any = firestore()
     .collection('players')
     .onSnapshot({
       error: (e) => console.error(e),

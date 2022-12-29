@@ -209,12 +209,10 @@ export function NewGame({navigation}: {navigation: any}) {
 
       <ModalComponent
         title={`Novo Resultado`}
-        text={`
-          Temporada: ${currentSeason}, 
-          Etapa: ${game}, 
-          Player: ${name}, 
-          Posição: ${position}
-        `}
+        text={`Temporada: ${currentSeason}`}
+        text2={`Etapa: ${game}`}
+        text3={`Player: ${name}`}
+        text4={`Posição: ${position}`}
         modalVisible={modalVisible}
         greenButtonText={`Confirmar`}
         redButtonText='Cancelar'
