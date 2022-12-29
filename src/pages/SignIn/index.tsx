@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
     KeyboardAvoidingView, 
     TouchableOpacityProps,
@@ -42,12 +42,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState<UserDTO>({} as UserDTO);
-  const [allPlayers, setAllPlayers] = useState<UserDTO[]>({} as UserDTO[]);
-  const [currentSeason, setCurrentSeason] = useState(0);
-  const [lastGame, setLastGame] = useState(0);
-  const [ranking, setRanking] = useState<RankingProps[]>([] as RankingProps[]);
-
 
   /* ***SIGN IN*** */
 
@@ -56,7 +50,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     await getUserAsyncStorage();
     await getAllPlayersFirestore();
     await getCurrentSeasonFirestore();
-    await getRankingAsyncStorage();
 
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
@@ -91,7 +84,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       const value = await AsyncStorage.getItem(key)
       const result = value && JSON.parse(value)
       result && result.email && result.email === email 
-        ? setUser(result) 
+        ? persistUser(result)
         : await getUserFirestore();
     } catch (e) {
       Alert.alert('Houve um erro na recuperação dos dados do usuário!');
@@ -113,18 +106,14 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as UserDTO[]
-        setUser(data[0])
+        persistUser(data[0])
       },
     }) 
     return () => subscribe()
   };
 
-  useEffect(() => {
-    user.email && persistUser();
-  }, [user]);
-
   //==> PERSISTE USER NO ASYNC STORAGE E CONTEXTO
-  const persistUser = async () => {
+  const persistUser = async (user: UserDTO) => {
     const userData = {
       doc_id: user.doc_id,
       name: user.name,
@@ -165,15 +154,11 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as UserDTO[]
-        setAllPlayers(data)
+        persistAllPlayers(data)
       },
     }) 
     return () => subscribe()
   };
-
-  useEffect(() => {
-    allPlayers.length > 0 && persistAllPlayers(allPlayers);
-  }, [allPlayers]);
 
   //==> PERSISTE ALL PLAYERS NO CONTEXTO
   const persistAllPlayers = async (allPlayers: UserDTO[]) => {
@@ -196,47 +181,32 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as SeasonDTO[]
-          setCurrentSeason(data[0].season);
-          setLastGame(data[0].game);
+          const season = data[0].season;
+          const game = data[0].game;
+          persistCurrentSeason(season, game);
+          getGamesFirestore(season, game);
       },
     }) 
     return () => subscribe()
   };
 
-  useEffect(() => {
-    currentSeason && persistCurrentSeason();
-  }, [currentSeason]);
-
   //==> PERSISTE CURRENT SEASON NO CONTEXTO
-  const persistCurrentSeason = async () => {
+  const persistCurrentSeason = async (
+    currentSeason: number, 
+    lastGame: number
+  ) => {
     const currentSeasonData = {
       season: currentSeason,
       game: lastGame,
     };
-
     setCurrentSeasonContext(currentSeasonData);
   };
 
 
   /* ***RANKING*** */
 
-  //==> RECUPERA RANKING DO ASYNC STORAGE
-  const getRankingAsyncStorage  = async () => {
-    const key = `@storage_Schiavoni:rankingData`;
-    try {
-      const value = await AsyncStorage.getItem(key)
-      const result = value && JSON.parse(value)
-      !!result && result.lastGame === lastGame 
-        ? setRanking(result) 
-        : await getGames(currentSeason)
-    } catch (e) {
-      Alert.alert('Houve um erro na recuperação dos dados do ranking!');
-      console.error(e);
-    };
-  };
-
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA DO FIRESTORE
-  const getGames = async (currentSeason: number) => {
+  const getGamesFirestore = async (currentSeason: number, lastGame: number) => {
     const subscribe = firestore()
     .collection('game_result')
     .where('season', '==', currentSeason)
@@ -249,53 +219,40 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as GameDTO[]
-        getPlayers(data);
+        getPlayers(data, lastGame);
       },
     }) 
     return () => subscribe()
   };
 
   //==> CHAMA SERVICE FIND NAMES
-  const getPlayers = (games: GameDTO[]) => {
+  const getPlayers = (games: GameDTO[], lastGame: number) => {
     const players = games.length > 0 && findNames(games);
-    players && getResults(players, games);
+    players && getResults(players, games, lastGame);
   };
   
   //==> CHAMA SERVICE FIND PLAYERS RESULTS
-  const getResults = (players: string[], games: GameDTO[]) => {
+  const getResults = (players: string[], games: GameDTO[], lastGame: number) => {
     const results = findPlayersResults(players, games);
-    getRanking(results);
+    getRanking(results, lastGame);
   };
 
   //==> CHAMA SERVICE PROCESS RANKING
-  const getRanking = (results: ResultsDTO[]) => {
+  const getRanking = (results: ResultsDTO[], lastGame: number) => {
     const orderedRanking = processRanking(results);
-    setRanking(orderedRanking);
+    persistRanking(orderedRanking, lastGame);
   };
 
-  useEffect(() => {
-    ranking.length > 0 && persistRanking(ranking);
-  }, [ranking]);
-
-  //==> PERSISTE RANKING NO ASYNC STORAGE E CONTEXTO
-  const persistRanking = async (orderedRanking: RankingProps[]) => {
-    const key = `@storage_Schiavoni:rankingData`;
+  //==> PERSISTE RANKING NO CONTEXTO
+  const persistRanking = async (
+    orderedRanking: RankingProps[],
+    lastGame: number
+  ) => {
     const ranking = {
       lastGame,
       orderedRanking
     }
-    setRankingAsyncStorage(key, ranking);
     setRankingContext(ranking);
-  };
-
-  //==> PERSISTE RANKING NO ASYNC STORAGE
-  const setRankingAsyncStorage = async (key: string, ranking: RankingDTO) => {
-    try {
-      await AsyncStorage.setItem(key, JSON.stringify(ranking));
-    } catch (e) {
-      Alert.alert('Houve um erro ao persistir os dados do ranking!');
-      console.error(e);
-    };
   };
 
 

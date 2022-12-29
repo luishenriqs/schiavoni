@@ -118,7 +118,6 @@ export function Wellcome({navigation}: {navigation: any}) {
       avatar: '',
       profile: ''
     })
-    .then(() => { console.log('CHAMA PÁG PARA ATUALIZAR PROFILE E AVATAR')})
     .catch((error) => console.error(error))
   };
 

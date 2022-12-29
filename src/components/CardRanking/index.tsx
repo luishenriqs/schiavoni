@@ -1,5 +1,4 @@
 import React from 'react';
-import { SvgProps } from 'react-native-svg';
 import {
     Container,
     InfoBox,
@@ -12,17 +11,17 @@ import {
  } from './styles';
 
 interface IProps {
-
     position: string;
     name: string;
     points: number;
+    avatar?: string;
 }
 
 export function CardRanking({
-
     position,
     name,
     points,
+    avatar
 }: IProps) {
     return (
         <Container>
@@ -31,9 +30,11 @@ export function CardRanking({
             </InfoBox>
             <NameBox>
                 <ImageContent>
-                    <ImageProfileAndAvatar source={{uri: 'https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Anonymous%20Player.jpeg?alt=media&token=4beab875-e86c-46ba-b950-7012d7e14557'}}/>
+                    {avatar !== 'anonymousURL'
+                        ? <ImageProfileAndAvatar source={{uri: avatar}}/>
+                        : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+                    }
                 </ImageContent>
-
                 {name.length <= 17
                     ? <Name>{name}</Name>
                     : <Name>{name.substring(12, -1)}...</Name>

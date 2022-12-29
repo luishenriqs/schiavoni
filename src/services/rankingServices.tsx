@@ -22,6 +22,7 @@ export const findPlayersResults = (playersCurrentSeason: string[], games: GameDT
 };
 
 export const processRanking = (results: ResultsDTO[]) => {
+    const resultsObjects: any = []
     //==> RETORNA APENAS O PLAYER E SEUS PONTOS
     const result = results.map((item) => {
         const points = item.results.map((game) => {
@@ -48,13 +49,24 @@ export const processRanking = (results: ResultsDTO[]) => {
     //==> ORDENA OS PONTOS
     const orderedPoints = onlyPoints.sort().reverse();
 
-    //==> ORDENA OS RESULTADOS
+    //==> ORDENA OS RESULTADOS E TRATA DUPLICIDADES DE PONTOS
     let orderedResult = orderedPoints.map((el) => {
         const ordered = result.filter((item) => {
-            return item.totalPoints === el && item
+            if (item.totalPoints === el) {
+                const index = result.indexOf(item);
+                result.splice(index, 1);
+                return item;
+            }
         })
-        return ordered[0];
+        return ordered;
     });
 
-    return orderedResult;
+    const resultList = orderedResult.map((elemt) => {
+        elemt.map((item) => {
+            resultsObjects.push(item)
+        })
+        return resultsObjects
+    })
+
+    return resultList[0];
 };
