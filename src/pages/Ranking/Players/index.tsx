@@ -77,9 +77,9 @@ const playersInfo = {
 // ****************************
 
 export function Players({navigation}: {navigation: any}) {
-  const { user, anonymous } = useAuth();
+  const { user } = useAuth();
 
-  const anonymousURL = anonymous.anonymousURL;
+  const anonymousURL = 'anonymousURL';
   
   return (
     <KeyboardAvoidingView style={{flex: 1}} enabled>

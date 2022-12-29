@@ -38,58 +38,15 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
   const { setUserContext } = useAuth();
   const { setAllPlayersContext } = useAllPlayers();
-  const { setRankingContext } = useChampion();
+  const { setRankingContext, setCurrentSeasonContext } = useChampion();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
   const [allPlayers, setAllPlayers] = useState<UserDTO[]>({} as UserDTO[]);
-  const [lastGame, setLastGame] = useState(0);
   const [currentSeason, setCurrentSeason] = useState(0);
-  const [games, setGames] = useState<GameDTO[]>([] as GameDTO[]);
-  const [playersCurrentSeason, setPlayersCurrentSeason] = useState<string[]>([])
-  const [playersResult, setPlayersResult] = useState<ResultsDTO[]>([] as ResultsDTO[]);
+  const [lastGame, setLastGame] = useState(0);
   const [ranking, setRanking] = useState<RankingProps[]>([] as RankingProps[]);
-
-  
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-  /* ***PRIMEIRO ACESSO*** */
-
-  //==> CRIA DO DOC GAME_RESULT NO FIRESTORE CASO NÃO EXISTA
-  const createGameResult = () => {
-    firestore()
-    .collection('game_result')
-    .doc('Game ' + new Date())
-    .set({
-      season: 0,
-      game: 0,
-      name: '',
-      position: 0,
-      points: 0,
-      date: '00/00/0000',
-    })
-    .catch((error) => console.error(error))
-  };
-
-  //==> CRIA DO DOC CURRENT_SEASON NO FIRESTORE CASO NÃO EXISTA
-  const createCurrentSeason = () => {
-    firestore()
-    .collection('current_season')
-    .doc('currentData')
-    .set({
-      season: 0,
-      game: 0,
-    })
-    .catch((error) => console.error(error))
-  };
 
 
   /* ***SIGN IN*** */
@@ -97,7 +54,8 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   //==> SIGN IN
   const handleSignInWithEmailAndPassword = async () => {
     await getUserAsyncStorage();
-    await getAllPlayersAsyncStorage();
+    await getAllPlayersFirestore();
+    await getCurrentSeasonFirestore();
     await getRankingAsyncStorage();
 
     if (!email || !email) {
@@ -124,7 +82,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   };
 
 
-  /* ***BUSCA DO ASYNC STORAGE*** */
+  /* ***USER*** */
 
   //==> RECUPERA USER DO ASYNC STORAGE
   const getUserAsyncStorage  = async () => {
@@ -141,39 +99,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     };
   };
 
-  //==> RECUPERA ALL PLAYERS DO ASYNC STORAGE
-  const getAllPlayersAsyncStorage  = async () => {
-    const key = `@storage_Schiavoni:allPlayersData`;
-    try {
-      const value = await AsyncStorage.getItem(key)
-      const result = value && JSON.parse(value)
-      result && result.length > 0 
-        ? setAllPlayers(result) 
-        : await getAllPlayersFirestore()
-    } catch (e) {
-      Alert.alert('Houve um erro na recuperação dos dados dos players!');
-      console.error(e);
-    };
-  };
-
-  //==> RECUPERA RANKING DO ASYNC STORAGE
-  const getRankingAsyncStorage  = async () => {
-    const key = `@storage_Schiavoni:rankingData`;
-    try {
-      const value = await AsyncStorage.getItem(key)
-      const result = value && JSON.parse(value)
-      !!result && result.lastGame === lastGame 
-        ? setRanking(result) 
-        : await getCurrentSeason()
-    } catch (e) {
-      Alert.alert('Houve um erro na recuperação dos dados do ranking!');
-      console.error(e);
-    };
-  };
-
-
-  /* ***BUSCA DO FIRESTORE*** */
-  
   //==> RECUPERA USER DO FIRESTORE
   const getUserFirestore = async () => {
     const subscribe = firestore()
@@ -193,81 +118,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     }) 
     return () => subscribe()
   };
-
-  //==> RECUPERA ALL PLAYERS DO FIRESTORE
-  const getAllPlayersFirestore = async () => {
-    const subscribe = firestore()
-    .collection('players')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-        setAllPlayers(data)
-      },
-    }) 
-    return () => subscribe()
-  };
-
-  //==> RECUPERA CURRENT SEASON DO FIRESTORE
-  const getCurrentSeason = async () => {
-    const subscribe: any = firestore()
-    .collection('current_season')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as SeasonDTO[]
-        if (data.length === 0) {
-          createCurrentSeason();
-          getCurrentSeason();
-        } else {
-          setCurrentSeason(data[0].season);
-          setLastGame(data[0].game);
-          getGames(data[0].season);
-        };
-      },
-    }) 
-    return () => subscribe()
-  };
-
-  //==> RECUPERA JOGOS DA ATUAL TEMPORADA DO FIRESTORE
-  const getGames = async (currentSeason: number) => {
-    const subscribe = firestore()
-    .collection('game_result')
-    .where('season', '==', currentSeason)
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as GameDTO[]
-        if (data.length === 0) {
-          createGameResult();
-          getGames(0);
-        } else {
-          setGames(data);
-          getPlayers(data);
-        };
-      },
-    }) 
-    return () => subscribe()
-  };
-
-
-
-  /* ***PERSIST*** */
 
   useEffect(() => {
     user.email && persistUser();
@@ -299,25 +149,128 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     };
   };
 
+
+  /* ***ALL PLAYERS*** */
+  
+  //==> RECUPERA ALL PLAYERS DO FIRESTORE
+  const getAllPlayersFirestore = async () => {
+    const subscribe = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+        setAllPlayers(data)
+      },
+    }) 
+    return () => subscribe()
+  };
+
   useEffect(() => {
     allPlayers.length > 0 && persistAllPlayers(allPlayers);
   }, [allPlayers]);
 
-  //==> PERSISTE ALL PLAYERS NO ASYNC STORAGE E CONTEXTO
+  //==> PERSISTE ALL PLAYERS NO CONTEXTO
   const persistAllPlayers = async (allPlayers: UserDTO[]) => {
-    const key = `@storage_Schiavoni:allPlayersData`;
-    setAllPlayersAsyncStorage(key, allPlayers);
     setAllPlayersContext(allPlayers);
   };
 
-  //==> PERSISTE TODOS OS PLAYERS NO ASYNC STORAGE
-  const setAllPlayersAsyncStorage = async (key: string, data: any) => {
+
+  /* ***CURRENT SEASON*** */
+
+  //==> RECUPERA CURRENT SEASON DO FIRESTORE
+  const getCurrentSeasonFirestore = async () => {
+    const subscribe: any = firestore()
+    .collection('current_season')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as SeasonDTO[]
+          setCurrentSeason(data[0].season);
+          setLastGame(data[0].game);
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  useEffect(() => {
+    currentSeason && persistCurrentSeason();
+  }, [currentSeason]);
+
+  //==> PERSISTE CURRENT SEASON NO CONTEXTO
+  const persistCurrentSeason = async () => {
+    const currentSeasonData = {
+      season: currentSeason,
+      game: lastGame,
+    };
+
+    setCurrentSeasonContext(currentSeasonData);
+  };
+
+
+  /* ***RANKING*** */
+
+  //==> RECUPERA RANKING DO ASYNC STORAGE
+  const getRankingAsyncStorage  = async () => {
+    const key = `@storage_Schiavoni:rankingData`;
     try {
-      await AsyncStorage.setItem(key, JSON.stringify(data));
+      const value = await AsyncStorage.getItem(key)
+      const result = value && JSON.parse(value)
+      !!result && result.lastGame === lastGame 
+        ? setRanking(result) 
+        : await getGames(currentSeason)
     } catch (e) {
-      Alert.alert('Houve um erro ao persistir os dados dos players!');
+      Alert.alert('Houve um erro na recuperação dos dados do ranking!');
       console.error(e);
     };
+  };
+
+  //==> RECUPERA JOGOS DA ATUAL TEMPORADA DO FIRESTORE
+  const getGames = async (currentSeason: number) => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .where('season', '==', currentSeason)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[]
+        getPlayers(data);
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> CHAMA SERVICE FIND NAMES
+  const getPlayers = (games: GameDTO[]) => {
+    const players = games.length > 0 && findNames(games);
+    players && getResults(players, games);
+  };
+  
+  //==> CHAMA SERVICE FIND PLAYERS RESULTS
+  const getResults = (players: string[], games: GameDTO[]) => {
+    const results = findPlayersResults(players, games);
+    getRanking(results);
+  };
+
+  //==> CHAMA SERVICE PROCESS RANKING
+  const getRanking = (results: ResultsDTO[]) => {
+    const orderedRanking = processRanking(results);
+    setRanking(orderedRanking);
   };
 
   useEffect(() => {
@@ -343,30 +296,6 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       Alert.alert('Houve um erro ao persistir os dados do ranking!');
       console.error(e);
     };
-  };
-
-
-  /* ***SERVICES*** */
-
-  //==> CHAMA SERVICE FIND NAMES
-  const getPlayers = (games: GameDTO[]) => {
-    const players = games.length > 0 && findNames(games);
-    players && setPlayersCurrentSeason(players);
-
-    players && getResults(players, games);
-  };
-  
-  //==> CHAMA SERVICE FIND PLAYERS RESULTS
-  const getResults = (players: string[], games: GameDTO[]) => {
-    const results = findPlayersResults(players, games);
-    setPlayersResult(results);
-    getRanking(results);
-  };
-
-  //==> CHAMA SERVICE PROCESS RANKING
-  const getRanking = (results: ResultsDTO[]) => {
-    const orderedRanking = processRanking(results);
-    setRanking(orderedRanking);
   };
 
 

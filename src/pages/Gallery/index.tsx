@@ -24,7 +24,7 @@ type IGallery = {
 };
 
 export function Gallery({navigation}: {navigation: any}) {
-  const { user, anonymous } = useAuth();
+  const { user } = useAuth();
   const [id, setId] = useState('');
   const [path, setPath] = useState('');
   const [gallery, setGallery] = useState<IGallery[]>([] as IGallery[]);
@@ -33,7 +33,7 @@ export function Gallery({navigation}: {navigation: any}) {
   const [fetchLength, setFetchLength] = useState(0);
   let toRender: IGallery[] = [];
 
-  const anonymousURL = anonymous.anonymousURL;
+  const anonymousURL = 'anonymousURL';
 
   useEffect(() => {
     fetchGallery()

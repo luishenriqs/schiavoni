@@ -18,9 +18,9 @@ export type GamesProps = {
 };
 
 export function Games({navigation}: {navigation: any}) {
-  const { user, anonymous } = useAuth();
+  const { user } = useAuth();
 
-  const anonymousURL = anonymous.anonymousURL;
+  const anonymousURL = 'anonymousURL';
   
   const [games, setGames] = useState<GamesProps[]>([]);
 

@@ -31,9 +31,11 @@ export function Header({
       <HeaderWrapper headerSize={headerSize}>
         <HeaderContent>
           {picture
-          ? <Image source={{uri: picture}}/>
-          : <Empty/>
-        }
+            ? picture === 'anonymousURL'
+              ? <Image source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+              : <Image source={{uri: picture}}/>
+            : <Empty/>
+          }
           <Title>{title}</Title>
           <IconContainer>
             <Icon size={30} name="menu" onPress={onPress} />

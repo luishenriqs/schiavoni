@@ -12,7 +12,7 @@ import { SeasonDTO } from '@dtos/GameDTO'
 import { Container, Content } from './styles';
 
 export function PSOP({navigation}: {navigation: any}) {
-  const { user, anonymous } = useAuth();
+  const { user } = useAuth();
   const { ranking } = useChampion();
   const { allPlayers } = useAllPlayers();
 
@@ -22,7 +22,7 @@ export function PSOP({navigation}: {navigation: any}) {
   const [lastGame, setLastGame] = useState(0);
   const [currentSeason, setCurrentSeason] = useState(0);
 
-  const anonymousURL = anonymous.anonymousURL;
+  const anonymousURL = 'anonymousURL';
 
   useEffect(() => {
     getCurrentSeason()

@@ -23,7 +23,7 @@ import {
 } from './styles';
 
 export function Profile({navigation}: {navigation: any}) {
-  const { user, anonymous, setUserContext } = useAuth();
+  const { user, setUserContext } = useAuth();
  
   const [profileImage, setProfileImage] = useState('');
   const [progressProfileImage, setProgressProfileImage] = useState('0');
@@ -32,8 +32,6 @@ export function Profile({navigation}: {navigation: any}) {
   const [avatar, setAvatar] = useState('');
   const [progressAvatar, setProgressAvatar] = useState('0');
   const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('0 transferido de 0');
-  
-  const anonymousURL = anonymous.anonymousURL;
 
   //==> ATUALIZA PROFILE URL NO FIRESTORE
   const updateProfileImageURL = async (url: string) => {
@@ -209,7 +207,7 @@ export function Profile({navigation}: {navigation: any}) {
                 <ImageProfileAndAvatar source={{uri: user.profile}}/>
               </ImageContent>
             : <ImageContent>
-                <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+                <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
               </ImageContent>
           }
           <ImageContent>
@@ -241,7 +239,7 @@ export function Profile({navigation}: {navigation: any}) {
                 <ImageProfileAndAvatar source={{uri: user.avatar}}/>
               </ImageContent>
             : <ImageContent>
-                <ImageProfileAndAvatar source={{uri: anonymousURL}}/>
+                <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
               </ImageContent>
           }
           <ImageContent>

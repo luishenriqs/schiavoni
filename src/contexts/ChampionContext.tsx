@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createContext, ReactNode } from 'react';
 import { ChampionDTO } from '@dtos/ChampionDTO';
 import { RankingDTO } from '@dtos/RankingDTO';
+import { CurrentSeasonDTO } from '@dtos/CurrentSeasonDTO';
 
 //==> TIPAGEM DO CONTEXTO
 export type ChampionContextDataProps = {
@@ -9,8 +10,9 @@ export type ChampionContextDataProps = {
     setChampionContext: (championData: ChampionDTO) => void;
     ranking: RankingDTO;
     setRankingContext: (rankingData: RankingDTO) => void;
+    currentSeason: CurrentSeasonDTO;
+    setCurrentSeasonContext: (currentSeasonData: CurrentSeasonDTO) => void;
 };
-
 //==> TIPAGEM DO PROVIDER
 type ChampionContextProviderProps = {
     children: ReactNode;
@@ -24,16 +26,24 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   const [champion, setChampion] = useState<ChampionDTO>({} as ChampionDTO);
 
   //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
-  const [ranking, setRanking] = useState<RankingDTO>({} as RankingDTO)
+  const [ranking, setRanking] = useState<RankingDTO>({} as RankingDTO);
+
+  //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
+  const [currentSeason, setCurrentSeason] = useState<CurrentSeasonDTO>({} as CurrentSeasonDTO);
 
   //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
   function setChampionContext(championData: ChampionDTO) {
-    setChampion(championData)
+    setChampion(championData);
   };
 
   //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
   function setRankingContext(rankingData: RankingDTO) {
-    setRanking(rankingData)
+    setRanking(rankingData);
+  };
+
+  //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
+  function setCurrentSeasonContext(currentSeasonData: CurrentSeasonDTO) {
+    setCurrentSeason(currentSeasonData);
   };
   
   //==> RETORNO DO PROVIDER
@@ -42,7 +52,9 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
       champion, 
       setChampionContext, 
       ranking, 
-      setRankingContext 
+      setRankingContext,
+      currentSeason,
+      setCurrentSeasonContext
     }}>
       {children}
     </ChampionContext.Provider>
