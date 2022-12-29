@@ -22,6 +22,16 @@ export function NewPlayer({navigation}: {navigation: any}) {
     isAdmin ? setIsAdmin(false) : setIsAdmin(true);
   };
 
+  //==> VERIFICAÇÃO DE CAMPOS OBRIGATÓRIOS
+  function handleCreateUserAccount() {
+    if (!email || !email) {
+      Alert.alert('Informe seu email e senha!')
+    } else {
+      createNewPlayer(name, email, password, isAdmin)
+    }
+  };
+
+  //==> CRIA NOVO USUÁRIO NO FIRESTORE E NO FIREBASE/AUTH
   function createNewPlayer(
     name: string,
     email: string, 
@@ -42,7 +52,12 @@ export function NewPlayer({navigation}: {navigation: any}) {
 
     auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(() => { Alert.alert('Novo player criado com sucesso!') })
+    .then(() => { 
+      Alert.alert('Novo player criado com sucesso!');
+      setName('');
+      setEmail('');
+      setPassword('');
+    })
     .catch(erro => {
       console.error(erro.code)
       if (erro.code === 'auth/email-already-in-use') {
@@ -57,14 +72,6 @@ export function NewPlayer({navigation}: {navigation: any}) {
         return Alert.alert('Senha deve ter no mínimo 6 dígitos');
       };
     });
-  };
-
-  function handleCreateUserAccount() {
-    if (!email || !email) {
-      Alert.alert('Informe seu email e senha!')
-    } else {
-      createNewPlayer(name, email, password, isAdmin)
-    }
   };
 
   return (
@@ -88,6 +95,7 @@ export function NewPlayer({navigation}: {navigation: any}) {
             placeholder='Name'
             autoCorrect={false}
             onChangeText={(value) => setName(value)}
+            value={name}
           />
           <Input 
             placeholder='Email'
@@ -95,11 +103,13 @@ export function NewPlayer({navigation}: {navigation: any}) {
             autoCorrect={false}
             autoCapitalize='none'
             onChangeText={(value) => setEmail(value)}
+            value={email}
           />
           <Input 
             placeholder='Password'
             secureTextEntry
             onChangeText={(value) => setPassword(value)}
+            value={password}
           />
           <ButtonRadio 
             title='Admin'
@@ -107,7 +117,7 @@ export function NewPlayer({navigation}: {navigation: any}) {
             onPress={handleSelectAdmin}
           />
           <Button 
-            title='Add New Player'
+            title='Novo Player'
             onPress={handleCreateUserAccount}
           />
         </Content>
