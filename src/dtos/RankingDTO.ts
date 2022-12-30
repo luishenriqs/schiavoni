@@ -9,3 +9,9 @@ export type RankingDTO = {
   lastGame: number;
   orderedRanking: RankingProps[];
 };
+
+export type PercentPerformanceDTO = {
+  totalPoints: number;
+  games: number;
+  player: string;
+};

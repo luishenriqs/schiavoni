@@ -33,8 +33,7 @@ export function PSOP({navigation}: {navigation: any}) {
                 ranking.orderedRanking[0].avatar
                   ? ranking.orderedRanking[0].avatar
                   : anonymousURL
-              }
-                  
+              }   
               Season={`Temporada ${currentSeason.season}`}
               Game={`Etapa ${currentSeason.game}`}
             />

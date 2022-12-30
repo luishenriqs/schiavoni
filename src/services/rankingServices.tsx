@@ -10,6 +10,8 @@ const findNames = (games: GameDTO[]) => {
         return el.name
     });
     const players = [...new Set(names)];
+    const index = players.indexOf("");
+    players.splice(index, 1);
     return players;
 };
 

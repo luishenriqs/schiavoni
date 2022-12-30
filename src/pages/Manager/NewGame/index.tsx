@@ -6,18 +6,23 @@ import { format } from 'date-fns';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTheme } from 'styled-components';
 import { useAllPlayers } from '@hooks/useAllPlayers';
+import { useChampion } from '@hooks/useChampion';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
-import { ChampionDTO } from '@dtos/ChampionDTO';
-import { SquadOfPlayersDTO } from '@dtos/UserDTO';
 import { getPlayersNames } from '@services/playersServices';
+import { getRanking } from '@services/rankingServices';
+import { ChampionDTO } from '@dtos/ChampionDTO';
+import { UserDTO, SquadOfPlayersDTO } from '@dtos/UserDTO';
+import { GameDTO } from '@dtos/GameDTO'
 import { Container, Content } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
   const { allPlayers } = useAllPlayers();
+  const { setRankingContext } = useChampion();
+
   const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
   const [currentSeason, setCurrentSeason] = useState(0);
   const [game, setGame] = useState('');
@@ -75,7 +80,7 @@ export function NewGame({navigation}: {navigation: any}) {
   ];
 
   //==> RECUPERA NÚMERO DA ÚLTIMA TEMPORADA
-  const getCurrentSeason = async () => {
+  const getCurrentSeason = () => {
     const subscribe = firestore()
     .collection('champion')
     .onSnapshot({
@@ -96,7 +101,7 @@ export function NewGame({navigation}: {navigation: any}) {
   };
 
   //==> REGISTRA UM NOVO RESULTADO INDIVIDUAL
-  async function handleAddResult() {
+  const handleAddResult = () => {
     let points = 0;
     switch (Number(position)) {
       case 1:
@@ -159,9 +164,56 @@ export function NewGame({navigation}: {navigation: any}) {
         season: currentSeason,
         game: Number(game),
       })
+      .then(() => getAllPlayersFirestore(currentSeason, Number(game)))
       .catch((error) => console.error(error))
     }
   };  
+
+  //==> RECUPERA ALL PLAYERS DO FIRESTORE
+  const getAllPlayersFirestore = (season: number, game: number) => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[];
+        const allPlayers = data;
+        getGamesResultsFirestore(season, game, allPlayers);
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
+  //==> PROCESSA, ATUALIZA E PERSISTE RANKING NO CONTEXTO
+  const getGamesResultsFirestore = (
+    currentSeason: number, 
+    lastGame: number,
+    allPlayers: UserDTO[]
+  ) => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .where('season', '==', currentSeason)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[];
+        const ranking = getRanking(data, lastGame, allPlayers);
+        ranking && setRankingContext(ranking);
+      },
+    }) 
+    return () => subscribe();
+  };
 
   return (
     <Container>

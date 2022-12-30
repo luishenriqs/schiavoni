@@ -15,6 +15,7 @@ import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
 import { getRanking } from '@services/rankingServices';
+import { getLevel } from '@services/levelServices';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
@@ -47,7 +48,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   //==> SIGN IN
   const handleSignInWithEmailAndPassword = async () => {
     await getUserAsyncStorage();
-    await getAllPlayersFirestore();
+    getAllPlayersFirestore();
 
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
@@ -91,7 +92,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   };
 
   //==> RECUPERA USER DO FIRESTORE
-  const getUserFirestore = async () => {
+  const getUserFirestore = () => {
     const subscribe: any = firestore()
     .collection('players')
     .where('email', '==', email)
@@ -136,7 +137,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   
   //==> RECUPERA ALL PLAYERS DO FIRESTORE
   //==> CHAMA GET CURRENT SEASON
-  const getAllPlayersFirestore = async () => {
+  const getAllPlayersFirestore = () => {
     const subscribe: any = firestore()
     .collection('players')
     .onSnapshot({
@@ -150,6 +151,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
         }) as UserDTO[]
         setAllPlayersContext(data);
         getCurrentSeasonFirestore(data);
+        getAllGamesResulstsFirestore(data);
       },
     }) 
     return () => subscribe()
@@ -160,7 +162,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
 
   //==> RECUPERA CURRENT SEASON DO FIRESTORE
   //==> CHAMA GET RANKING FIRESTORE
-  const getCurrentSeasonFirestore = async (allPlayers: UserDTO[]) => {
+  const getCurrentSeasonFirestore = (allPlayers: UserDTO[]) => {
     const subscribe: any = firestore()
     .collection('current_season')
     .onSnapshot({
@@ -187,7 +189,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
 
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
   //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
-  const getGamesResultsFirestore = async (
+  const getGamesResultsFirestore = (
     currentSeason: number, 
     lastGame: number,
     allPlayers: UserDTO[]
@@ -206,6 +208,30 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
         }) as GameDTO[]
         const ranking = getRanking(data, lastGame, allPlayers);
         ranking && setRankingContext(ranking);
+      },
+    }) 
+    return () => subscribe();
+  };
+
+  /* ***LEVEL*** */
+
+  //==> RECUPERA TODOS OS JOGOS DAS ÚTIMAS 3 TEMPORADAS NO FIRESTORE
+  //==> PROCESSA E PERSISTE LEVEL NO CONTEXTO
+  const getAllGamesResulstsFirestore = (allPlayers: UserDTO[]) => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[]
+        const level = getLevel(data, allPlayers);
+        console.log('LEVEL ================> ', level)
+        //level && setLevelContext(level);
       },
     }) 
     return () => subscribe();
