@@ -67,9 +67,10 @@ export function ChampionPage({navigation}: {navigation: any}) {
       <Content>
         <Title>The great PSOP Champion!</Title>
         <Text>{champion.name}</Text>
-        <Imagem 
-          source={{uri: champion.profile ? champion.profile : anonymousURL}} 
-        />
+        {champion.profile
+          ? <Imagem source={{uri: champion.profile}} />
+          : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+        }
       </Content>
     </Container>
   );

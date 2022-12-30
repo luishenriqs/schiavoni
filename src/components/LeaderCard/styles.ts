@@ -12,7 +12,7 @@ export const Container = styled.View`
 
 export const LeaderInfo = styled.View`
   flex: 1;
-  width: ${RFValue(175)}px;
+  width: ${RFValue(200)}px;
   padding-top: 15px;
   margin: 0 10px;
   align-items: center;
@@ -29,7 +29,7 @@ export const Title = styled.Text`
 export const LeadersName = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XLL};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

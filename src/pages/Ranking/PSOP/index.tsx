@@ -29,8 +29,14 @@ export function PSOP({navigation}: {navigation: any}) {
             <LeaderCard 
               title='LÍDER:'
               leadersName={ranking.orderedRanking[0].player}
+              avatar={
+                ranking.orderedRanking[0].avatar
+                  ? ranking.orderedRanking[0].avatar
+                  : anonymousURL
+              }
+                  
               Season={`Temporada ${currentSeason.season}`}
-              Game={`Game ${currentSeason.game}`}
+              Game={`Etapa ${currentSeason.game}`}
             />
           }
           <LabelPSOP />

@@ -82,7 +82,8 @@ const processRanking = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
         if (player.name === item.player) return player;
         })
         item.profile = onePlayer[0].profile ? onePlayer[0].profile : anonymousURL;
-    })
+        item.avatar = onePlayer[0].avatar ? onePlayer[0].avatar : anonymousURL;
+    });
 
     return resultList[0];
 };

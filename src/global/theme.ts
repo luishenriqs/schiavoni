@@ -32,10 +32,12 @@ export default {
   },
 
   FONT_SIZE: {
+    SS: `${RFValue(12)}px`,
     SM: `${RFValue(14)}px`,
     MD: `${RFValue(16)}px`,
     LG: `${RFValue(18)}px`,
     XL: `${RFValue(20)}px`,
+    XLL: `${RFValue(25)}px`,
     XXL: `${RFValue(30)}px`,
   },
 };

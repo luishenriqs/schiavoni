@@ -17,7 +17,7 @@ export const Container = styled.View`
 export const NameContainer = styled.View`
   flex-direction: row;
   justify-content: flex-start;
-  width: 69%;
+  width: 68%;
   margin: 0 3px;
   height: 70px;
   align-items: center;
@@ -29,7 +29,7 @@ export const NameContainer = styled.View`
 `;
 
 export const PowerContainer = styled.View`
-  width: 29%;
+  width: 30%;
   height: 70px;
   flex-direction: row;
   align-items: center;
@@ -42,10 +42,10 @@ export const PowerContainer = styled.View`
 `;
 
 export const Name = styled.Text`
-  margin-left: 8px;
+  margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.MD};
+    font-size: ${theme.FONT_SIZE.XL};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

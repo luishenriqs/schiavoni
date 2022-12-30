@@ -9,7 +9,7 @@ export const LabelContainer = styled.View`
 `;
 
 export const LabelPlayer = styled.View`
-  width: 70%;
+  width: 68%;
   align-items: center;
   padding: 3px;
   margin: 0 3px;
@@ -21,7 +21,7 @@ export const LabelPlayer = styled.View`
 `;
 
 export const LabelPoints = styled.View`
-  width: 14%;
+  width: 15%;
   align-items: center;
   padding: 3px;
   border-radius: 5px;
@@ -32,8 +32,8 @@ export const LabelPoints = styled.View`
 `;
 
 export const LabelText = styled.Text`
-  font-size: ${RFValue(9)}px;
   ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.SS};
     font-family: ${theme.FONT_FAMILY.medium};
     color: ${theme.COLORS.gray_200};
   `};
