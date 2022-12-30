@@ -54,7 +54,9 @@ const processRanking = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
     });
 
     //==> ORDENA OS PONTOS
-    const orderedPoints = onlyPoints.sort().reverse();
+    const orderedPoints = onlyPoints.sort(function(a, b) {
+        return a - b;
+    }).reverse();
 
     //==> ORDENA OS RESULTADOS E TRATA DUPLICIDADES DE PONTOS
     let orderedResult = orderedPoints.map((el) => {
