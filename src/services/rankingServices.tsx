@@ -6,12 +6,17 @@ const anonymousURL = 'anonymousURL';
 
 //==> RETORNA NOMES DOS PLAYERS
 const findNames = (games: GameDTO[]) => {
+    games.filter((el) => {
+        if (el.season === 0) {
+            const index = games.indexOf(el)
+            games.splice(index, 1);
+        }
+    });
     const names = games.map((el) => {
         return el.name
     });
     const players = [...new Set(names)];
-    const index = players.indexOf("");
-    players.splice(index, 1);
+
     return players;
 };
 
@@ -80,13 +85,13 @@ const processRanking = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
         return resultsObjects
     });
 
-    //==> RECUPERA IMAGE PROFILE
+    //==> RECUPERA IMAGE PROFILE E AVATAR
     resultList[0].map((item: RankingProps) => {
         const onePlayer = allPlayers.filter((player) => {
         if (player.name === item.player) return player;
         })
-        item.profile = onePlayer[0].profile ? onePlayer[0].profile : anonymousURL;
-        item.avatar = onePlayer[0].avatar ? onePlayer[0].avatar : anonymousURL;
+        item.profile = onePlayer[0] && onePlayer[0].profile ? onePlayer[0].profile : anonymousURL;
+        item.avatar = onePlayer[0] && onePlayer[0].avatar ? onePlayer[0].avatar : anonymousURL;
     });
 
     return resultList[0];

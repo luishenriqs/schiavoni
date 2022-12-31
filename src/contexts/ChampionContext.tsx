@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createContext, ReactNode } from 'react';
 import { ChampionDTO } from '@dtos/ChampionDTO';
-import { RankingDTO } from '@dtos/RankingDTO';
+import { RankingDTO, LevelDTO } from '@dtos/RankingDTO';
 import { CurrentSeasonDTO } from '@dtos/CurrentSeasonDTO';
 
 //==> TIPAGEM DO CONTEXTO
@@ -10,6 +10,8 @@ export type ChampionContextDataProps = {
     setChampionContext: (championData: ChampionDTO) => void;
     ranking: RankingDTO;
     setRankingContext: (rankingData: RankingDTO) => void;
+    level: LevelDTO;
+    setLevelContext: (levelData: LevelDTO) => void;
     currentSeason: CurrentSeasonDTO;
     setCurrentSeasonContext: (currentSeasonData: CurrentSeasonDTO) => void;
 };
@@ -29,6 +31,9 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   const [ranking, setRanking] = useState<RankingDTO>({} as RankingDTO);
 
   //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
+  const [level, setLevel] = useState<LevelDTO>({} as LevelDTO);
+
+  //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
   const [currentSeason, setCurrentSeason] = useState<CurrentSeasonDTO>({} as CurrentSeasonDTO);
 
   //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
@@ -39,6 +44,11 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
   function setRankingContext(rankingData: RankingDTO) {
     setRanking(rankingData);
+  };
+
+  //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
+  function setLevelContext(levelData: LevelDTO) {
+    setLevel(levelData);
   };
 
   //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
@@ -53,6 +63,8 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
       setChampionContext, 
       ranking, 
       setRankingContext,
+      level,
+      setLevelContext,
       currentSeason,
       setCurrentSeasonContext
     }}>

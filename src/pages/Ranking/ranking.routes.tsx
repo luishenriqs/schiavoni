@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { PSOP } from './PSOP';
-import { Players } from './Players';
+import { GameLevel } from './GameLevel';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -39,8 +39,8 @@ export function RankingRoutes () {
                 }}
             />
             <Screen
-                name='Players' 
-                component={Players} 
+                name='Game Level' 
+                component={GameLevel} 
                 options={{
                     tabBarIcon: (({ size, color }) => (
                         <MaterialCommunityIcons 

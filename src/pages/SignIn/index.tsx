@@ -38,7 +38,11 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
   const { setUserContext } = useAuth();
   const { setAllPlayersContext } = useAllPlayers();
-  const { setRankingContext, setCurrentSeasonContext } = useChampion();
+  const { 
+    setRankingContext, 
+    setCurrentSeasonContext, 
+    setLevelContext 
+  } = useChampion();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -230,8 +234,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           }
         }) as GameDTO[]
         const level = getLevel(data, allPlayers);
-        console.log('LEVEL ================> ', level)
-        //level && setLevelContext(level);
+        level && setLevelContext(level);
       },
     }) 
     return () => subscribe();

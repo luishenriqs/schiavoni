@@ -15,3 +15,14 @@ export type PercentPerformanceDTO = {
   games: number;
   player: string;
 };
+
+export type LevelProps = {
+  player: string;
+  power: number;
+  profile?: string;
+  avatar?: string;
+};
+
+export type LevelDTO = {
+  level: LevelProps[];
+};

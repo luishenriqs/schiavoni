@@ -1,23 +1,24 @@
 import React from 'react';
-import { SvgProps } from 'react-native-svg';
 import {
     Container,
     NameContainer,
     PowerContainer,
     Name,
-    Icon
+    Icon,
+    ImageContent,
+    ImageProfileAndAvatar
  } from './styles';
 
 interface IProps {
-    svg: React.FC<SvgProps>
     power: number;
     name: string;
+    avatar: string;
 }
 
 export function CardPlayers({
-    svg: Svg,
     power,
     name,
+    avatar
 }: IProps) {
 
     const powerSize = (power: number) => {
@@ -42,11 +43,13 @@ export function CardPlayers({
     return (
         <Container>
             <NameContainer>
-                <Svg 
-                    width={68}
-                    border-radius={8}
-                />
-                {name.length <= 16
+                <ImageContent>
+                    {avatar !== 'anonymousURL'
+                        ? <ImageProfileAndAvatar source={{uri: avatar}}/>
+                        : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+                    }
+                </ImageContent>
+                {name.length <= 17
                     ? <Name>{name}</Name>
                     : <Name>{name.substring(12, -1)}...</Name>
                 }
@@ -61,4 +64,4 @@ export function CardPlayers({
             </PowerContainer>
         </Container>
     );
-}
+};
