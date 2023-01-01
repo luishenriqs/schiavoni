@@ -41,7 +41,8 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const { 
     setRankingContext, 
     setCurrentSeasonContext, 
-    setLevelContext 
+    setLevelContext,
+    setGameResultContext
   } = useChampion();
 
   const [email, setEmail] = useState('');
@@ -192,6 +193,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   /* ***RANKING*** */
 
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
+  //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
   //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
   const getGamesResultsFirestore = (
     currentSeason: number, 
@@ -210,6 +212,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
           ...doc.data()
           }
         }) as GameDTO[]
+        data && setGameResultContext(data);
         const ranking = getRanking(data, lastGame, allPlayers);
         ranking && setRankingContext(ranking);
       },

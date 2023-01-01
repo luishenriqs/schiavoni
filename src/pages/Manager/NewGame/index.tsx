@@ -21,7 +21,7 @@ import { Container, Content } from './styles';
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
   const { allPlayers } = useAllPlayers();
-  const { setRankingContext } = useChampion();
+  const { setRankingContext, setGameResultContext } = useChampion();
 
   const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
   const [currentSeason, setCurrentSeason] = useState(0);
@@ -31,8 +31,8 @@ export function NewGame({navigation}: {navigation: any}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    getCurrentSeason();
     getPlayers();
+    getCurrentSeason();
   }, []);
 
   //==> SELECT STYLE
@@ -54,12 +54,6 @@ export function NewGame({navigation}: {navigation: any}) {
     value: null,
   };
 
-  //==> PLAYERS POSSÍVEIS PARA O SELECT
-  const getPlayers = () => {
-    const squadOfPlayers = getPlayersNames(allPlayers);
-    squadOfPlayers && setSquad(squadOfPlayers);
-  };
-
   const positionsPlaceholder = {
     label: 'Selecione uma posição:',
     value: null,
@@ -78,6 +72,12 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '9 - Nono Colocado', value: '9' },
     { label: '10 - Décimo Colocado', value: '10' }
   ];
+
+  //==> PLAYERS POSSÍVEIS PARA O SELECT
+  const getPlayers = () => {
+    const squadOfPlayers = getPlayersNames(allPlayers);
+    squadOfPlayers && setSquad(squadOfPlayers);
+  };
 
   //==> RECUPERA NÚMERO DA ÚLTIMA TEMPORADA
   const getCurrentSeason = () => {
@@ -164,32 +164,16 @@ export function NewGame({navigation}: {navigation: any}) {
         season: currentSeason,
         game: Number(game),
       })
-      .then(() => getAllPlayersFirestore(currentSeason, Number(game)))
+      .then(() => {
+        const season = currentSeason;
+        getGamesResultsFirestore(season, Number(game), allPlayers);
+      })
       .catch((error) => console.error(error))
     }
   };  
 
-  //==> RECUPERA ALL PLAYERS DO FIRESTORE
-  const getAllPlayersFirestore = (season: number, game: number) => {
-    const subscribe: any = firestore()
-    .collection('players')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[];
-        const allPlayers = data;
-        getGamesResultsFirestore(season, game, allPlayers);
-      },
-    }) 
-    return () => subscribe()
-  };
-
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
+  //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
   //==> PROCESSA, ATUALIZA E PERSISTE RANKING NO CONTEXTO
   const getGamesResultsFirestore = (
     currentSeason: number, 
@@ -208,6 +192,7 @@ export function NewGame({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as GameDTO[];
+        data && setGameResultContext(data);
         const ranking = getRanking(data, lastGame, allPlayers);
         ranking && setRankingContext(ranking);
       },

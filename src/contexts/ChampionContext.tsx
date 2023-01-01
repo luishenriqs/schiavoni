@@ -3,6 +3,7 @@ import { createContext, ReactNode } from 'react';
 import { ChampionDTO } from '@dtos/ChampionDTO';
 import { RankingDTO, LevelDTO } from '@dtos/RankingDTO';
 import { CurrentSeasonDTO } from '@dtos/CurrentSeasonDTO';
+import { GameDTO } from '@dtos/GameDTO';
 
 //==> TIPAGEM DO CONTEXTO
 export type ChampionContextDataProps = {
@@ -14,6 +15,8 @@ export type ChampionContextDataProps = {
     setLevelContext: (levelData: LevelDTO) => void;
     currentSeason: CurrentSeasonDTO;
     setCurrentSeasonContext: (currentSeasonData: CurrentSeasonDTO) => void;
+    gameResult: GameDTO[];
+    setGameResultContext: (gameResultData: GameDTO[]) => void;
 };
 //==> TIPAGEM DO PROVIDER
 type ChampionContextProviderProps = {
@@ -36,7 +39,10 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
   const [currentSeason, setCurrentSeason] = useState<CurrentSeasonDTO>({} as CurrentSeasonDTO);
 
-  //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
+  //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
+  const [gameResult, setGameResult] = useState<GameDTO[]>([] as GameDTO[]);
+
+    //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
   function setChampionContext(championData: ChampionDTO) {
     setChampion(championData);
   };
@@ -55,6 +61,11 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   function setCurrentSeasonContext(currentSeasonData: CurrentSeasonDTO) {
     setCurrentSeason(currentSeasonData);
   };
+
+  //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
+  function setGameResultContext(gameResultData: GameDTO[]) {
+    setGameResult(gameResultData);
+  };
   
   //==> RETORNO DO PROVIDER
   return (
@@ -66,7 +77,9 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
       level,
       setLevelContext,
       currentSeason,
-      setCurrentSeasonContext
+      setCurrentSeasonContext,
+      gameResult,
+      setGameResultContext
     }}>
       {children}
     </ChampionContext.Provider>
