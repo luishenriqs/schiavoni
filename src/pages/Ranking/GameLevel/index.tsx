@@ -3,7 +3,7 @@ import { FlatList, KeyboardAvoidingView } from "react-native";
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
 import { Header } from '@components/Header';
-import { CardPlayers } from "@components/CardPlayers";
+import { CardLevel } from "@components/CardLevel";
 import { LabelPlayers } from "@components/LabelPlayers";
 import { Container, Content, Title } from './styles';
 
@@ -31,7 +31,7 @@ export function GameLevel({navigation}: {navigation: any}) {
               data={level as any}
               keyExtractor={(item, index) => item + index}
               renderItem={({ item }) => (
-                <CardPlayers 
+                <CardLevel 
                   name={item.player}
                   power={item.power}
                   avatar={item.avatar}

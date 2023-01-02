@@ -15,7 +15,7 @@ interface IProps {
     avatar: string;
 }
 
-export function CardPlayers({
+export function CardLevel({
     power,
     name,
     avatar

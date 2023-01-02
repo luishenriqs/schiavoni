@@ -73,7 +73,7 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '10 - Décimo Colocado', value: '10' }
   ];
 
-  //==> PLAYERS POSSÍVEIS PARA O SELECT
+  //==> PLAYERS PARA O SELECT
   const getPlayers = () => {
     const squadOfPlayers = getPlayersNames(allPlayers);
     squadOfPlayers && setSquad(squadOfPlayers);
