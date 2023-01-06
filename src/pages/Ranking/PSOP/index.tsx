@@ -39,7 +39,6 @@ export function PSOP({navigation}: {navigation: any}) {
             />
           }
           <LabelPSOP />
-
           {ranking.orderedRanking &&
             <FlatList
               data={ranking.orderedRanking}
