@@ -1,4 +1,4 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 
 export const Container = styled.ScrollView.attrs({
@@ -14,4 +14,14 @@ export const Container = styled.ScrollView.attrs({
 
 export const Content = styled.View`
   padding: 25px 0;
+`;
+
+export const Title = styled.Text`
+  align-self: center;
+  margin-bottom: 30px;
+  ${({ theme }) => css`
+    color: ${theme.COLORS.gray_100};
+    font-size: ${theme.FONT_SIZE.LG};
+    font-family: ${theme.FONT_FAMILY.medium};
+  `};
 `;

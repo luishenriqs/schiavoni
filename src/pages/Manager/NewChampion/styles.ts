@@ -14,11 +14,11 @@ export const Container = styled.ScrollView.attrs({
 
 export const Content = styled.View`
   padding: 25px 0;
-  align-items: center;
 `;
 
 export const Title = styled.Text`
-  margin-bottom: 25px;
+  align-self: center;
+  margin-bottom: 30px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.LG};

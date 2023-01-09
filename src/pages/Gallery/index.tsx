@@ -124,7 +124,7 @@ export function Gallery({navigation}: {navigation: any}) {
     <Container>
       <Header
         title='Gallery'
-        text='Great Moments'
+        text='Grandes Momentos'
         picture={user.profile ? user.profile : anonymousURL}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}

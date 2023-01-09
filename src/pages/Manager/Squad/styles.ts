@@ -1,23 +1,24 @@
 import styled, { css } from "styled-components/native";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
-import { RFPercentage } from "react-native-responsive-fontsize";
+import { getBottomSpace } from "react-native-iphone-x-helper";
 
-export const Container = styled.View`
+export const Container = styled.ScrollView.attrs({
+  ShowsVerticalScrollIndicator: false,
+  contentContainerStyle: {
+    paddingBottom: getBottomSpace() + 48,
+  },
+})`
   flex: 1;
   width: 100%;
   background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
 export const Content = styled.View`
-  width: 100%;
-  flex-direction: row;
-  height: ${getStatusBarHeight() + RFPercentage(9)}px;
-  align-items: center;
-  justify-content: center;
-  padding: 25px 15px 0;
+  padding: 25px 0;
 `;
 
 export const Title = styled.Text`
+  align-self: center;
+  margin-bottom: 30px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.LG};

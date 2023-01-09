@@ -149,7 +149,7 @@ export function NewChampion({navigation}: {navigation: any}) {
         }}
       >
         <Content>
-          <Title>New PSOP Champion</Title>
+          <Title>Novo Campeão do PSOP</Title>
           <RNPickerSelect
             placeholder={playersPlaceholder}
             onValueChange={(value) => setName(value)}
@@ -158,7 +158,7 @@ export function NewChampion({navigation}: {navigation: any}) {
             value={name}
           />
           <Button 
-            title='Novo PSOP Champion'
+            title='Campeão do PSOP'
             onPress={() => setModalVisible(!modalVisible)}
           />
         </Content>

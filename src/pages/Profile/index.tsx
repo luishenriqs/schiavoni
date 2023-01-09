@@ -194,6 +194,7 @@ export function Profile({navigation}: {navigation: any}) {
     <Container>
       <Header
         title={user.name}
+        text='Atualize seu perfil'
         headerSize={'small'}
         onPress={() => navigation.openDrawer()}
       />

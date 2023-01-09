@@ -64,7 +64,7 @@ export function ChampionPage({navigation}: {navigation: any}) {
       />
       <PsopImage />
       <Content>
-        <Title>The great PSOP Champion!</Title>
+        <Title>Campeão PSOP!</Title>
         <Text>{champion.name}</Text>
         {champion.profile
           ? <Imagem source={{uri: champion.profile}} />

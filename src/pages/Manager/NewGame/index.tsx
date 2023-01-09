@@ -15,7 +15,7 @@ import { getRanking } from '@services/rankingServices';
 import { ChampionDTO } from '@dtos/ChampionDTO';
 import { UserDTO, SquadOfPlayersDTO } from '@dtos/UserDTO';
 import { GameDTO } from '@dtos/GameDTO'
-import { Container, Content } from './styles';
+import { Container, Content, Title } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
@@ -233,6 +233,7 @@ export function NewGame({navigation}: {navigation: any}) {
         }}
       >
         <Content>
+          <Title>Registre um novo resultado</Title>
           <RNPickerSelect
             placeholder={gamePlaceholder}
             onValueChange={(value) => setGame(value)}

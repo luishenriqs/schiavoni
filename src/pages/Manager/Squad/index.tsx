@@ -4,11 +4,12 @@ import { PsopImage } from '@components/PsopImage';
 import { Container, Content, Title } from './styles';
 
 export function Squad({navigation}: {navigation: any}) {
+  const year = new Date().getFullYear();
   return (
     <Container>
       <Header
-        title='Squad Players'
-        text='2023'
+        title='Squad of Players'
+        text={'Seleção ' + String(year)}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />

@@ -88,7 +88,7 @@ export function AddGallery({navigation}: {navigation: any}) {
     <Container>
       <Header
         title='Add to Gallery'
-        text='Great Moments'
+        text='Grandes Momentos'
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />

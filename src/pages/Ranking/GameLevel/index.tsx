@@ -18,7 +18,7 @@ export function GameLevel({navigation}: {navigation: any}) {
       <Container>
         <Header
           title='Game Level'
-          text={`For the Last 3 Seasons`}
+          text={`Últimas 3 Temporadas`}
           picture={user.profile ? user.profile : anonymousURL}
           headerSize={'small'}
           onPress={() => navigation.openDrawer()}
