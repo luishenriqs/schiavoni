@@ -1,6 +1,4 @@
 import styled, { css } from "styled-components/native";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
-import { RFPercentage } from "react-native-responsive-fontsize";
 
 export const Container = styled.View`
   flex: 1;
@@ -9,13 +7,19 @@ export const Container = styled.View`
   background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
-export const Content = styled.View`
+export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
-  height: ${getStatusBarHeight() + RFPercentage(9)}px;
+  padding: 25px 8px 0;
+`;
+
+export const GameWrapper = styled.View`
+  flex: 1;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  padding: 25px 8px 0;
+  margin-bottom: 30px;
 `;
 
 export const SeasonBox = styled.View`

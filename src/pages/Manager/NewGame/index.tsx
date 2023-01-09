@@ -7,7 +7,6 @@ import RNPickerSelect from 'react-native-picker-select';
 import { useTheme } from 'styled-components';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
-import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
@@ -49,6 +48,11 @@ export function NewGame({navigation}: {navigation: any}) {
     },
   };
 
+  const gamePlaceholder = {
+    label: 'Selecione uma etapa:',
+    value: null,
+  };
+
   const playersPlaceholder = {
     label: 'Selecione um player:',
     value: null,
@@ -58,6 +62,18 @@ export function NewGame({navigation}: {navigation: any}) {
     label: 'Selecione uma posição:',
     value: null,
   };
+
+  //==> ETAPAS POSSÍVEIS PARA O SELECT
+  const games = [
+    { label: 'Etapa 1', value: '1' },
+    { label: 'Etapa 2', value: '2' },
+    { label: 'Etapa 3', value: '3' },
+    { label: 'Etapa 4', value: '4' },
+    { label: 'Etapa 5', value: '5' },
+    { label: 'Etapa 6', value: '6' },
+    { label: 'Etapa 7', value: '7' },
+    { label: 'Etapa 8', value: '8' }
+  ];
 
   //==> POSIÇÕES POSSÍVEIS PARA O SELECT
   const positions = [
@@ -73,7 +89,7 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '10 - Décimo Colocado', value: '10' }
   ];
 
-  //==> PLAYERS PARA O SELECT
+  //==> PLAYERS POSSÍVEIS PARA O SELECT
   const getPlayers = () => {
     const squadOfPlayers = getPlayersNames(allPlayers);
     squadOfPlayers && setSquad(squadOfPlayers);
@@ -217,11 +233,12 @@ export function NewGame({navigation}: {navigation: any}) {
         }}
       >
         <Content>
-          <Input 
-            placeholder='Digite o número da etapa'
-            keyboardType='numeric'
-            onChangeText={(value) => setGame(value)}
-            value={String(game)}
+          <RNPickerSelect
+            placeholder={gamePlaceholder}
+            onValueChange={(value) => setGame(value)}
+            style={pickerSelectStyles}
+            items={games}
+            value={game}
           />
           <RNPickerSelect
             placeholder={playersPlaceholder}
