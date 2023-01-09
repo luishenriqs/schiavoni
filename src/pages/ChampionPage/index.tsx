@@ -14,8 +14,6 @@ import {
 
 export function ChampionPage({navigation}: {navigation: any}) {
   const { champion, setChampionContext } = useChampion();
-  
-  const anonymousURL = 'anonymousURL';
 
   useEffect(() => {
     getChampion();

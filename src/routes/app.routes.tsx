@@ -3,6 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '@hooks/useAuth';
 import { useTheme } from 'styled-components';
 import { ChampionPage } from '@pages/ChampionPage';
 import { RankingRoutes } from '@pages/Ranking/ranking.routes';
@@ -17,6 +18,7 @@ const Drawer = createDrawerNavigator();
 // Route to app menu;
 export function AppRoutes() {
   const theme = useTheme();
+  const user = useAuth();
   return (
     <Drawer.Navigator 
       drawerContent={props => <CustomDrawer {...props} />} 
@@ -97,19 +99,21 @@ export function AppRoutes() {
           )
         }}
       />
-      <Drawer.Screen 
-        name="Manager" 
-        component={ManagerRoutes}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons 
-              name='md-settings-outline'
-              size={20}
-              color={color}
-            />
-          )
-        }}
-      />
+      {user.user.isAdmin &&
+        <Drawer.Screen 
+          name="Manager" 
+          component={ManagerRoutes}
+          options={{
+            drawerIcon: ({color}) => (
+              <Ionicons 
+                name='md-settings-outline'
+                size={20}
+                color={color}
+              />
+            )
+          }}
+        />
+      }
     </Drawer.Navigator>
   );
 };
