@@ -86,7 +86,9 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '7 - Sétimo Colocado', value: '7' },
     { label: '8 - Oitavo Colocado', value: '8' },
     { label: '9 - Nono Colocado', value: '9' },
-    { label: '10 - Décimo Colocado', value: '10' }
+    { label: '10 - Décimo Colocado', value: '10' },
+    { label: '11 - Décimo Primeiro Colocado', value: '11' },
+    { label: '12 - Décimo Segundo Colocado', value: '12' }
   ];
 
   //==> PLAYERS POSSÍVEIS PARA O SELECT
@@ -149,6 +151,12 @@ export function NewGame({navigation}: {navigation: any}) {
         break;
       case 10:
         points = 1;
+        break;
+      case 11:
+        points = 0;
+        break;
+      case 12:
+        points = 0;
         break;
     }
     if (!currentSeason || !game || !name || !position || !points) {
