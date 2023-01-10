@@ -159,7 +159,7 @@ export function NewGame({navigation}: {navigation: any}) {
         points = 0;
         break;
     }
-    if (!currentSeason || !game || !name || !position || !points) {
+    if (!currentSeason || !game || !name || !position) {
       Alert.alert('Preencha todos os campos!')
     } else {
       firestore()

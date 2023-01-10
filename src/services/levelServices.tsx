@@ -40,12 +40,12 @@ const performance = (data: PercentPerformanceDTO) => {
     const percent = data.totalPoints / ((data.games * 25) / 100);
 
     let power = 0;
-    if (percent >= 50) power = 5;
-    if (percent < 50 && percent >= 40) power = 4;
-    if (percent < 40 && percent >= 30) power = 3;
-    if (percent < 30 && percent >= 20) power = 2;
-    if (percent < 20 && percent >= 10) power = 1;
-    if (percent < 20 && percent >= 10) power = 0;
+    if (percent >= 55) power = 5;
+    if (percent < 55 && percent >= 45) power = 4;
+    if (percent < 45 && percent >= 35) power = 3;
+    if (percent < 35 && percent >= 25) power = 2;
+    if (percent < 25 && percent >= 15) power = 1;
+    if (percent < 15) power = 0;
     
     const performance = {
         player: data.player,

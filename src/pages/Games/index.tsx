@@ -28,19 +28,20 @@ export function Games({navigation}: {navigation: any}) {
   const { gameResult, currentSeason } = useChampion();
 
   const [results, setResults] = useState<GamesResultsDTO>({} as GamesResultsDTO);
-  
+
   const anonymousURL = 'anonymousURL';
 
   useEffect(() => {
     const result = gamesServices(gameResult);
     result && setResults(result);
-  }, []);
+  }, [gameResult]);
 
-  const renderResults = (game: GameDTO[], index: number) => {
+  //==> RETORNA RESULTADOS DE CADA ETAPA
+  const renderResults = (game: GameDTO[], gameNumber: number) => {
     return (
       <GameWrapper>
         <SeasonBox>
-          <Season>{'Etapa ' + index}</Season>
+          <Season>{'Etapa ' + gameNumber}</Season>
         </SeasonBox>
         {
           game.map((item) => (
@@ -48,6 +49,7 @@ export function Games({navigation}: {navigation: any}) {
               key={item.name}
               position={item.position}
               name={item.name}
+              gameNumber={gameNumber}
             />
           ))
         }

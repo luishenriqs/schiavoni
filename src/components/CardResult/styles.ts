@@ -32,9 +32,8 @@ export const Position = styled.Text`
 
 export const NameBox = styled.View`
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 80%;
-  //margin: 0 3px;
   height: 40px;
   align-items: center;
   border-top-right-radius: 5px;
@@ -52,4 +51,9 @@ export const Name = styled.Text`
     font-size: ${theme.FONT_SIZE.XL};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
+`;
+
+export const Empty = styled.View`
+  width: 20px;
+  height: 20px;
 `;

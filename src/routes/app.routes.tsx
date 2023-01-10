@@ -18,7 +18,7 @@ const Drawer = createDrawerNavigator();
 // Route to app menu;
 export function AppRoutes() {
   const theme = useTheme();
-  const user = useAuth();
+  const { user } = useAuth();
   return (
     <Drawer.Navigator 
       drawerContent={props => <CustomDrawer {...props} />} 
@@ -99,7 +99,7 @@ export function AppRoutes() {
           )
         }}
       />
-      {user.user.isAdmin &&
+      {user.isAdmin &&
         <Drawer.Screen 
           name="Manager" 
           component={ManagerRoutes}

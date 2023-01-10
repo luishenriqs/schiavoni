@@ -143,14 +143,16 @@ export function Gallery({navigation}: {navigation: any}) {
                   source={{uri: item.url ? item.url : anonymousURL}}
                   progressiveRenderingEnabled
                 />
-                <ButtonIcon 
-                  onPress={() => handleDelete(item)}
-                  style={{
-                    flexDirection: 'row-reverse',
-                    marginLeft: 20,
-                    marginTop: -50
-                  }}
-                />
+                {user.isAdmin &&
+                  <ButtonIcon 
+                    onPress={() => handleDelete(item)}
+                    style={{
+                      flexDirection: 'row-reverse',
+                      marginLeft: 20,
+                      marginTop: -50
+                    }}
+                  />
+                }
               </ImageWrapper>
               <Legend>{item.legend}</Legend>
             </Memory>

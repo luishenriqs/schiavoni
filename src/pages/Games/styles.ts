@@ -25,6 +25,7 @@ export const GameWrapper = styled.View`
 export const SeasonBox = styled.View`
   width: 80%;
   height: 40px;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
