@@ -8,6 +8,7 @@ export const Container = styled.View<Prop>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   margin: 15px 10px;
+  align-self: center;
 `;
 
 export const EmptyPhotoContainer = styled.View<Prop>`

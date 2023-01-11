@@ -233,14 +233,11 @@ export function NewGame({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <PsopImage />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{
-            flex: 1, 
-            paddingHorizontal: 40,
-        }}
-      >
-        <Content>
+      <Content>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={{ flex: 1 }}
+        >
           <Title>Registre um novo resultado</Title>
           <RNPickerSelect
             placeholder={gamePlaceholder}
@@ -267,8 +264,8 @@ export function NewGame({navigation}: {navigation: any}) {
             title='Enviar'
             onPress={() => setModalVisible(!modalVisible)}
           />
-        </Content>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Content>
 
       <ModalComponent
         title={`Novo Resultado`}

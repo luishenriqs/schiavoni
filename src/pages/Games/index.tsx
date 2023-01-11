@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView } from "react-native";
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
 import { gamesServices } from '@services/gamesServices'
@@ -58,27 +57,25 @@ export function Games({navigation}: {navigation: any}) {
   };
 
   return (
-    <KeyboardAvoidingView style={{flex: 1}} enabled>
-      <Container>
-        <Header
-          title='Etapas'
-          text={currentSeason.season + `º Temporada`}
-          picture={user.profile ? user.profile : anonymousURL}
-          headerSize={'big'}
-          onPress={() => navigation.openDrawer()}
-        />
-        <PsopImage />
-        <Content>
-          {!!results['game_1'] && renderResults(results['game_1'], 1)}
-          {!!results['game_2'] && renderResults(results['game_2'], 2)}
-          {!!results['game_3'] && renderResults(results['game_3'], 3)}
-          {!!results['game_4'] && renderResults(results['game_4'], 4)}
-          {!!results['game_5'] && renderResults(results['game_5'], 5)}
-          {!!results['game_6'] && renderResults(results['game_6'], 6)}
-          {!!results['game_7'] && renderResults(results['game_7'], 7)}
-          {!!results['game_8'] && renderResults(results['game_8'], 8)}
-        </Content>
-      </Container>
-    </KeyboardAvoidingView>
+    <Container>
+      <Header
+        title='Etapas'
+        text={currentSeason.season + `º Temporada`}
+        picture={user.profile ? user.profile : anonymousURL}
+        headerSize={'big'}
+        onPress={() => navigation.openDrawer()}
+      />
+      <PsopImage />
+      <Content>
+        {!!results['game_1'] && renderResults(results['game_1'], 1)}
+        {!!results['game_2'] && renderResults(results['game_2'], 2)}
+        {!!results['game_3'] && renderResults(results['game_3'], 3)}
+        {!!results['game_4'] && renderResults(results['game_4'], 4)}
+        {!!results['game_5'] && renderResults(results['game_5'], 5)}
+        {!!results['game_6'] && renderResults(results['game_6'], 6)}
+        {!!results['game_7'] && renderResults(results['game_7'], 7)}
+        {!!results['game_8'] && renderResults(results['game_8'], 8)}
+      </Content>
+    </Container>
   );
 };

@@ -2,10 +2,11 @@ import styled, { css } from "styled-components/native";
 
 export const Container = styled.View`
   flex-direction: row;
+  width: 100%;
+  height: 42px;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  height: 42px;
   margin: 0 10%;
 `;
 

@@ -141,14 +141,11 @@ export function NewChampion({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <PsopImage />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{
-            flex: 1, 
-            paddingHorizontal: 40,
-        }}
-      >
-        <Content>
+      <Content>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={{ flex: 1 }}
+        >
           <Title>Novo Campeão do PSOP</Title>
           <RNPickerSelect
             placeholder={playersPlaceholder}
@@ -161,8 +158,8 @@ export function NewChampion({navigation}: {navigation: any}) {
             title='Campeão do PSOP'
             onPress={() => setModalVisible(!modalVisible)}
           />
-        </Content>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Content>
 
       <ModalComponent
         title={`${name} é o novo PSOP Champion!`}

@@ -83,14 +83,11 @@ export function NewPlayer({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <PsopImage />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{
-            flex: 1, 
-            paddingHorizontal: 40,
-        }}
-      >
-        <Content>
+      <Content>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={{ flex: 1 }}
+        >
           <Input 
             placeholder='Name'
             autoCorrect={false}
@@ -120,8 +117,8 @@ export function NewPlayer({navigation}: {navigation: any}) {
             title='Novo Player'
             onPress={handleCreateUserAccount}
           />
-        </Content>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Content>
     </Container>
   );
 };

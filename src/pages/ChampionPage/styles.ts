@@ -4,15 +4,15 @@ import styled, { css } from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   width: 100%;
+  align-items: center;
   background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
-export const Content = styled.View`
+export const Content = styled.ScrollView`
+  flex: 1;
   width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 15px 0;
+  padding: 0 15%;
+  margin-top: 25px;
 `;
 
 export const Imagem = styled(Image)`
@@ -22,6 +22,7 @@ export const Imagem = styled(Image)`
 `;
 
 export const Title = styled.Text`
+  align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.MD};
@@ -30,6 +31,7 @@ export const Title = styled.Text`
 `;
 
 export const Text = styled.Text`
+  align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
     font-size: ${theme.FONT_SIZE.XXL};

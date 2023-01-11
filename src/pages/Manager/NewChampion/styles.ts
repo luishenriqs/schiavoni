@@ -1,19 +1,17 @@
 import styled, { css } from "styled-components/native";
-import { getBottomSpace } from "react-native-iphone-x-helper";
 
-export const Container = styled.ScrollView.attrs({
-  ShowsVerticalScrollIndicator: false,
-  contentContainerStyle: {
-    paddingBottom: getBottomSpace() + 48,
-  },
-})`
+export const Container = styled.View`
   flex: 1;
   width: 100%;
+  align-items: center;
   background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
-export const Content = styled.View`
-  padding: 25px 0;
+export const Content = styled.ScrollView`
+  flex: 1;
+  width: 100%;
+  padding: 0 15%;
+  margin-top: 25px;
 `;
 
 export const Title = styled.Text`
