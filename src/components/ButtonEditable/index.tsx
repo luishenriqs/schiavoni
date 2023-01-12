@@ -6,21 +6,33 @@ type Props = TouchableOpacityProps & {
     title: string;
     type?: ButtonTypeStyleProps;
     width?: number;
-    length?: number;
+    height?: number;
+    marginLeft?: number;
+    marginRight?: number;
+    paddingLeft?: number;
+    paddingRight?: number;
 }
 
 export function ButtonEditable({ 
     title, 
     type = 'GREEN-BUTTON',
     width = 80,
-    length = 80,
+    height = 80,
+    marginLeft = 0,
+    marginRight = 0,
+    paddingLeft = 0,
+    paddingRight = 0,
     ...rest 
 }: Props) {
     return (
         <Container 
             type={type}
             width={width}
-            length={length}
+            height={height}
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            paddingLeft={paddingLeft}
+            paddingRight={paddingRight}
             {...rest}
         >
             <Title>

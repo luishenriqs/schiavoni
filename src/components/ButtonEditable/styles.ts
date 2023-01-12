@@ -1,26 +1,35 @@
 import { TouchableOpacity } from "react-native";
 import styled, { css } from "styled-components/native";
 
-export type ButtonTypeStyleProps = "GREEN-BUTTON" | "GRAY-BUTTON";
+export type ButtonTypeStyleProps =
+  | "GREEN-BUTTON"
+  | "GRAY-BUTTON"
+  | "RED-BUTTON";
 
 type Props = {
   type: ButtonTypeStyleProps;
   width: number;
-  length: number;
+  height: number;
+  marginLeft?: number;
+  marginRight?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
 };
 
 export const Container = styled(TouchableOpacity)<Props>`
   flex: 1;
-  min-width: ${({ width }) => width}px;
-  max-width: ${({ width }) => width}px;
-  min-height: ${({ length }) => length}px;
-  max-height: ${({ length }) => length}px;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  margin-left: 20px;
-  padding-left: 10px;
-  padding-right: 30px;
+  border: 1px solid ${({ theme }) => theme.COLORS.black};
+  min-width: ${({ width }) => width}%;
+  max-width: ${({ width }) => width}%;
+  min-height: ${({ height }) => height}%;
+  max-height: ${({ height }) => height}%;
+  margin-left: ${({ marginLeft }) => marginLeft}px;
+  margin-right: ${({ marginRight }) => marginRight}px;
+  padding-left: ${({ paddingLeft }) => paddingLeft}px;
+  padding-right: ${({ paddingRight }) => paddingRight}px;
 
   ${({ type, theme }) =>
     type === "GREEN-BUTTON" &&
@@ -33,10 +42,16 @@ export const Container = styled(TouchableOpacity)<Props>`
     css`
       background-color: ${theme.COLORS.gray_400};
     `};
+
+  ${({ type, theme }) =>
+    type === "RED-BUTTON" &&
+    css`
+      background-color: ${theme.COLORS.red_200};
+    `};
 `;
 
 export const Title = styled.Text`
-  align-self: flex-start;
+  align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.white};
     font-size: ${theme.FONT_SIZE.MD};

@@ -7,11 +7,12 @@ export const Container = styled.View`
   background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
-export const Content = styled.ScrollView`
+export const Content = styled.View`
   flex: 1;
   width: 100%;
-  padding: 0 15%;
-  margin-top: 25px;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 8px 0;
 `;
 
 export const Title = styled.Text`
