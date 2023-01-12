@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { ButtonEditable } from '@components/ButtonEditable';
+import ModalComponent from '@components/ModalComponent';
 import {
     Container,
     NameBox,
@@ -24,6 +25,8 @@ export function CardSquadPlayers({
     isAdmin
 }: IProps) {
     const { allPlayers } = useAllPlayers();
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleUpdateAdmin = (name: string, isAdmin: boolean) => {
         const playerUpdated = allPlayers.filter((item) => {
@@ -57,6 +60,11 @@ export function CardSquadPlayers({
             .catch(error => console.error(error))
     };
 
+    const toDelete = () => {
+        //handleDelete(name);
+        setModalVisible(!modalVisible)
+    };
+
     return (
         <Container>
             <NameBox>
@@ -84,9 +92,18 @@ export function CardSquadPlayers({
                     type='RED-BUTTON'
                     width={50}
                     height={100}
-                    onPress={() => handleDelete(name)}
+                    onPress={() => setModalVisible(!modalVisible)}
                 />
             </ButtonBox>
+            <ModalComponent
+                title={`Deletar Player ${name}`}
+                text={`O player ${name} não estará mais cadastrado na Schiavoni Poker House!`}
+                modalVisible={modalVisible}
+                greenButtonText={`Confirmar`}
+                redButtonText='Cancelar'
+                onPressGreenButton={toDelete}
+                onPressRedButton={() => setModalVisible(!modalVisible)}
+            />
         </Container>
     );
 }

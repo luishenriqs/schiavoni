@@ -15,9 +15,9 @@ export function Routes() {
     const subscribe = auth().onAuthStateChanged(userInfo => {
       setAuthUser(userInfo);
     });
-
     return subscribe;
-  }, [])
+  }, []);
+
   return(
       <NavigationContainer>
           {authUser ? <AppRoutes /> : <AuthRoutes />}
