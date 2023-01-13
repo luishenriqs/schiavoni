@@ -40,7 +40,7 @@ export function NewPlayer({navigation}: {navigation: any}) {
   ) {
     firestore()
     .collection('players')
-    .doc(email + '-' + new Date())
+    .doc(email)
     .set({
       name,
       email,

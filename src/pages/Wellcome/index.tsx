@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
@@ -108,9 +109,11 @@ export function Wellcome({navigation}: {navigation: any}) {
   //==> CRIA DO DOC PLAYERS NO FIRESTORE CASO NÃO EXISTA
   const createPlayer = () => {
     const email = 'anonymous@email.com';
+    const password = '123456';
+    
     firestore()
     .collection('players')
-    .doc(email + '-' + new Date())
+    .doc(email)
     .set({
       name: 'Anonymous Player',
       email,
@@ -118,7 +121,11 @@ export function Wellcome({navigation}: {navigation: any}) {
       avatar: '',
       profile: ''
     })
-    .catch((error) => console.error(error))
+    .catch((error) => console.error(error));
+
+    auth()
+    .createUserWithEmailAndPassword(email, password)
+    .catch((error) => console.error(error));
   };
 
   //==> CRIA DO DOC CURRENT_SEASON NO FIRESTORE CASO NÃO EXISTA
