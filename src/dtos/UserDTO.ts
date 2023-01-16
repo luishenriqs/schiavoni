@@ -1,10 +1,10 @@
 export type UserDTO = {
-  doc_id: string;
   name: string;
   email: string;
-  isAdmin: boolean;
-  avatar: string;
   profile: string;
+  avatar: string;
+  doc_id: string;
+  isAdmin: boolean;
 };
 
 export type SquadOfPlayersDTO = {
