@@ -184,8 +184,7 @@ export function NewGame({navigation}: {navigation: any}) {
       firestore()
       .collection('current_season')
       .doc('currentData')
-      .set({
-        season: currentSeason,
+      .update({
         game: Number(game),
       })
       .then(() => {
@@ -196,7 +195,7 @@ export function NewGame({navigation}: {navigation: any}) {
     }
   };  
 
-  //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
+  //==> RECUPERA JOGOS DA ATUAL TEMPORADA
   //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
   //==> PROCESSA, ATUALIZA E PERSISTE RANKING NO CONTEXTO
   const getGamesResultsFirestore = (

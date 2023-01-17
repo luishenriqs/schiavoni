@@ -7,21 +7,15 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@hooks/useAuth';
-import { useAllPlayers } from '@hooks/useAllPlayers';
-import { useChampion } from '@hooks/useChampion';
-import { getRanking } from '@services/rankingServices';
-import { getLevel } from '@services/levelServices';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
 import { UserDTO } from '@dtos/userDTO'
-import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
 import {
     Container,
     Header,
@@ -37,23 +31,13 @@ type Props = TouchableOpacityProps;
 export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const theme = useTheme();
   const { setUserContext } = useAuth();
-  const { setAllPlayersContext } = useAllPlayers();
-  const { 
-    setRankingContext, 
-    setCurrentSeasonContext, 
-    setLevelContext,
-    setGameResultContext
-  } = useChampion();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  /* ***SIGN IN*** */
-
   //==> SIGN IN
-  const handleSignInWithEmailAndPassword = async () => {
-    await getUserAsyncStorage();
-    getAllPlayersFirestore();
+  const handleSignInWithEmailAndPassword = () => {
+    getUser();
 
     if (!email || !email) {
       Alert.alert('Informe seu email e senha!')
@@ -78,26 +62,8 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     };
   };
 
-
-  /* ***USER*** */
-
-  //==> RECUPERA USER DO ASYNC STORAGE
-  const getUserAsyncStorage  = async () => {
-    const key = `@storage_Schiavoni:playerData`;
-    try {
-      const value = await AsyncStorage.getItem(key)
-      const result = value && JSON.parse(value)
-      result && result.email && result.email === email 
-        ? persistUser(result)
-        : await getUserFirestore();
-    } catch (e) {
-      Alert.alert('Houve um erro na recuperação dos dados do usuário!');
-      console.error(e);
-    };
-  };
-
   //==> RECUPERA USER DO FIRESTORE
-  const getUserFirestore = () => {
+  const getUser = () => {
     const subscribe: any = firestore()
     .collection('players')
     .where('email', '==', email)
@@ -116,131 +82,18 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     return () => subscribe()
   };
 
-  //==> PERSISTE USER NO ASYNC STORAGE E CONTEXTO
+  //==> PERSISTE USER NO CONTEXTO
   const persistUser = async (user: UserDTO) => {
     const userData = {
-      doc_id: user.doc_id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
-      avatar: user.avatar,
       profile: user.profile,
+      avatar: user.avatar,
+      doc_id: user.doc_id,
+      isAdmin: user.isAdmin,
     };
 
-    const key = `@storage_Schiavoni:playerData`;
-    try {
-      await AsyncStorage.setItem(key, JSON.stringify(userData));
-    } catch (e) {
-      Alert.alert('Houve um erro ao persistir os dados do usuário!');
-      console.error(e);
-    };
     setUserContext(userData);
-  };
-
-
-  /* ***ALL PLAYERS*** */
-  
-  //==> RECUPERA ALL PLAYERS DO FIRESTORE
-  //==> CHAMA GET CURRENT SEASON
-  const getAllPlayersFirestore = () => {
-    const subscribe: any = firestore()
-    .collection('players')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-        setAllPlayersContext(data);
-        getCurrentSeasonFirestore(data);
-        getAllGamesResulstsFirestore(data);
-      },
-    }) 
-    return () => subscribe()
-  };
-
-
-  /* ***CURRENT SEASON*** */
-
-  //==> RECUPERA CURRENT SEASON DO FIRESTORE
-  //==> CHAMA GET RANKING FIRESTORE
-  const getCurrentSeasonFirestore = (allPlayers: UserDTO[]) => {
-    const subscribe: any = firestore()
-    .collection('current_season')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as SeasonDTO[]
-          const season = data[0].season;
-          const game = data[0].game;
-          const currentSeasonData = { season, game };
-          setCurrentSeasonContext(currentSeasonData);
-          getGamesResultsFirestore(season, game, allPlayers);
-      },
-    }) 
-    return () => subscribe()
-  };
-
-
-  /* ***RANKING*** */
-
-  //==> RECUPERA JOGOS DA ATUAL TEMPORADA NO FIRESTORE
-  //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
-  //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
-  const getGamesResultsFirestore = (
-    currentSeason: number, 
-    lastGame: number,
-    allPlayers: UserDTO[]
-  ) => {
-    const subscribe = firestore()
-    .collection('game_result')
-    .where('season', '==', currentSeason)
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as GameDTO[]
-        data && setGameResultContext(data);
-        const ranking = getRanking(data, lastGame, allPlayers);
-        ranking && setRankingContext(ranking);
-      },
-    }) 
-    return () => subscribe();
-  };
-
-  /* ***LEVEL*** */
-
-  //==> RECUPERA TODOS OS JOGOS DAS ÚTIMAS 3 TEMPORADAS NO FIRESTORE
-  //==> PROCESSA E PERSISTE LEVEL NO CONTEXTO
-  const getAllGamesResulstsFirestore = (allPlayers: UserDTO[]) => {
-    const subscribe = firestore()
-    .collection('game_result')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as GameDTO[]
-        const level = getLevel(data, allPlayers);
-        level && setLevelContext(level);
-      },
-    }) 
-    return () => subscribe();
   };
 
 

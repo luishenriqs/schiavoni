@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
+import { Loading } from '@components/Loading';
 import { useChampion } from '@hooks/useChampion';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import { ChampionDTO } from '@dtos/ChampionDTO'
+import { ChampionDTO } from '@dtos/ChampionDTO';
 import {
   Container, 
   Content, 
@@ -14,6 +15,8 @@ import {
 
 export function ChampionPage({navigation}: {navigation: any}) {
   const { champion, setChampionContext } = useChampion();
+
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getChampion();
@@ -32,43 +35,64 @@ export function ChampionPage({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as ChampionDTO[]
-        persistChampionData(data[0]);
+        if (data.length === 0) {
+          createChampion();
+        } else {
+          persistChampionData(data[0]);
+        };
       },
     }) 
     return () => subscribe()
   };
 
-  //==> PERSISTE DADOS DO CAMPEÃO NO CONTEXTO
-  const persistChampionData = async (championPlayer: ChampionDTO) => {
+  //==> CRIA DOC CHAMPION NO FIRESTORE CASO NÃO EXISTA
+  const createChampion = () => {
     const championData = {
-      avatar: championPlayer.avatar,
-      doc_id: championPlayer.doc_id,
-      email: championPlayer.email,
-      id: championPlayer.id,
-      name: championPlayer.name,
-      profile: championPlayer.profile,
-      season: championPlayer.season,
+      name: 'Anonymous Player',
+      email: 'anonymous@email.com',
+      profile: '',
+      avatar: '',
+      doc_id: '',
+      season: 0,
     };
+
+    firestore()
+    .collection('champion')
+    .doc('newChampion')
+    .set(championData)
+    .then(() => persistChampionData(championData))
+    .catch((error) => console.error(error));
+  };
+
+  //==> PERSISTE DADOS DO CAMPEÃO NO CONTEXTO
+  const persistChampionData = (championData: ChampionDTO) => {
     setChampionContext(championData);
+    setIsLoading(false);
   };
 
   return (
-    <Container>
-      <Header
-        title='The Champion'
-        text={'Temporada ' + champion.season}
-        headerSize={'big'}
-        onPress={() => navigation.openDrawer()}
-      />
-      <PsopImage />
-      <Content>
-        <Title>Campeão PSOP!</Title>
-        <Text>{champion.name}</Text>
-        {champion.profile
-          ? <Imagem source={{uri: champion.profile}} />
-          : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-        }
-      </Content>
-    </Container>
+    <>
+      {isLoading
+        ? <Loading />
+        :
+          <Container>
+            <Header
+              title='The Champion'
+              text={champion.season ? 'Temporada ' + champion.season : ''}
+              headerSize={'big'}
+              onPress={() => navigation.openDrawer()}
+            />
+            <PsopImage />
+            <Content>
+              <Title>Campeão PSOP!</Title>
+              <Text>{champion.name}</Text>
+              {champion.profile
+                ? <Imagem source={{uri: champion.profile}} />
+                : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+              }
+            </Content>
+          </Container>
+      }
+    </>
   );
 };

@@ -1,17 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { FlatList } from "react-native";
+import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
+import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
+import { getLevel } from '@services/levelServices';
 import { Header } from '@components/Header';
 import { CardLevel } from "@components/CardLevel";
 import { LabelPlayers } from "@components/LabelPlayers";
+import { GameDTO } from '@dtos/GameDTO';
+import { UserDTO } from '@dtos/userDTO';
 import { Container, Content, Title } from './styles';
 
 export function GameLevel({navigation}: {navigation: any}) {
   const { user } = useAuth();
-  const { level } = useChampion();
+  const { level, setLevelContext } = useChampion();
+  const { setAllPlayersContext } = useAllPlayers();
 
   const anonymousURL = 'anonymousURL';
+
+  useEffect(() => {
+    getAllPlayers();
+  }, []);
+
+  
+  //==> RECUPERA TODOS OS JOGADORES E PERSISTE NO CONTEXTO
+  //==> CHAMA GET ALL GAMES
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+        setAllPlayersContext(data);
+        getAllGames(data);
+      },
+    }) 
+    return () => subscribe()
+  };
+
+
+  //==> RECUPERA TODOS OS JOGOS
+  //==> PROCESSA E PERSISTE LEVEL NO CONTEXTO
+  const getAllGames = (allPlayers: UserDTO[]) => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[]
+          const level = getLevel(data, allPlayers);
+          level && setLevelContext(level);
+      },
+    }) 
+    return () => subscribe();
+  };
+
   
   return (
     <Container>

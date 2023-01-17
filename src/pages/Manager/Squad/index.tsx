@@ -5,7 +5,6 @@ import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { CardSquadPlayers } from '@components/CardSquadPlayers';
 import { Container, Content, Title } from './styles';
-import pl from 'date-fns/esm/locale/pl/index.js';
 
 export function Squad({navigation}: {navigation: any}) {
   const year = new Date().getFullYear();
@@ -13,7 +12,7 @@ export function Squad({navigation}: {navigation: any}) {
 
   const anonymousURL = 'anonymousURL';
 
-  const allPlayersFiltered = allPlayers.filter((player) => {
+  allPlayers.filter((player) => {
     if (player.name === 'Anonymous Player') {
       const index = allPlayers.indexOf(player)
       allPlayers.splice(index, 1);
