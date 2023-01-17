@@ -24,8 +24,8 @@ export function NewPlayer({navigation}: {navigation: any}) {
 
   //==> VERIFICAÇÃO DE CAMPOS OBRIGATÓRIOS
   function handleCreateUserAccount() {
-    if (!email || !email) {
-      Alert.alert('Informe seu email e senha!')
+    if (!name || !email || !password) {
+      Alert.alert('Informe o nome, email e senha!')
     } else {
       createNewPlayer(name, email, password, isAdmin)
     }

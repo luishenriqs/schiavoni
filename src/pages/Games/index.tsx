@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
+import { useAllPlayers } from '@hooks/useAllPlayers';
 import { gamesServices } from '@services/gamesServices'
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { CardResult } from '@components/CardResult';
+import { getRanking } from '@services/rankingServices';
 import { GameDTO, GamesResultsDTO } from '@dtos/GameDTO';
+import { UserDTO } from '@dtos/UserDTO';
 import {
   Container, 
   Content,
@@ -24,11 +28,52 @@ export type GamesProps = {
 
 export function Games({navigation}: {navigation: any}) {
   const { user } = useAuth();
-  const { gameResult, currentSeason } = useChampion();
+  const { allPlayers } = useAllPlayers();
+  const { 
+    gameResult, 
+    currentSeason,
+    setGameResultContext, 
+    setRankingContext
+  } = useChampion();
 
   const [results, setResults] = useState<GamesResultsDTO>({} as GamesResultsDTO);
 
   const anonymousURL = 'anonymousURL';
+
+  useEffect(() => {
+    getGamesResults(
+      currentSeason.season,
+      currentSeason.game,
+      allPlayers
+    );
+  }, []);
+
+  //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
+  //==> PROCESSA, ATUALIZA E PERSISTE RANKING NO CONTEXTO
+  const getGamesResults = (
+    currentSeason: number, 
+    lastGame: number,
+    allPlayers: UserDTO[]
+  ) => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .where('season', '==', currentSeason)
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[];
+        data && setGameResultContext(data);
+        const ranking = getRanking(data, lastGame, allPlayers);
+        ranking && setRankingContext(ranking);
+      },
+    }) 
+    return () => subscribe();
+  };
 
   useEffect(() => {
     const result = gamesServices(gameResult);

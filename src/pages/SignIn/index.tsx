@@ -35,51 +35,33 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  //==> SIGN IN
-  const handleSignInWithEmailAndPassword = () => {
-    getUser();
-
-    if (!email || !email) {
-      Alert.alert('Informe seu email e senha!')
-    } else {
-      auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(() => console.log('LOGADO COM SUCESSO ', email))
-        .catch((error) => {
-          console.error(error)
-          if (error.code === 'auth/user-not-found') {
-            return Alert.alert('Esse player não existe!');
-          };
-  
-          if (error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password') {
-            return Alert.alert('Player ou senha inválido!');
-          };
-  
-          if (error.code === 'auth/too-many-requests') {
-            return Alert.alert('Muitas tentativas, senha bloqueada. Resete sua senha e tente novamente mais tarde!');
-          };
-        });
-    };
-  };
-
   //==> RECUPERA USER DO FIRESTORE
   const getUser = () => {
-    const subscribe: any = firestore()
-    .collection('players')
-    .where('email', '==', email)
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-        persistUser(data[0])
-      },
-    }) 
-    return () => subscribe()
+    if (!email || !password) {
+      Alert.alert('Informe seu email e senha!');
+    } else {
+      const subscribe: any = firestore()
+      .collection('players')
+      .where('email', '==', email)
+      .onSnapshot({
+        error: (e) => console.error(e),
+        next: (querySnapshot) => {
+          const data = querySnapshot.docs.map(doc => {
+            return {
+              doc_id: doc.id,
+            ...doc.data()
+            }
+          }) as UserDTO[]
+          if (data.length > 0) {
+            persistUser(data[0]);
+            handleSignInWithEmailAndPassword();
+          } else {
+            Alert.alert('Email não encontrado no sistema!')
+          };
+        },
+      }) 
+      return () => subscribe();
+    }
   };
 
   //==> PERSISTE USER NO CONTEXTO
@@ -96,6 +78,26 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     setUserContext(userData);
   };
 
+  //==> SIGN IN
+  const handleSignInWithEmailAndPassword = () => {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => console.log('LOGADO COM SUCESSO ', email))
+      .catch((error) => {
+        console.error(error)
+        if (error.code === 'auth/user-not-found') {
+          return Alert.alert('Email não encontrado no sistema!');
+        };
+
+        if (error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password') {
+          return Alert.alert('Email ou senha inválidos!');
+        };
+
+        if (error.code === 'auth/too-many-requests') {
+          return Alert.alert('Muitas tentativas, senha bloqueada. Resete sua senha e tente novamente mais tarde!');
+        };
+      });
+  };
 
   /* ***EMAIL*** */
 
@@ -157,7 +159,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
                       <Button
                           title="Sign In"
                           type='GRAY-BUTTON'
-                          onPress={handleSignInWithEmailAndPassword}
+                          onPress={getUser}
                       />
                       <ButtonText 
                           title="Recuperar senha" 

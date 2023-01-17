@@ -11,19 +11,15 @@ import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
 import { getPlayersNames } from '@services/playersServices';
-import { getRanking } from '@services/rankingServices';
-import { ChampionDTO } from '@dtos/ChampionDTO';
-import { UserDTO, SquadOfPlayersDTO } from '@dtos/UserDTO';
-import { GameDTO } from '@dtos/GameDTO'
+import { SquadOfPlayersDTO } from '@dtos/UserDTO';
 import { Container, Content, Title } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
   const { allPlayers } = useAllPlayers();
-  const { setRankingContext, setGameResultContext } = useChampion();
+  const { currentSeason } = useChampion();
 
   const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
-  const [currentSeason, setCurrentSeason] = useState(0);
   const [game, setGame] = useState('');
   const [name, setName] = useState('');
   const [position, setPosition] = useState('');
@@ -31,7 +27,6 @@ export function NewGame({navigation}: {navigation: any}) {
 
   useEffect(() => {
     getPlayers();
-    getCurrentSeason();
   }, []);
 
   //==> SELECT STYLE
@@ -97,28 +92,7 @@ export function NewGame({navigation}: {navigation: any}) {
     squadOfPlayers && setSquad(squadOfPlayers);
   };
 
-  //==> RECUPERA NÚMERO DA ÚLTIMA TEMPORADA
-  const getCurrentSeason = () => {
-    const subscribe = firestore()
-    .collection('champion')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as ChampionDTO[]
-        data[0].season 
-          ? setCurrentSeason(data[0].season + 1)
-          : setCurrentSeason(1);
-      },
-    })
-    return () => subscribe()
-  };
-
-  //==> REGISTRA UM NOVO RESULTADO INDIVIDUAL
+  //==> REGISTRA UM NOVO RESULTADO
   const handleAddResult = () => {
     let points = 0;
     switch (Number(position)) {
@@ -159,14 +133,14 @@ export function NewGame({navigation}: {navigation: any}) {
         points = 0;
         break;
     }
-    if (!currentSeason || !game || !name || !position) {
+    if (!currentSeason.season || !game || !name || !position) {
       Alert.alert('Preencha todos os campos!')
     } else {
       firestore()
       .collection('game_result')
       .doc('Game ' + new Date())
       .set({
-        season: currentSeason,
+        season: currentSeason.season,
         game: Number(game),
         name,
         position: Number(position),
@@ -174,60 +148,32 @@ export function NewGame({navigation}: {navigation: any}) {
         date: format(new Date(), 'dd/MM/yyyy'),
       })
       .then(() => {
-        Alert.alert('Resultado adicionado com sucesso!')
-        setName('')
-        setPosition('')
-        setModalVisible(!modalVisible)
+        Alert.alert('Resultado adicionado com sucesso!');
+        setCurrentSeason();
+        setName('');
+        setPosition('');
+        setModalVisible(!modalVisible);
       })
-      .catch((error) => console.error(error))
-  
-      firestore()
-      .collection('current_season')
-      .doc('currentData')
-      .update({
-        game: Number(game),
-      })
-      .then(() => {
-        const season = currentSeason;
-        getGamesResultsFirestore(season, Number(game), allPlayers);
-      })
-      .catch((error) => console.error(error))
+      .catch((error) => console.error(error));
     }
-  };  
+  };
 
-  //==> RECUPERA JOGOS DA ATUAL TEMPORADA
-  //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
-  //==> PROCESSA, ATUALIZA E PERSISTE RANKING NO CONTEXTO
-  const getGamesResultsFirestore = (
-    currentSeason: number, 
-    lastGame: number,
-    allPlayers: UserDTO[]
-  ) => {
-    const subscribe = firestore()
-    .collection('game_result')
-    .where('season', '==', currentSeason)
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as GameDTO[];
-        data && setGameResultContext(data);
-        const ranking = getRanking(data, lastGame, allPlayers);
-        ranking && setRankingContext(ranking);
-      },
-    }) 
-    return () => subscribe();
+  //==> ATUALIZA GAME NO CURRENT SEASON CONTEXT
+  const setCurrentSeason = () => {
+    firestore()
+    .collection('current_season')
+    .doc('currentData')
+    .update({
+      game: Number(game),
+    })
+    .catch((error) => console.error(error))
   };
 
   return (
     <Container>
       <Header
         title='New Game'
-        text={`${currentSeason}º Temporada`}
+        text={`${currentSeason.season}º Temporada`}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
@@ -268,7 +214,7 @@ export function NewGame({navigation}: {navigation: any}) {
 
       <ModalComponent
         title={`Novo Resultado`}
-        text={`Temporada: ${currentSeason}`}
+        text={`Temporada: ${currentSeason.season}`}
         text2={`Etapa: ${game}`}
         text3={`Player: ${name}`}
         text4={`Posição: ${position}`}

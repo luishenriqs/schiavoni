@@ -61,7 +61,7 @@ export function CardSquadPlayers({
     };
 
     const toDelete = () => {
-        //handleDelete(name);
+        handleDelete(name);
         setModalVisible(!modalVisible)
     };
 
@@ -96,7 +96,7 @@ export function CardSquadPlayers({
                 />
             </ButtonBox>
             <ModalComponent
-                title={`Deletar Player ${name}`}
+                title={`Deletar o Player ${name}`}
                 text={`O player ${name} não estará mais cadastrado na Schiavoni Poker House!`}
                 modalVisible={modalVisible}
                 greenButtonText={`Confirmar`}
