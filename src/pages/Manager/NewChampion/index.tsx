@@ -20,7 +20,7 @@ import {
 
 export function NewChampion({navigation}: {navigation: any}) {
   const theme = useTheme();
-  const { allPlayers } = useAllPlayers();
+  const { allPlayers, setAllPlayersContext } = useAllPlayers();
   const { currentSeason } = useChampion();
 
   const [name, setName] = useState('');
@@ -29,8 +29,32 @@ export function NewChampion({navigation}: {navigation: any}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    getPlayers();
+    if (allPlayers.length === 0) {
+      getAllPlayers();
+    } else {
+      loadSquadOfPlayers();
+    };
   }, []);
+
+  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+          setAllPlayersContext(data);
+          loadSquadOfPlayers();
+      },
+    }) 
+    return () => subscribe();
+  };
 
   //==> SELECT STYLE
   const pickerSelectStyles = {
@@ -52,7 +76,7 @@ export function NewChampion({navigation}: {navigation: any}) {
   };
 
   //==> PLAYERS POSSÍVEIS PARA O SELECT
-  const getPlayers = () => {
+  const loadSquadOfPlayers = () => {
     const squadOfPlayers = getPlayersNames(allPlayers);
     squadOfPlayers && setSquad(squadOfPlayers);
   };
@@ -84,8 +108,8 @@ export function NewChampion({navigation}: {navigation: any}) {
 
   //==> CONFIRMAÇÃO DE NOVO CAMPEÃO
   const handleAddNewChampion = () => {
-    addNewChampion()
-    setModalVisible(!modalVisible)
+    addNewChampion();
+    setModalVisible(!modalVisible);
   };
 
   //==> SALVA O NOVO CAMPEÃO

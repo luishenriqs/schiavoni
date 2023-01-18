@@ -1,67 +1,48 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
-import { ButtonRadio } from '@components/ButtonRadio';
+import ModalComponent from '@components/ModalComponent';
+import { UserDTO } from '@dtos/userDTO';
 import {
   Container, 
   Content
 } from './styles';
 
 export function NewPlayer({navigation}: {navigation: any}) {
+  const { setAllPlayersContext } = useAllPlayers();
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false)
-
-  function handleSelectAdmin() {
-    isAdmin ? setIsAdmin(false) : setIsAdmin(true);
-  };
+  const [modalVisible, setModalVisible] = useState(false);
 
   //==> VERIFICAÇÃO DE CAMPOS OBRIGATÓRIOS
-  function handleCreateUserAccount() {
-    if (!name || !email || !password) {
-      Alert.alert('Informe o nome, email e senha!')
+  const handleCreateUserAccount = () => {
+    if (!name || !email) {
+      Alert.alert('Informe o nome e email!')
     } else {
-      createNewPlayer(name, email, password, isAdmin)
+      createNewPlayerAuthentication();
     }
   };
 
-  //==> CRIA NOVO USUÁRIO NO FIRESTORE E NO FIREBASE/AUTH
-  function createNewPlayer(
-    name: string,
-    email: string, 
-    password: string,
-    isAdmin: boolean
-  ) {
-    firestore()
-    .collection('players')
-    .doc(email)
-    .set({
-      name,
-      email,
-      isAdmin,
-      avatar: '',
-      profile: ''
-    })
-    .catch((error) => console.error(error))
+  //==> CRIA NOVO USUÁRIO NO FIREBASE/AUTH
+  const createNewPlayerAuthentication = () => {
+    const password = '123456';
 
     auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(() => { 
-      Alert.alert('Novo player criado com sucesso!');
-      setName('');
-      setEmail('');
-      setPassword('');
+    .then(() => {
+      createNewPlayerFirestore();
     })
     .catch(erro => {
       console.error(erro.code)
       if (erro.code === 'auth/email-already-in-use') {
-        return Alert.alert('Esse email já existe em nosso sistema!');
+        setModalVisible(!modalVisible);
       };
 
       if (erro.code === 'auth/invalid-email') {
@@ -72,6 +53,47 @@ export function NewPlayer({navigation}: {navigation: any}) {
         return Alert.alert('Senha deve ter no mínimo 6 dígitos');
       };
     });
+  };
+
+  //==> CRIA NOVO USUÁRIO NO FIRESTORE
+  const createNewPlayerFirestore = () => {
+    firestore()
+    .collection('players')
+    .doc(email)
+    .set({
+      name,
+      email,
+      isAdmin: false,
+      avatar: '',
+      profile: ''
+    })
+    .then(() => {
+      setModalVisible(!modalVisible);
+      Alert.alert('Novo player criado com sucesso!');
+      setName('');
+      setEmail('');
+      getAllPlayers();
+    })
+    .catch((error) => console.error(error))
+  };
+
+  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+          setAllPlayersContext(data);
+      },
+    }) 
+    return () => subscribe();
   };
 
   return (
@@ -102,23 +124,22 @@ export function NewPlayer({navigation}: {navigation: any}) {
             onChangeText={(value) => setEmail(value)}
             value={email}
           />
-          <Input 
-            placeholder='Password'
-            secureTextEntry
-            onChangeText={(value) => setPassword(value)}
-            value={password}
-          />
-          <ButtonRadio 
-            title='Admin'
-            type={isAdmin}
-            onPress={handleSelectAdmin}
-          />
           <Button 
             title='Novo Player'
             onPress={handleCreateUserAccount}
           />
         </KeyboardAvoidingView>
       </Content>
+
+      <ModalComponent
+        title={`Email Existente!`}
+        text={`O email ${email} já foi usado uma vez em nosso sistema, deseja proceguir com um recadastro?`}
+        modalVisible={modalVisible}
+        greenButtonText={`Cadastrar Novamente`}
+        redButtonText='Cancelar'
+        onPressGreenButton={createNewPlayerFirestore}
+        onPressRedButton={() => setModalVisible(!modalVisible)}
+      />
     </Container>
   );
 };

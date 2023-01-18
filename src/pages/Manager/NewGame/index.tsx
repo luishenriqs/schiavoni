@@ -11,12 +11,12 @@ import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
 import { getPlayersNames } from '@services/playersServices';
-import { SquadOfPlayersDTO } from '@dtos/UserDTO';
+import { SquadOfPlayersDTO, UserDTO } from '@dtos/UserDTO';
 import { Container, Content, Title } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
-  const { allPlayers } = useAllPlayers();
+  const { allPlayers, setAllPlayersContext } = useAllPlayers();
   const { currentSeason } = useChampion();
 
   const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
@@ -26,8 +26,32 @@ export function NewGame({navigation}: {navigation: any}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    getPlayers();
+    if (allPlayers.length === 0) {
+      getAllPlayers();
+    } else {
+      loadSquadOfPlayers();
+    };
   }, []);
+
+  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+          setAllPlayersContext(data);
+          loadSquadOfPlayers();
+      },
+    }) 
+    return () => subscribe();
+  };
 
   //==> SELECT STYLE
   const pickerSelectStyles = {
@@ -87,7 +111,7 @@ export function NewGame({navigation}: {navigation: any}) {
   ];
 
   //==> PLAYERS POSSÍVEIS PARA O SELECT
-  const getPlayers = () => {
+  const loadSquadOfPlayers = () => {
     const squadOfPlayers = getPlayersNames(allPlayers);
     squadOfPlayers && setSquad(squadOfPlayers);
   };

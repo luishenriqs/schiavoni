@@ -4,6 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { ButtonEditable } from '@components/ButtonEditable';
 import ModalComponent from '@components/ModalComponent';
+import { UserDTO } from '@dtos/userDTO';
 import {
     Container,
     NameBox,
@@ -24,10 +25,11 @@ export function CardSquadPlayers({
     profile,
     isAdmin
 }: IProps) {
-    const { allPlayers } = useAllPlayers();
+    const { allPlayers, setAllPlayersContext } = useAllPlayers();
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    //==> ATUALIZA STATUS ADMIN
     const handleUpdateAdmin = (name: string, isAdmin: boolean) => {
         const playerUpdated = allPlayers.filter((item) => {
             if (item.name === name) return item;
@@ -46,6 +48,13 @@ export function CardSquadPlayers({
             .catch(error => console.error(error))
     };
 
+    //==> CHAMA HANDLE DELETE
+    const toDelete = () => {
+        setModalVisible(!modalVisible)
+        handleDelete(name);
+    };
+
+    //==> DELETA PLAYER DO SISTEMA
     const handleDelete = (name: string) => {
         const playerToDelete = allPlayers.filter((item) => {
             if (item.name === name) return item;
@@ -56,13 +65,28 @@ export function CardSquadPlayers({
             .delete()
             .then(() => {
                 Alert.alert(`${name} não está mais cadastrado na Schiavoni Poker House!`)
+                getAllPlayers();
             })
             .catch(error => console.error(error))
     };
 
-    const toDelete = () => {
-        handleDelete(name);
-        setModalVisible(!modalVisible)
+    //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO
+    const getAllPlayers = () => {
+        const subscribe: any = firestore()
+        .collection('players')
+        .onSnapshot({
+        error: (e) => console.error(e),
+        next: (querySnapshot) => {
+            const data = querySnapshot.docs.map(doc => {
+            return {
+                doc_id: doc.id,
+            ...doc.data()
+            }
+            }) as UserDTO[]
+            setAllPlayersContext(data);
+        },
+        }) 
+        return () => subscribe();
     };
 
     return (
@@ -88,7 +112,7 @@ export function CardSquadPlayers({
                     onPress={() => handleUpdateAdmin(name, isAdmin)}
                 />
                 <ButtonEditable 
-                    title='Delete'
+                    title='Remover'
                     type='RED-BUTTON'
                     width={50}
                     height={100}
@@ -96,7 +120,7 @@ export function CardSquadPlayers({
                 />
             </ButtonBox>
             <ModalComponent
-                title={`Deletar o Player ${name}`}
+                title={`Remover o Player ${name}`}
                 text={`O player ${name} não estará mais cadastrado na Schiavoni Poker House!`}
                 modalVisible={modalVisible}
                 greenButtonText={`Confirmar`}
