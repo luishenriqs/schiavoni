@@ -111,13 +111,13 @@ export function NewPlayer({navigation}: {navigation: any}) {
           style={{ flex: 1 }}
         >
           <Input 
-            placeholder='Name'
+            placeholder='Nome'
             autoCorrect={false}
             onChangeText={(value) => setName(value)}
             value={name}
           />
           <Input 
-            placeholder='Email'
+            placeholder='E-mail'
             keyboardType='email-address'
             autoCorrect={false}
             autoCapitalize='none'
