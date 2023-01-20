@@ -23,7 +23,7 @@ export const Imagem = styled(Image)`
 `;
 
 export const Line = styled.View`
-  border: solid 0.5px ${({ theme }) => theme.COLORS.gray_500};
+  border: solid 1px ${({ theme }) => theme.COLORS.gray_500};
 `;
 
 export const DrawerListContent = styled.View`

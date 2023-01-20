@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAuth } from '@hooks/useAuth';
 import {
   Container, 
   HeaderWrapper, 
@@ -26,6 +27,8 @@ export function Header({
   headerSize, 
   onPress
 }: HeaderProps) {
+  const { user } = useAuth();
+
   return (
     <Container>
       <HeaderWrapper headerSize={headerSize}>
@@ -38,7 +41,11 @@ export function Header({
           }
           <Title>{title}</Title>
           <IconContainer>
-            <Icon size={30} name="menu" onPress={onPress} />
+            <Icon 
+              size={30} 
+              name={user.termsOfUse ? "menu" : "logout"}
+              onPress={onPress} 
+            />
           </IconContainer>
         </HeaderContent>
 

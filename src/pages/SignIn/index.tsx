@@ -73,6 +73,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       avatar: user.avatar,
       doc_id: user.doc_id,
       isAdmin: user.isAdmin,
+      termsOfUse: user.termsOfUse,
     };
 
     setUserContext(userData);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { Loading } from '@components/Loading';
+import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
@@ -14,6 +15,7 @@ import {
 } from './styles';
 
 export function ChampionPage({navigation}: {navigation: any}) {
+  const { user } = useAuth();
   const { champion, setChampionContext } = useChampion();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -68,6 +70,7 @@ export function ChampionPage({navigation}: {navigation: any}) {
   const persistChampionData = (championData: ChampionDTO) => {
     setChampionContext(championData);
     setIsLoading(false);
+    if (!user.termsOfUse) navigation.navigate('Terms Of Use');
   };
 
   return (

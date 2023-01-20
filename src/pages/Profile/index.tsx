@@ -85,6 +85,7 @@ export function Profile({navigation}: {navigation: any}) {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      termsOfUse: user.termsOfUse,
       avatar: user.avatar,
       profile: user.profile,
     };

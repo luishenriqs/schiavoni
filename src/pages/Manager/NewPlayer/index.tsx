@@ -64,6 +64,7 @@ export function NewPlayer({navigation}: {navigation: any}) {
       name,
       email,
       isAdmin: false,
+      termsOfUse: false,
       avatar: '',
       profile: ''
     })

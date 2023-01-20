@@ -18,7 +18,7 @@ export function ButtonRadio({ title, type, ...rest }: Props) {
         >
             <MaterialCommunityIcons
                 size={28}
-                name={type ? 'radiobox-marked' : 'radiobox-blank'}
+                name={type ? 'checkbox-marked-outline' : 'checkbox-blank-outline'}
                 style={{ color: type ? theme.COLORS.green_700 : theme.COLORS.gray_900}}
             />
             <Title>

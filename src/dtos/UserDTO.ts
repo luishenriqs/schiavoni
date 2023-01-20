@@ -5,6 +5,7 @@ export type UserDTO = {
   avatar: string;
   doc_id: string;
   isAdmin: boolean;
+  termsOfUse: boolean;
 };
 
 export type SquadOfPlayersDTO = {
