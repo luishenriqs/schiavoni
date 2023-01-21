@@ -105,11 +105,11 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   //==> RECUPERA SENHA
   function handleForgotPassword() {
     if (!email) {
-      Alert.alert('Informe seu email e senha!')
+      Alert.alert('Informe seu email!')
     } else {
       auth()
         .sendPasswordResetEmail(email)
-        .then(() => Alert.alert('Nós enviamos um link para o seu email para resetar sua senha.'));
+        .then(() => Alert.alert('Nós enviamos um link para o seu email para que possa redefinir sua senha.'));
     };
   };
 

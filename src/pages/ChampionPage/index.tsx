@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import { Loading } from '@components/Loading';
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
+import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { ChampionDTO } from '@dtos/ChampionDTO';
