@@ -12,46 +12,19 @@ import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
 import { getPlayersNames } from '@services/playersServices';
 import { SquadOfPlayersDTO, UserDTO } from '@dtos/UserDTO';
+import { SeasonDTO } from '@dtos/GameDTO'
 import { Container, Content, Title } from './styles';
 
 export function NewGame({navigation}: {navigation: any}) {
   const theme = useTheme();
   const { allPlayers, setAllPlayersContext } = useAllPlayers();
-  const { currentSeason } = useChampion();
+  const { champion, currentSeason, setCurrentSeasonContext } = useChampion();
 
   const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
   const [game, setGame] = useState('');
   const [name, setName] = useState('');
   const [position, setPosition] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-
-  useEffect(() => {
-    if (allPlayers.length === 0) {
-      getAllPlayers();
-    } else {
-      loadSquadOfPlayers();
-    };
-  }, []);
-
-  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
-  const getAllPlayers = () => {
-    const subscribe: any = firestore()
-    .collection('players')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-          setAllPlayersContext(data);
-          loadSquadOfPlayers();
-      },
-    }) 
-    return () => subscribe();
-  };
 
   //==> SELECT STYLE
   const pickerSelectStyles = {
@@ -110,10 +83,83 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '12 - Décimo Segundo Colocado', value: '12' }
   ];
 
+  useEffect(() => {
+    if (allPlayers.length === 0) {
+      getAllPlayers();
+    } else {
+      loadSquadOfPlayers(allPlayers);
+    };
+  }, []);
+
+  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+          setAllPlayersContext(data);
+          loadSquadOfPlayers(data);
+      },
+    }) 
+    return () => subscribe();
+  };
+
   //==> PLAYERS POSSÍVEIS PARA O SELECT
-  const loadSquadOfPlayers = () => {
+  const loadSquadOfPlayers = (allPlayers: UserDTO[]) => {
     const squadOfPlayers = getPlayersNames(allPlayers);
     squadOfPlayers && setSquad(squadOfPlayers);
+    if (!currentSeason.season) getCurrentSeason();
+  };
+
+  //==> RECUPERA CURRENT SEASON E PERSISTE NO CONTEXTO SE CONTEXTO VAZIO
+  const getCurrentSeason = () => {
+    const subscribe: any = firestore()
+    .collection('current_season')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as SeasonDTO[]
+        if (data.length === 0) {
+          createCurrentSeason();
+        } else {
+          const season = data[0].season;
+          const game = data[0].game;
+          const currentSeasonData = { season, game };
+          setCurrentSeasonContext(currentSeasonData);
+        };
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> CRIA DOC CURRENT_SEASON NO FIRESTORE CASO NÃO EXISTA
+  const createCurrentSeason = () => {
+    firestore()
+    .collection('current_season')
+    .doc('currentData')
+    .set({
+      season: champion.season + 1,
+      game: 0,
+    })
+    .then(() => {
+      const season = champion.season + 1;
+      const game = 0;
+      const currentSeasonData = { season, game };
+      setCurrentSeasonContext(currentSeasonData);
+    })
+    .catch((error) => console.error(error))
   };
 
   //==> REGISTRA UM NOVO RESULTADO
@@ -216,7 +262,7 @@ export function NewGame({navigation}: {navigation: any}) {
             value={game}
           />
           <RNPickerSelect
-            placeholder={playersPlaceholder}
+            placeholder={squad && playersPlaceholder}
             onValueChange={(value) => setName(value)}
             style={pickerSelectStyles}
             items={squad}

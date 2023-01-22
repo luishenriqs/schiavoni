@@ -114,31 +114,43 @@ export function NewChampion({navigation}: {navigation: any}) {
 
   //==> SALVA O NOVO CAMPEÃO
   const addNewChampion = () => {
-    firestore()
-    .collection('champion')
-    .doc('newChampion')
-    .set({
-      name,
-      season: currentSeason.season,
-      profile: newChampion.profile,
-      avatar: newChampion.avatar,
-      id: newChampion.doc_id,
-      email: newChampion.email
-    })
-    .then(() => {
-      Alert.alert('Novo campeão salvo com sucesso!');
-      setName('');
-    })
-    .catch((error) => console.error(error));
+    if (!name) {
+      Alert.alert('Selecione o nome do novo campeão');
+    } else {
+      firestore()
+      .collection('champion')
+      .doc('newChampion')
+      .set({
+        name,
+        season: currentSeason.season,
+        profile: newChampion.profile,
+        avatar: newChampion.avatar,
+        id: newChampion.doc_id,
+        email: newChampion.email
+      })
+      .then(() => {
+        Alert.alert('Novo campeão salvo com sucesso!');
+        setName('');
+      })
+      .catch((error) => console.error(error));
+  
+      firestore()
+      .collection('current_season')
+      .doc('currentData')
+      .set({
+        season: currentSeason.season + 1,
+        game: 0,
+      })
+      .catch((error) => console.error(error))
+    }
+  };
 
-    firestore()
-    .collection('current_season')
-    .doc('currentData')
-    .set({
-      season: currentSeason.season + 1,
-      game: 0,
-    })
-    .catch((error) => console.error(error))
+  const openModal = () => {
+    if (!name) {
+      Alert.alert('Selecione o nome do novo campeão');
+    } else {
+      setModalVisible(!modalVisible);
+    }
   };
 
   return (
@@ -165,7 +177,7 @@ export function NewChampion({navigation}: {navigation: any}) {
           />
           <Button 
             title='Campeão do PSOP'
-            onPress={() => setModalVisible(!modalVisible)}
+            onPress={openModal}
           />
         </KeyboardAvoidingView>
       </Content>

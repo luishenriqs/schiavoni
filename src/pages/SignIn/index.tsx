@@ -109,7 +109,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
     } else {
       auth()
         .sendPasswordResetEmail(email)
-        .then(() => Alert.alert('Nós enviamos um link para o seu email para que possa redefinir sua senha.'));
+        .then(() => Alert.alert('Nós enviamos um link em seu email para redefinição de senha.'));
     };
   };
 

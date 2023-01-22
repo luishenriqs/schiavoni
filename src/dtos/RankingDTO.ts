@@ -25,4 +25,4 @@ export type LevelProps = {
 
 export type LevelDTO = {
   level: LevelProps[];
-};
+}[];

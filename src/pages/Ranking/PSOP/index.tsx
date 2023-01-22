@@ -5,13 +5,14 @@ import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
 import { getRanking } from '@services/rankingServices';
+import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
 import { LeaderCard } from '@components/LeaderCard';
 import { CardRanking }from '@components/CardRanking';
 import { LabelPSOP } from "@components/LabelPSOP";
 import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
 import { UserDTO } from '@dtos/userDTO'
-import { Container, Content } from './styles';
+import { Container, Content, Title, Text } from './styles';
 
 export function PSOP({navigation}: {navigation: any}) {
   const { user } = useAuth();
@@ -149,22 +150,30 @@ export function PSOP({navigation}: {navigation: any}) {
             Game={`Etapa ${currentSeason.game}`}
           />
         }
-        {ranking.orderedRanking &&
-          <>
-            <LabelPSOP />
-            <FlatList
-              data={ranking.orderedRanking}
-              keyExtractor={(item, index) => index + item.player}
-              renderItem={({ item, index }) => (
-                <CardRanking 
-                  position={`${index + 1} º`}
-                  name={item.player}
-                  points={item.totalPoints}
-                  avatar={item.profile}
-                />
-              )}
-            />
-          </>
+        {ranking.orderedRanking
+          ?
+            <>
+              <LabelPSOP />
+              <FlatList
+                data={ranking.orderedRanking}
+                keyExtractor={(item, index) => index + item.player}
+                renderItem={({ item, index }) => (
+                  <CardRanking 
+                    position={`${index + 1} º`}
+                    name={item.player}
+                    points={item.totalPoints}
+                    avatar={item.profile}
+                  />
+                )}
+              />
+            </>
+          : currentSeason.game === 0 
+            ? 
+              <>
+                <Title>{`A ${currentSeason.season}º Temporada do PSOP`}</Title>
+                <Text>{`Nenhuma etapa registrada`}</Text>
+              </>
+            : <Loading />
         }
       </Content>
     </Container>
