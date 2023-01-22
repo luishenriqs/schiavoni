@@ -137,18 +137,25 @@ export function PSOP({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <Content>
-        {ranking.lastGame > 0 &&
-          <LeaderCard 
-            title='LÍDER:'
-            leadersName={ranking.orderedRanking[0].player}
-            avatar={
-              ranking.orderedRanking[0].avatar
-                ? ranking.orderedRanking[0].avatar
-                : anonymousURL
-            }   
-            Season={`Temporada ${currentSeason.season}`}
-            Game={`Etapa ${currentSeason.game}`}
-          />
+        {ranking.lastGame > 0 
+          ?
+            <LeaderCard 
+              title='LÍDER:'
+              leadersName={ranking.orderedRanking[0].player}
+              avatar={
+                ranking.orderedRanking[0].avatar
+                  ? ranking.orderedRanking[0].avatar
+                  : anonymousURL
+              }   
+              Season={`Temporada ${currentSeason.season}`}
+              Game={`Etapa ${currentSeason.game}`}
+            />
+          : currentSeason.game === 0 
+          ? 
+            <>
+              <Text>PATOS SERIES OF POKER</Text>
+            </>
+          : <Loading />
         }
         {ranking.orderedRanking
           ?
@@ -170,7 +177,7 @@ export function PSOP({navigation}: {navigation: any}) {
           : currentSeason.game === 0 
             ? 
               <>
-                <Title>{`A ${currentSeason.season}º Temporada do PSOP`}</Title>
+                <Title>{`${currentSeason.season}º Temporada do PSOP`}</Title>
                 <Text>{`Nenhuma etapa registrada`}</Text>
               </>
             : <Loading />
