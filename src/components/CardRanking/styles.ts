@@ -11,7 +11,7 @@ export const Container = styled.View`
 `;
 
 export const InfoBox = styled.View`
-  width: 15%;
+  width: 17%;
   height: 70px;
   align-items: center;
   justify-content: center;
@@ -25,7 +25,7 @@ export const InfoBox = styled.View`
 export const Position = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.LG};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
@@ -33,7 +33,7 @@ export const Position = styled.Text`
 export const NameBox = styled.View`
   flex-direction: row;
   justify-content: flex-start;
-  width: 68%;
+  width: 64%;
   margin: 0 3px;
   height: 70px;
   align-items: center;
@@ -48,7 +48,7 @@ export const Name = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.LG};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
@@ -56,7 +56,7 @@ export const Name = styled.Text`
 export const Points = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.LG};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

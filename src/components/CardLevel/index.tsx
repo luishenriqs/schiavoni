@@ -49,9 +49,9 @@ export function CardLevel({
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>
-                {name.length <= 17
+                {name.length <= 16
                     ? <Name>{name}</Name>
-                    : <Name>{name.substring(12, -1)}...</Name>
+                    : <Name>{name.substring(11, -1)}...</Name>
                 }
             </NameContainer>
             <PowerContainer>

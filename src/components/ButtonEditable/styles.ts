@@ -54,7 +54,7 @@ export const Title = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.white};
-    font-size: ${theme.FONT_SIZE.MD};
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

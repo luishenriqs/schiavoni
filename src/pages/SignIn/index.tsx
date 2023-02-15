@@ -158,7 +158,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
                           onChangeText={(value) => setPassword(value)}
                       />
                       <Button
-                          title="Sign In"
+                          title="Entrar"
                           type='GRAY-BUTTON'
                           onPress={getUser}
                       />

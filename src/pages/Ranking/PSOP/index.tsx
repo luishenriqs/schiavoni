@@ -12,7 +12,7 @@ import { CardRanking }from '@components/CardRanking';
 import { LabelPSOP } from "@components/LabelPSOP";
 import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
 import { UserDTO } from '@dtos/userDTO'
-import { Container, Content, Title, Text } from './styles';
+import { Container, Content, Title, Text, Imagem } from './styles';
 
 export function PSOP({navigation}: {navigation: any}) {
   const { user } = useAuth();
@@ -133,7 +133,7 @@ export function PSOP({navigation}: {navigation: any}) {
         title='PSOP'
         text='Patos Series Of Poker'
         picture={user.profile ? user.profile : anonymousURL}
-        headerSize={'big'}
+        headerSize={currentSeason.game === 0 ? 'small' : 'big'}
         onPress={() => navigation.openDrawer()}
       />
       <Content>
@@ -154,6 +154,7 @@ export function PSOP({navigation}: {navigation: any}) {
           ? 
             <>
               <Text>PATOS SERIES OF POKER</Text>
+              <Imagem source={require('@assets/logoOficial/PSOPLogo.jpg')}/>
             </>
           : <Loading />
         }
@@ -177,7 +178,7 @@ export function PSOP({navigation}: {navigation: any}) {
           : currentSeason.game === 0 
             ? 
               <>
-                <Title>{`${currentSeason.season}º Temporada do PSOP`}</Title>
+                <Title>{`${currentSeason.season}º Temporada`}</Title>
                 <Text>{`Nenhuma etapa registrada`}</Text>
               </>
             : <Loading />

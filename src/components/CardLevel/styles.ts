@@ -46,7 +46,7 @@ export const Name = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.LG};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
