@@ -48,7 +48,7 @@ export function Squad({navigation}: {navigation: any}) {
   return (
     <Container>
       <Header
-        title='Squad of Players'
+        title='Player Squad'
         text={'Seleção ' + String(year)}
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}

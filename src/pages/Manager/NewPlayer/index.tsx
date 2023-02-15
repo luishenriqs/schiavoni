@@ -134,7 +134,7 @@ export function NewPlayer({navigation}: {navigation: any}) {
 
       <ModalComponent
         title={`Email Existente!`}
-        text={`O email ${email} já foi usado uma vez em nosso sistema, deseja proceguir com um recadastro?`}
+        text={`O email ${email} já foi usado uma vez em nosso sistema, deseja prosseguir com um recadastro?`}
         modalVisible={modalVisible}
         greenButtonText={`Cadastrar Novamente`}
         redButtonText='Cancelar'

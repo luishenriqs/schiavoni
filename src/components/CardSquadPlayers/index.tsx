@@ -32,7 +32,7 @@ export function CardSquadPlayers({
     //==> ATUALIZA STATUS ADMIN
     const handleUpdateAdmin = (name: string, isAdmin: boolean) => {
         if (name === 'Dú Schiavoni') {
-            Alert.alert(`Não é possível remover o privilégio de Admin de ${name}`);
+            Alert.alert(`${name} é administrador permanente!`);
         } else {
             const playerUpdated = allPlayers.filter((item) => {
                 if (item.name === name) return item;
@@ -56,7 +56,7 @@ export function CardSquadPlayers({
     //==> ABRE MODAL DE REMOÇÃO
     const openModal = () => {
         if (name === 'Dú Schiavoni') {
-            Alert.alert(`Não é possível remover ${name} do aplicativo da Schiavoni Poker House!`);
+            Alert.alert(`${name} é membro permanente!`);
         } else {
             setModalVisible(!modalVisible);
         };
@@ -108,9 +108,9 @@ export function CardSquadPlayers({
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>
-                {name.length <= 16
+                {name.length <= 15
                     ? <Name>{name}</Name>
-                    : <Name>{name.substring(11, -1)}...</Name>
+                    : <Name>{name.substring(12, -1)}...</Name>
                 }
             </NameBox>
             <ButtonBox>

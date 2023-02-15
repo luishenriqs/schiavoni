@@ -48,7 +48,7 @@ export const Name = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.LG};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
@@ -56,7 +56,7 @@ export const Name = styled.Text`
 export const Points = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.LG};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

@@ -51,7 +51,7 @@ export const ImageContent = styled.View`
 export const ImageProfileAndAvatar = styled.Image`
   width: ${RFValue(130)}px;
   height: ${RFValue(130)}px;
-  margin: 15px 10px;
+  margin: 15px 2px;
   border-radius: 5px;
 `;
 

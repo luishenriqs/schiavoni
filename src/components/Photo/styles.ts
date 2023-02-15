@@ -7,7 +7,7 @@ type Prop = {
 export const Container = styled.View<Prop>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
-  margin: 15px 10px;
+  margin: 15px 2px;
   align-self: center;
 `;
 

@@ -393,7 +393,7 @@ export function TermsOfUse({navigation}: {navigation: any}) {
           <BulletPoint>*</BulletPoint>
           <BulletText>
             Foldar J9 (Valete + Nove) é falta grave, passível de sério dano 
-            a sua repução, sendo avaliado pela comissão julgadora da Casa e
+            a sua reputação, sendo avaliado pela comissão julgadora da Casa e
             Dept. de Criação as medidas punitivas cabíveis.
           </BulletText>
         </BulletBox>
