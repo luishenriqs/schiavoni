@@ -16,10 +16,9 @@ import { Container, Content, Title, Text, Imagem } from './styles';
 
 export function PSOP({navigation}: {navigation: any}) {
   const { user } = useAuth();
-  const { setAllPlayersContext } = useAllPlayers();
+  const { allPlayers } = useAllPlayers();
   const { 
     ranking,
-    champion,
     currentSeason,
     setRankingContext, 
     setCurrentSeasonContext,
@@ -29,33 +28,12 @@ export function PSOP({navigation}: {navigation: any}) {
   const anonymousURL = 'anonymousURL';
 
   useEffect(() => {
-    getAllPlayers();
+    getCurrentSeason();;
   }, []);
-
-  //==> RECUPERA TODOS OS JOGADORES E PERSISTE NO CONTEXTO
-  //==> CHAMA CURRENT SEASON
-  const getAllPlayers = () => {
-    const subscribe: any = firestore()
-    .collection('players')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-          setAllPlayersContext(data);
-          getCurrentSeason(data);
-      },
-    }) 
-    return () => subscribe()
-  };
 
   //==> RECUPERA CURRENT SEASON E PERSISTE NO CONTEXTO
   //==> CHAMA GET GAMES
-  const getCurrentSeason = (allPlayers: UserDTO[]) => {
+  const getCurrentSeason = () => {
     const subscribe: any = firestore()
     .collection('current_season')
     .onSnapshot({
@@ -67,39 +45,16 @@ export function PSOP({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as SeasonDTO[]
-        if (data.length === 0) {
-          createCurrentSeason(allPlayers);
-        } else {
-          const season = data[0].season;
-          const game = data[0].game;
-          const currentSeasonData = { season, game };
-          setCurrentSeasonContext(currentSeasonData);
-          getGames(season, game, allPlayers);
-        };
+        const season = data[0].season;
+        const game = data[0].game;
+        const currentSeasonData = { season, game };
+        setCurrentSeasonContext(currentSeasonData);
+        getGames(season, game, allPlayers);
       },
     }) 
     return () => subscribe()
   };
 
-  //==> CRIA DOC CURRENT_SEASON NO FIRESTORE CASO NÃO EXISTA
-  const createCurrentSeason = (allPlayers: UserDTO[]) => {
-    firestore()
-    .collection('current_season')
-    .doc('currentData')
-    .set({
-      season: champion.season + 1,
-      game: 0,
-    })
-    .then(() => {
-      const season = champion.season + 1;
-      const game = 0;
-      const currentSeasonData = { season, game };
-      setCurrentSeasonContext(currentSeasonData);
-      getGames(season, game, allPlayers);
-    })
-    .catch((error) => console.error(error))
-  };
- 
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA E PERSISTE NO CONTEXTO
   //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
   const getGames = (
