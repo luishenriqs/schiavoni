@@ -1,9 +1,12 @@
 import React from 'react';
 import {
     Container,
+    PlayerContainer,
     NameContainer,
-    PowerContainer,
     Name,
+    PercentContainer,
+    PercentText,
+    PowerContainer,
     Icon,
     ImageContent,
     ImageProfileAndAvatar
@@ -11,12 +14,14 @@ import {
 
 interface IProps {
     power: number;
+    percent: number;
     name: string;
     avatar: string;
 }
 
 export function CardLevel({
     power,
+    percent,
     name,
     avatar
 }: IProps) {
@@ -42,18 +47,25 @@ export function CardLevel({
 
     return (
         <Container>
-            <NameContainer>
+            <PlayerContainer>
                 <ImageContent>
                     {avatar !== 'anonymousURL'
                         ? <ImageProfileAndAvatar source={{uri: avatar}}/>
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>
-                {name.length <= 15
-                    ? <Name>{name}</Name>
-                    : <Name>{name.substring(12, -1)}...</Name>
-                }
-            </NameContainer>
+                <NameContainer>
+                    {name.length <= 15
+                        ? <Name>{name}</Name>
+                        : <Name>{name.substring(12, -1)}...</Name>
+                    }
+                </NameContainer>
+                <PercentContainer>
+                    <PercentText percent={percent}>
+                        {'% ' + percent.toFixed(0)}
+                    </PercentText>
+                </PercentContainer>
+            </PlayerContainer>
             <PowerContainer>
                 {stars?.map((item, index) => {
                     return (

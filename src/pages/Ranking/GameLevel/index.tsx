@@ -76,7 +76,7 @@ export function GameLevel({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <Content>
-        <Title>Nível de desempenho</Title>
+        <Title>Desempenho individual por participação</Title>
         <LabelPlayers />
         {level.length > 0
           ?
@@ -87,6 +87,7 @@ export function GameLevel({navigation}: {navigation: any}) {
                 <CardLevel 
                   name={item.player}
                   power={item.power}
+                  percent={item.percent}
                   avatar={item.avatar}
                 />
               )}

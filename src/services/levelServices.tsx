@@ -49,7 +49,8 @@ const performance = (data: PercentPerformanceDTO) => {
     
     const performance = {
         player: data.player,
-        power
+        percent: Number(percent.toFixed(2)),
+        power,
     }
     return performance;
 }
@@ -76,19 +77,19 @@ const processLevel = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
     });
 
     //==> ISOLA APENAS OS PONTOS
-    const onlyPower = result.map((el) => {
-        return el.power
+    const onlyPercent = result.map((el) => {
+        return el.percent
     });
 
     //==> ORDENA OS PONTOS
-    const orderedPower = onlyPower.sort(function(a, b) {
+    const orderedPercent = onlyPercent.sort(function(a, b) {
         return a - b;
     }).reverse();
 
     //==> ORDENA OS PERFIS E TRATA DUPLICIDADES DE PONTOS
-    let orderedResult = orderedPower.map((el) => {
+    let orderedResult = orderedPercent.map((el) => {
         const ordered = result.filter((item) => {
-            if (item.power === el) {
+            if (item.percent === el) {
                 const index = result.indexOf(item);
                 result.splice(index, 1);
                 return item;
