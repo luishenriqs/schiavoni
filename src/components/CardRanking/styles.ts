@@ -1,6 +1,10 @@
 import styled, { css } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
+type Props = {
+  positionStatus: number;
+};
+
 export const Container = styled.View`
   flex-direction: row;
   align-items: center;
@@ -10,16 +14,25 @@ export const Container = styled.View`
   margin: 5px 5px;
 `;
 
-export const InfoBox = styled.View`
+export const InfoBox = styled.View<Props>`
   width: 17%;
   height: 70px;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  ${({ theme }) => css`
-    border: 1px solid ${theme.COLORS.black};
-    background: ${theme.COLORS.gray_700};
-  `};
+
+  ${({ theme }) =>
+    css`
+      border: 1px solid ${theme.COLORS.black};
+      background: ${theme.COLORS.gray_700};
+    `};
+
+  ${({ positionStatus, theme }) =>
+    positionStatus <= 3 &&
+    css`
+      border: 1px solid ${theme.COLORS.green_500};
+      background: ${theme.COLORS.gray_700};
+    `};
 `;
 
 export const Position = styled.Text`
@@ -30,7 +43,7 @@ export const Position = styled.Text`
   `};
 `;
 
-export const NameBox = styled.View`
+export const NameBox = styled.View<Props>`
   flex-direction: row;
   justify-content: flex-start;
   width: 64%;
@@ -38,10 +51,19 @@ export const NameBox = styled.View`
   height: 70px;
   align-items: center;
   border-radius: 5px;
-  ${({ theme }) => css`
-    border: 1px solid ${theme.COLORS.black};
-    background: ${theme.COLORS.gray_700};
-  `};
+
+  ${({ theme }) =>
+    css`
+      border: 1px solid ${theme.COLORS.black};
+      background: ${theme.COLORS.gray_700};
+    `};
+
+  ${({ positionStatus, theme }) =>
+    positionStatus <= 3 &&
+    css`
+      border: 1px solid ${theme.COLORS.green_500};
+      background: ${theme.COLORS.gray_700};
+    `};
 `;
 
 export const Name = styled.Text`

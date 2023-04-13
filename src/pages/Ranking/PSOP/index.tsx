@@ -123,6 +123,7 @@ export function PSOP({navigation}: {navigation: any}) {
                 renderItem={({ item, index }) => (
                   <CardRanking 
                     position={`${index + 1} º`}
+                    positionNumber={index + 1}
                     name={item.player}
                     points={item.totalPoints}
                     avatar={item.profile}

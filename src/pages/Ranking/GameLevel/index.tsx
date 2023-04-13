@@ -76,7 +76,7 @@ export function GameLevel({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <Content>
-        <Title>Desempenho individual por participação</Title>
+        <Title>Desempenho Individual por Participação</Title>
         <LabelPlayers />
         {level.length > 0
           ?

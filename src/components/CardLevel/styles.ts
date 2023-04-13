@@ -101,11 +101,6 @@ export const PowerContainer = styled.View`
   `};
 `;
 
-export const Icon = styled(MaterialIcons).attrs<Props>(({ theme, power }) => ({
-  size: 16,
-  color: power ? theme.COLORS.gold : theme.COLORS.gray_600,
-}))``;
-
 export const ImageContent = styled.View`
   justify-content: flex-start;
 `;
@@ -115,3 +110,8 @@ export const ImageProfileAndAvatar = styled.Image`
   height: ${RFValue(70)}px;
   border-radius: 5px;
 `;
+
+export const Icon = styled(MaterialIcons).attrs<Props>(({ theme, power }) => ({
+  size: 16,
+  color: power ? theme.COLORS.gold : theme.COLORS.gray_600,
+}))``;
