@@ -10,8 +10,8 @@ import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
 import { getPlayersNames } from '@services/playersServices';
-import { UserDTO } from '@dtos/userDTO';
-import { SquadOfPlayersDTO } from '@dtos/UserDTO';
+import { UserDTO, SquadOfPlayersDTO } from '@dtos/userDTO';
+import { GameDTO } from '@dtos/GameDTO';
 import { 
   Container,
   Content,
@@ -27,34 +27,6 @@ export function NewChampion({navigation}: {navigation: any}) {
   const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
   const [newChampion, setNewChampion] = useState<UserDTO>({} as UserDTO);
   const [modalVisible, setModalVisible] = useState(false);
-
-  useEffect(() => {
-    if (allPlayers.length === 0) {
-      getAllPlayers();
-    } else {
-      loadSquadOfPlayers();
-    };
-  }, []);
-
-  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
-  const getAllPlayers = () => {
-    const subscribe: any = firestore()
-    .collection('players')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as UserDTO[]
-          setAllPlayersContext(data);
-          loadSquadOfPlayers();
-      },
-    }) 
-    return () => subscribe();
-  };
 
   //==> SELECT STYLE
   const pickerSelectStyles = {
@@ -75,8 +47,36 @@ export function NewChampion({navigation}: {navigation: any}) {
     value: null,
   };
 
+  useEffect(() => {
+    if (allPlayers.length === 0) {
+      getAllPlayers();
+    } else {
+      loadSquadOfPlayers(allPlayers);
+    };
+  }, []);
+
+  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+          setAllPlayersContext(data);
+          loadSquadOfPlayers(data);
+      },
+    }) 
+    return () => subscribe();
+  };
+
   //==> PLAYERS POSSÍVEIS PARA O SELECT
-  const loadSquadOfPlayers = () => {
+  const loadSquadOfPlayers = (allPlayers: UserDTO[]) => {
     const squadOfPlayers = getPlayersNames(allPlayers);
     squadOfPlayers && setSquad(squadOfPlayers);
   };
@@ -106,39 +106,92 @@ export function NewChampion({navigation}: {navigation: any}) {
     return () => subscribe()
   };
 
-  //==> CONFIRMAÇÃO DE NOVO CAMPEÃO
+  //==> SALVA O NOVO CAMPEÃO
   const handleAddNewChampion = () => {
-    addNewChampion();
-    setModalVisible(!modalVisible);
+    if (!name) {
+      Alert.alert('Selecione o nome do novo campeão');
+    } else {
+      setModalVisible(!modalVisible);
+      
+      firestore()
+      .collection('champion')
+      .doc('newChampion')
+      .set({
+        name,
+        season: currentSeason.season,
+        profile: newChampion.profile,
+        avatar: newChampion.avatar,
+        id: newChampion.doc_id,
+        email: newChampion.email
+      })
+      .then(() => {
+        Alert.alert('Novo campeão salvo com sucesso!');
+        setName('');
+        setNewCurrentSeason();
+      })
+      .catch((error) => console.error(error));
+    }
   };
 
-  //==> SALVA O NOVO CAMPEÃO
-  const addNewChampion = () => {
+  //==> ATUALIZA CURRENT SEASON
+  //==> CHAMA GET ALL GAMES
+  const setNewCurrentSeason = () => {
     firestore()
-    .collection('champion')
-    .doc('newChampion')
-    .set({
-      name,
-      season: currentSeason.season,
-      profile: newChampion.profile,
-      avatar: newChampion.avatar,
-      id: newChampion.doc_id,
-      email: newChampion.email
-    })
-    .then(() => {
-      Alert.alert('Novo campeão salvo com sucesso!');
-      setName('');
-    })
-    .catch((error) => console.error(error));
+      .collection('current_season')
+      .doc('currentData')
+      .set({
+        season: currentSeason.season + 1,
+        game: 0,
+      })
+      .then(() => {
+        getAllGames();
+      })
+      .catch((error) => console.error(error))
+  };
 
-    firestore()
-    .collection('current_season')
-    .doc('currentData')
-    .set({
-      season: currentSeason.season + 1,
-      game: 0,
+  //==> BUSCA TODOS OS RESULTADOS PARA LIMPEZA
+  //==> CHAMA REMOVE OLD SEASON
+  const getAllGames = () => {
+    const subscribe = firestore()
+    .collection('game_result')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as GameDTO[]
+        removeOldSeason(data);
+      },
     })
-    .catch((error) => console.error(error))
+    return () => subscribe();
+  };
+
+  //==> MANTEM APENAS OS RESULTADOS DAS ÚLTIMAS 3 TEMPORADAS
+  const removeOldSeason = (allGames: GameDTO[]) => {
+    const gamesFromOldSeasons: GameDTO[] = allGames.filter((item) => {
+      if (item.season < currentSeason.season - 2) {
+        return item;
+      }
+    });
+
+    for(let i = 0; i < gamesFromOldSeasons.length; i++) {
+      firestore()
+      .collection('game_result')
+        .doc(gamesFromOldSeasons[i].doc_id)
+        .delete()
+        .catch(error => console.error(error))
+    };
+  };
+
+  const openModal = () => {
+    if (!name) {
+      Alert.alert('Selecione o nome do novo campeão');
+    } else {
+      setModalVisible(!modalVisible);
+    }
   };
 
   return (
@@ -165,7 +218,7 @@ export function NewChampion({navigation}: {navigation: any}) {
           />
           <Button 
             title='Campeão do PSOP'
-            onPress={() => setModalVisible(!modalVisible)}
+            onPress={openModal}
           />
         </KeyboardAvoidingView>
       </Content>

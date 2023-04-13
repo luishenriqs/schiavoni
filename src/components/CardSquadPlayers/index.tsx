@@ -31,34 +31,44 @@ export function CardSquadPlayers({
 
     //==> ATUALIZA STATUS ADMIN
     const handleUpdateAdmin = (name: string, isAdmin: boolean) => {
-        const playerUpdated = allPlayers.filter((item) => {
-            if (item.name === name) return item;
-        });
-        firestore()
-            .collection('players')
-            .doc(playerUpdated[0].doc_id)
-            .update({
-                isAdmin: !isAdmin,
-            })
-            .then(() => {
-                !isAdmin
-                    ? Alert.alert(`${name} agora é um administrador!`)
-                    : Alert.alert(`${name} não é mais um administrador!`)
-            })
-            .catch(error => console.error(error))
+        if (name === 'Dú Schiavoni') {
+            Alert.alert(`${name} é administrador permanente!`);
+        } else {
+            const playerUpdated = allPlayers.filter((item) => {
+                if (item.name === name) return item;
+            });
+
+            firestore()
+                .collection('players')
+                .doc(playerUpdated[0].doc_id)
+                .update({
+                    isAdmin: !isAdmin,
+                })
+                .then(() => {
+                    !isAdmin
+                        ? Alert.alert(`${name} agora é um administrador!`)
+                        : Alert.alert(`${name} não é mais um administrador!`)
+                })
+                .catch(error => console.error(error))
+        };
     };
 
-    //==> CHAMA HANDLE DELETE
-    const toDelete = () => {
-        setModalVisible(!modalVisible)
-        handleDelete(name);
+    //==> ABRE MODAL DE REMOÇÃO
+    const openModal = () => {
+        if (name === 'Dú Schiavoni') {
+            Alert.alert(`${name} é membro permanente!`);
+        } else {
+            setModalVisible(!modalVisible);
+        };
     };
 
-    //==> DELETA PLAYER DO SISTEMA
-    const handleDelete = (name: string) => {
+    //==> REMOVE PLAYER DO SISTEMA
+    const handleDelete = () => {
         const playerToDelete = allPlayers.filter((item) => {
             if (item.name === name) return item;
         });
+        setModalVisible(!modalVisible);
+
         firestore()
             .collection('players')
             .doc(playerToDelete[0].doc_id)
@@ -98,7 +108,7 @@ export function CardSquadPlayers({
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>
-                {name.length <= 17
+                {name.length <= 15
                     ? <Name>{name}</Name>
                     : <Name>{name.substring(12, -1)}...</Name>
                 }
@@ -112,11 +122,11 @@ export function CardSquadPlayers({
                     onPress={() => handleUpdateAdmin(name, isAdmin)}
                 />
                 <ButtonEditable 
-                    title='Remover'
+                    title={name === 'Dú Schiavoni' ? '-------' : 'Remover'}
                     type='RED-BUTTON'
                     width={50}
                     height={100}
-                    onPress={() => setModalVisible(!modalVisible)}
+                    onPress={openModal}
                 />
             </ButtonBox>
             <ModalComponent
@@ -125,7 +135,7 @@ export function CardSquadPlayers({
                 modalVisible={modalVisible}
                 greenButtonText={`Confirmar`}
                 redButtonText='Cancelar'
-                onPressGreenButton={toDelete}
+                onPressGreenButton={handleDelete}
                 onPressRedButton={() => setModalVisible(!modalVisible)}
             />
         </Container>

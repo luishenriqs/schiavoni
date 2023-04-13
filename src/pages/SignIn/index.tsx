@@ -73,6 +73,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
       avatar: user.avatar,
       doc_id: user.doc_id,
       isAdmin: user.isAdmin,
+      termsOfUse: user.termsOfUse,
     };
 
     setUserContext(userData);
@@ -104,11 +105,11 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
   //==> RECUPERA SENHA
   function handleForgotPassword() {
     if (!email) {
-      Alert.alert('Informe seu email e senha!')
+      Alert.alert('Informe seu email!')
     } else {
       auth()
         .sendPasswordResetEmail(email)
-        .then(() => Alert.alert('Nós enviamos um link para o seu email para resetar sua senha.'));
+        .then(() => Alert.alert('Nós enviamos um link em seu email para redefinição de senha.'));
     };
   };
 
@@ -157,7 +158,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
                           onChangeText={(value) => setPassword(value)}
                       />
                       <Button
-                          title="Sign In"
+                          title="Entrar"
                           type='GRAY-BUTTON'
                           onPress={getUser}
                       />

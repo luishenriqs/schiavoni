@@ -19,6 +19,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     name: '',
     email: '',
     isAdmin: false,
+    termsOfUse: false,
     avatar: '',
     profile: ''
   })

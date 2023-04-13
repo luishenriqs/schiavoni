@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
-  padding: 0 15%;
+  padding: 0 14%;
   margin-top: 25px;
 `;
 
@@ -51,7 +51,7 @@ export const ImageContent = styled.View`
 export const ImageProfileAndAvatar = styled.Image`
   width: ${RFValue(130)}px;
   height: ${RFValue(130)}px;
-  margin: 15px 10px;
+  margin: 15px 2px;
   border-radius: 5px;
 `;
 

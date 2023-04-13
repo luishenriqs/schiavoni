@@ -75,12 +75,13 @@ export function AddGallery({navigation}: {navigation: any}) {
   ) => {
     firestore()
     .collection('gallery')
-    .doc(legend + '-' + new Date().getFullYear())
+    .doc(legend + '-' + new Date().getTime())
     .set({
       url,
       legend,
       MIME
     })
+    .then(() => setLegend(''))
     .catch((error) => console.error(error))
   };
 
@@ -104,6 +105,7 @@ export function AddGallery({navigation}: {navigation: any}) {
           autoCorrect={false}
           autoCapitalize={'words'}
           onChangeText={(value: string) => setLegend(value)}
+          value={legend}
         />
         <Button
           title="Upload"

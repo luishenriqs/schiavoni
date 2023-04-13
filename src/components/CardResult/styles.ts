@@ -7,7 +7,6 @@ export const Container = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  margin: 0 10%;
 `;
 
 export const PositionBox = styled.View`

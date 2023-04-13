@@ -11,6 +11,7 @@ import { Games } from '@pages/Games';
 import { Profile } from '@pages/Profile';
 import { Gallery } from '@pages/Gallery';
 import { ManagerRoutes } from '@pages/Manager/manager.routes';
+import { TermsOfUse } from '@pages/TermsOfUse';
 import { CustomDrawer } from '@components/CustomDrawer';
 
 const Drawer = createDrawerNavigator();
@@ -29,6 +30,7 @@ export function AppRoutes() {
         drawerActiveTintColor: theme.COLORS.gray_100,
         drawerLabelStyle: {
           marginLeft: -25,
+          marginTop: 0,
           fontFamily: theme.FONT_FAMILY.bold,
           fontSize: 15
         }
@@ -114,6 +116,23 @@ export function AppRoutes() {
           }}
         />
       }
+      <Drawer.Screen 
+        name="Terms Of Use" 
+        component={TermsOfUse}
+        options={{
+          drawerLabelStyle: {
+            fontStyle: 'italic',
+            marginLeft: -25
+          },
+          drawerIcon: ({color}) => (
+            <MaterialCommunityIcons 
+              name='file-document-outline'
+              size={20}
+              color={color}
+            />
+          )
+        }}
+      />
     </Drawer.Navigator>
   );
 };

@@ -13,7 +13,8 @@ export const Container = styled.View`
 export const LeaderInfo = styled.View`
   flex: 1;
   width: ${RFValue(200)}px;
-  padding-top: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin: 0 10px;
   align-items: center;
 `;

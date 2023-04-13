@@ -13,7 +13,7 @@ export const Container = styled.View`
 export const NameBox = styled.View`
   flex-direction: row;
   justify-content: flex-start;
-  width: 60%;
+  width: 58%;
   height: 70px;
   align-items: center;
   border-radius: 5px;
@@ -27,7 +27,7 @@ export const Name = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

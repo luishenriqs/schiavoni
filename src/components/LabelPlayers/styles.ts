@@ -9,7 +9,7 @@ export const LabelContainer = styled.View`
 `;
 
 export const LabelPlayer = styled.View`
-  width: 68%;
+  width: 74%;
   align-items: center;
   padding: 3px;
   margin: 0 3px;
@@ -21,7 +21,7 @@ export const LabelPlayer = styled.View`
 `;
 
 export const LabelPower = styled.View`
-  width: 30%;
+  width: 24%;
   align-items: center;
   padding: 3px;
   border-radius: 5px;

@@ -1,7 +1,7 @@
 import React from 'react';
 import auth from '@react-native-firebase/auth';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
-import { Octicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { 
     Container, 
@@ -17,9 +17,9 @@ import {
 export function CustomDrawer(props: any) {
     const { COLORS } = useTheme();
 
-    function handleLogout() {
+    const handleLogout = () => {
         auth().signOut();
-    }
+    };
 
     return (
         <Container>
@@ -35,16 +35,6 @@ export function CustomDrawer(props: any) {
             </DrawerContentScrollView>
             <Line />
             <DrawerListContent>
-                <ButtonBottom onPress={() => {console.log('Termos de uso')}}>
-                    <ButtonContent>
-                        <MaterialCommunityIcons 
-                            name='file-document-outline'
-                            size={20}
-                            color={COLORS.gray_600}
-                        />
-                        <TextButton>Terms of use</TextButton>
-                    </ButtonContent>
-                </ButtonBottom>
                 <ButtonBottom onPress={handleLogout}>
                     <ButtonContent>
                         <Octicons 
@@ -57,5 +47,5 @@ export function CustomDrawer(props: any) {
                 </ButtonBottom>
             </DrawerListContent>
         </Container>
-    )
-}
+    );
+};

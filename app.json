@@ -1,8 +1,21 @@
 {
   "expo": {
-    "name": "schiavoni",
-    "slug": "schiavoni",
+    "name": "schiavoni_poker_house",
+    "slug": "schiavonipokerhouse",
     "version": "1.0.0",
+    "icon": "./resources/android_icon.png",
+    "splash": {
+      "image": "./resources/splash_icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
+    "android": {
+      "package": "com.schiavoni_poker_house",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -13,6 +26,12 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d000deea-10eb-4823-b616-90cd7423e0e3"
+      }
+    },
+    "owner": "luishenriqs"
   }
 }

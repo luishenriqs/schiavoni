@@ -37,10 +37,10 @@ export function LeaderCard({
             >
                 <LeaderInfo>
                     <Title>{title}</Title>
-                        {leadersName.length <= 16
-                            ? <LeadersName>{leadersName}</LeadersName>
-                            : <LeadersName>{leadersName.substring(12, -1)}...</LeadersName>
-                        }
+                    {leadersName.length <= 15
+                        ? <LeadersName>{leadersName}</LeadersName>
+                        : <LeadersName>{leadersName.substring(12, -1)}...</LeadersName>
+                    }
                     <Text>{Season}</Text>
                     <Text>{Game}</Text>
                 </LeaderInfo>

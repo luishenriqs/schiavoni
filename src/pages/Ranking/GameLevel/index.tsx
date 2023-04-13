@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FlatList } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
 import { getLevel } from '@services/levelServices';
+import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
 import { CardLevel } from "@components/CardLevel";
 import { LabelPlayers } from "@components/LabelPlayers";
@@ -23,7 +24,6 @@ export function GameLevel({navigation}: {navigation: any}) {
     getAllPlayers();
   }, []);
 
-  
   //==> RECUPERA TODOS OS JOGADORES E PERSISTE NO CONTEXTO
   //==> CHAMA GET ALL GAMES
   const getAllPlayers = () => {
@@ -44,7 +44,6 @@ export function GameLevel({navigation}: {navigation: any}) {
     }) 
     return () => subscribe()
   };
-
 
   //==> RECUPERA TODOS OS JOGOS
   //==> PROCESSA E PERSISTE LEVEL NO CONTEXTO
@@ -67,7 +66,6 @@ export function GameLevel({navigation}: {navigation: any}) {
     return () => subscribe();
   };
 
-  
   return (
     <Container>
       <Header
@@ -78,20 +76,23 @@ export function GameLevel({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <Content>
-        <Title>Nível de desempenho</Title>
+        <Title>Desempenho por Participação</Title>
         <LabelPlayers />
-        {level &&
-          <FlatList
-            data={level as any}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => (
-              <CardLevel 
-                name={item.player}
-                power={item.power}
-                avatar={item.avatar}
-              />
-            )}
-          />
+        {level.length > 0
+          ?
+            <FlatList
+              data={level as any}
+              keyExtractor={(item, index) => item + index}
+              renderItem={({ item }) => (
+                <CardLevel 
+                  name={item.player}
+                  power={item.power}
+                  percent={item.percent}
+                  avatar={item.avatar}
+                />
+              )}
+            />
+          : <Loading />
         }
       </Content>
     </Container>

@@ -30,7 +30,7 @@ export const Container = styled(TouchableOpacity)<Props>`
 
 export const Title = styled.Text`
   ${({ theme }) => css`
-    color: ${theme.COLORS.white};
+    color: ${theme.COLORS.gold};
     font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
     margin-left: 20px;

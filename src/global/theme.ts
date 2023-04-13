@@ -38,6 +38,6 @@ export default {
     LG: `${RFValue(18)}px`,
     XL: `${RFValue(20)}px`,
     XLL: `${RFValue(25)}px`,
-    XXL: `${RFValue(30)}px`,
+    XXL: `${RFValue(28)}px`,
   },
 };

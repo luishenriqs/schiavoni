@@ -12,6 +12,7 @@ import {
 
 interface IProps {
     position: string;
+    positionNumber: number;
     name: string;
     points: number;
     avatar?: string;
@@ -19,28 +20,30 @@ interface IProps {
 
 export function CardRanking({
     position,
+    positionNumber,
     name,
     points,
     avatar
 }: IProps) {
+
     return (
         <Container>
-            <InfoBox>
+            <InfoBox positionStatus={positionNumber}>
                 <Position>{position}</Position>
             </InfoBox>
-            <NameBox>
+            <NameBox positionStatus={positionNumber}>
                 <ImageContent>
                     {avatar !== 'anonymousURL'
                         ? <ImageProfileAndAvatar source={{uri: avatar}}/>
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>
-                {name.length <= 17
+                {name.length <= 15
                     ? <Name>{name}</Name>
                     : <Name>{name.substring(12, -1)}...</Name>
                 }
             </NameBox>
-            <InfoBox>
+            <InfoBox positionStatus={positionNumber}>
                 <Points>{points}</Points>
             </InfoBox>
         </Container>

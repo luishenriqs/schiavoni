@@ -36,7 +36,7 @@ export const HeaderContent = styled.View`
 export const Title = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XXL};
+    font-size: ${theme.FONT_SIZE.XLL};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -66,6 +66,7 @@ export const Icon = styled(MaterialCommunityIcons)`
 export const Empty = styled.View`
   width: 60px;
   height: 60px;
+  border-radius: 50px;
 `;
 
 export const Image = styled.Image`

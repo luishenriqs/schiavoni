@@ -5,7 +5,7 @@ export function LabelPlayers() {
   return (
     <LabelContainer>
       <LabelPlayer>
-        <LabelText>Jogador</LabelText>
+        <LabelText>Jogador / Aproveitamento de pontos</LabelText>
       </LabelPlayer>
       <LabelPower>
         <LabelText>Força</LabelText>
