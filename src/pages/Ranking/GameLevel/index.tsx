@@ -7,7 +7,7 @@ import { useChampion } from '@hooks/useChampion';
 import { getLevel } from '@services/levelServices';
 import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
-import { CardLevel } from "@components/CardLevel";
+import { CardPerformance } from "@components/CardPerformance";
 import { LabelPlayers } from "@components/LabelPlayers";
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
@@ -76,7 +76,7 @@ export function GameLevel({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <Content>
-        <Title>Desempenho por Participação</Title>
+        <Title>Escolha um jogador</Title>
         <LabelPlayers />
         {level.length > 0
           ?
@@ -84,7 +84,7 @@ export function GameLevel({navigation}: {navigation: any}) {
               data={level as any}
               keyExtractor={(item, index) => item + index}
               renderItem={({ item }) => (
-                <CardLevel 
+                <CardPerformance 
                   name={item.player}
                   power={item.power}
                   percent={item.percent}

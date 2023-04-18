@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 export const LabelContainer = styled.View`
   flex-direction: row;
@@ -9,21 +8,10 @@ export const LabelContainer = styled.View`
 `;
 
 export const LabelPlayer = styled.View`
-  width: 74%;
+  width: 100%;
   align-items: center;
   padding: 3px;
   margin: 0 3px;
-  border-radius: 5px;
-  ${({ theme }) => css`
-    border: 1px solid ${theme.COLORS.black};
-    background: ${theme.COLORS.gray_700};
-  `};
-`;
-
-export const LabelPower = styled.View`
-  width: 24%;
-  align-items: center;
-  padding: 3px;
   border-radius: 5px;
   ${({ theme }) => css`
     border: 1px solid ${theme.COLORS.black};
