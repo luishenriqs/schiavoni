@@ -1,39 +1,9 @@
-import { GameDTO, ResultsDTO } from '@dtos/GameDTO'
-import { LevelProps, PercentPerformanceDTO } from '@dtos/RankingDTO'
-import { UserDTO } from '@dtos/UserDTO'
+import { getPlayersResults } from '@services/resultServices';
+import { GameDTO, ResultsDTO } from '@dtos/GameDTO';
+import { LevelProps, PercentPerformanceDTO } from '@dtos/RankingDTO';
+import { UserDTO } from '@dtos/UserDTO';
 
 const anonymousURL = 'anonymousURL';
-
-//==> RETORNA NOMES DOS PLAYERS
-const findNames = (games: GameDTO[]) => {
-    games.filter((el) => {
-        if (el.season === 0) {
-            const index = games.indexOf(el)
-            games.splice(index, 1);
-        }
-    });
-
-    const names = games.map((el) => {
-        return el.name
-    });
-    const players = [...new Set(names)];
-
-    return players;
-};
-
-//==> RETORNA PLAYERS E ARRAY COM SEUS RESULTADOS COMPLETOS (GameDTO[])
-const findPlayersResults = (names: string[], games: GameDTO[]) => {
-    return names.map((player) => {
-        const results = games.filter((game) => {
-            if (game.name === player) return game;
-        });
-        const game = {
-            player,
-            results
-        };
-        return game;
-    });
-};
 
 //==> CALCULA PERCENTUAL DE APROVEITAMENTO DO PLAYER
 const performance = (data: PercentPerformanceDTO) => {
@@ -76,12 +46,12 @@ const processLevel = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
         return perform;
     });
 
-    //==> ISOLA APENAS OS PONTOS
+    //==> ISOLA APENAS OS PERCENTUAIS
     const onlyPercent = result.map((el) => {
         return el.percent
     });
 
-    //==> ORDENA OS PONTOS
+    //==> ORDENA OS OS PERCENTUAIS
     const orderedPercent = onlyPercent.sort(function(a, b) {
         return a - b;
     }).reverse();
@@ -123,9 +93,8 @@ export const getLevel = (
     games: GameDTO[], 
     allPlayers: UserDTO[]
 ) => {
-    const players = games.length > 0 && findNames(games);
-    const results = players && findPlayersResults(players, games);
+    const results = games && getPlayersResults(games);
     const level = results && processLevel(results, allPlayers);
 
-    return level;
+    return { level, results };
 };

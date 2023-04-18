@@ -59,7 +59,7 @@ export function GameLevel({navigation}: {navigation: any}) {
           ...doc.data()
           }
         }) as GameDTO[]
-          const level = getLevel(data, allPlayers);
+          const { level } = getLevel(data, allPlayers);
           level && setLevelContext(level);
       },
     }) 
