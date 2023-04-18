@@ -8,8 +8,9 @@ import { useTheme } from 'styled-components';
 import { ChampionPage } from '@pages/ChampionPage';
 import { RankingRoutes } from '@pages/Ranking/ranking.routes';
 import { Games } from '@pages/Games';
-import { Profile } from '@pages/Profile';
 import { Gallery } from '@pages/Gallery';
+import { HallOfFame } from '@pages/HallOfFame';
+import { Profile } from '@pages/Profile';
 import { ManagerRoutes } from '@pages/Manager/manager.routes';
 import { TermsOfUse } from '@pages/TermsOfUse';
 import { CustomDrawer } from '@components/CustomDrawer';
@@ -76,12 +77,12 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
-        name="Profile" 
-        component={Profile}
+        name="Gallery" 
+        component={Gallery}
         options={{
           drawerIcon: ({color}) => (
-            <MaterialCommunityIcons 
-              name='account-outline'
+            <Fontisto 
+              name='photograph'
               size={20}
               color={color}
             />
@@ -89,12 +90,25 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
-        name="Gallery" 
-        component={Gallery}
+        name="Hall Of Fame" 
+        component={HallOfFame}
         options={{
           drawerIcon: ({color}) => (
-            <Fontisto 
-              name='photograph'
+            <MaterialCommunityIcons 
+              name='crown-outline'
+              size={20}
+              color={color}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen 
+        name="Profile" 
+        component={Profile}
+        options={{
+          drawerIcon: ({color}) => (
+            <MaterialCommunityIcons 
+              name='account-outline'
               size={20}
               color={color}
             />
