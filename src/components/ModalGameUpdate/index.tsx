@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalProps } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTheme } from 'styled-components';
+import { useAllPlayers } from '@hooks/useAllPlayers';
+import { getPlayersNames } from '@services/playersServices';
+import { SquadOfPlayersDTO, UserDTO } from '@dtos/UserDTO';
 import {
   ModalContainer,
   ModalView,
@@ -24,7 +27,8 @@ type Props = ModalProps & {
   modalVisible?: boolean;
   onPressGreenButton?(): void;
   onPressRedButton?(): void;
-  callBackFunction(value: number): void;
+  callBackPlayer(value: string): void;
+  callBackPosition(value: number): void;
 };
 
 export const ModalGameUpdate: React.FC<Props> = ({
@@ -38,10 +42,16 @@ export const ModalGameUpdate: React.FC<Props> = ({
   modalVisible,
   onPressGreenButton,
   onPressRedButton,
-  callBackFunction
+  callBackPlayer,
+  callBackPosition
 }: Props) => {
 
   const theme = useTheme();
+  const { allPlayers } = useAllPlayers();
+
+  const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
+  const [game, setGame] = useState('');
+  const [name, setName] = useState('');
 
   //==> SELECT STYLE
   const pickerSelectStyles = {
@@ -57,9 +67,20 @@ export const ModalGameUpdate: React.FC<Props> = ({
     },
   };
 
+  const playersPlaceholder = {
+    label: 'Selecione um player:',
+    value: null,
+  };
+
   const positionsPlaceholder = {
     label: 'Selecione uma posição:',
     value: null,
+  };
+
+  //==> PLAYERS POSSÍVEIS PARA O SELECT
+  const loadSquadOfPlayers = (allPlayers: UserDTO[]) => {
+    const squadOfPlayers = getPlayersNames(allPlayers);
+    squadOfPlayers && setSquad(squadOfPlayers);
   };
 
   //==> POSIÇÕES POSSÍVEIS PARA O SELECT
@@ -77,6 +98,10 @@ export const ModalGameUpdate: React.FC<Props> = ({
     { label: '11 - Décimo Primeiro Colocado', value: '11' },
     { label: '12 - Décimo Segundo Colocado', value: '12' }
   ];
+
+  useEffect(() => {
+    loadSquadOfPlayers(allPlayers);
+  }, []);
 
   return (
     <Modal
@@ -102,10 +127,24 @@ export const ModalGameUpdate: React.FC<Props> = ({
               <ModalText>{text4}</ModalText>
             }
             <RNPickerSelect
+              placeholder={squad && playersPlaceholder}
+              onValueChange={(value) => {
+                callBackPlayer(value);
+                setName(value);
+              }}
+              style={pickerSelectStyles}
+              items={squad}
+              value={name}
+            />
+            <RNPickerSelect
               placeholder={positionsPlaceholder}
-              onValueChange={(value) => callBackFunction(value)}
+              onValueChange={(value) => {
+                callBackPosition(value);
+                setGame(value);
+              }}
               style={pickerSelectStyles}
               items={positions}
+              value={game}
             />
             <ModalButtonContainer>
               {onPressGreenButton &&
