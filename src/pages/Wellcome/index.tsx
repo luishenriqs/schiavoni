@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '@components/Button';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import {
     Header,
     WellcomeText,

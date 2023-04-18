@@ -5,7 +5,7 @@ import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
 import { CardSquadPlayers } from '@components/CardSquadPlayers';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import { Container, Content, Title } from './styles';
 
 export function Squad({navigation}: {navigation: any}) {

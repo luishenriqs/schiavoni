@@ -1,4 +1,4 @@
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 
 //==> RECUPERA NOMES DE TODOS OS PLAYERS
 export const getPlayersNames = (allPlayers: UserDTO[]) => {

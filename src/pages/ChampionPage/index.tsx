@@ -6,7 +6,7 @@ import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import { ChampionDTO } from '@dtos/ChampionDTO';
 import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
 import {

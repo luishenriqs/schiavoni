@@ -15,7 +15,7 @@ import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import {
     Container,
     Header,

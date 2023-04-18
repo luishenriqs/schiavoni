@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createContext, ReactNode } from 'react';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 
 export type AuthContextDataProps = {
     user: UserDTO;

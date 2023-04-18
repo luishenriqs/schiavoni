@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { ButtonEditable } from '@components/ButtonEditable';
 import ModalComponent from '@components/ModalComponent';
-import { UserDTO } from '@dtos/userDTO';
+import { UserDTO } from '@dtos/UserDTO';
 import {
     Container,
     NameBox,

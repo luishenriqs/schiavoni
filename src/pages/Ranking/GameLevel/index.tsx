@@ -10,7 +10,7 @@ import { Header } from '@components/Header';
 import { CardLevel } from "@components/CardLevel";
 import { LabelPlayers } from "@components/LabelPlayers";
 import { GameDTO } from '@dtos/GameDTO';
-import { UserDTO } from '@dtos/userDTO';
+import { UserDTO } from '@dtos/UserDTO';
 import { Container, Content, Title } from './styles';
 
 export function GameLevel({navigation}: {navigation: any}) {

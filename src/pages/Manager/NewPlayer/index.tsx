@@ -8,7 +8,7 @@ import { PsopImage } from '@components/PsopImage';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import ModalComponent from '@components/ModalComponent';
-import { UserDTO } from '@dtos/userDTO';
+import { UserDTO } from '@dtos/UserDTO';
 import {
   Container, 
   Content

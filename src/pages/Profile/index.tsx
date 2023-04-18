@@ -8,7 +8,7 @@ import { useAuth } from '@hooks/useAuth';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
 import { Button } from '@components/Button';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import {
   Container,
   Content,
