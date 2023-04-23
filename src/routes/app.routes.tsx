@@ -69,7 +69,7 @@ export function AppRoutes() {
         options={{
           drawerIcon: ({color}) => (
             <MaterialCommunityIcons 
-              name='crown-outline'
+              name='trending-up'
               size={20}
               color={color}
             />

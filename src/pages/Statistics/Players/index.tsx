@@ -90,7 +90,7 @@ export function StatisticsPlayers({navigation}: {navigation: any}) {
                   percent={item.percent}
                   avatar={item.avatar}
                   onPress={(() => {
-                    navigation.navigate('Performance', {name: item.player})
+                    navigation.navigate('Performance', { name: item.player })
                   })}
                 />
               )}

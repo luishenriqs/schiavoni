@@ -13,12 +13,14 @@ import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
 import { Container, Content, Title } from './styles';
 
-export function Performance({navigation}: {navigation: any}, name: string) {
+export function Performance({route, navigation}: any) {
   const { user } = useAuth();
   const { level, setLevelContext } = useChampion();
   const { setAllPlayersContext } = useAllPlayers();
 
   const anonymousURL = 'anonymousURL';
+
+  const { name } = route.params;
 
   useEffect(() => {
     getAllPlayers();
@@ -77,7 +79,7 @@ export function Performance({navigation}: {navigation: any}, name: string) {
         onPress={() => navigation.goBack()}
       />
       <Content>
-        <Title>Escolha um jogador</Title>
+        <Title>{name}</Title>
       </Content>
     </Container>
   );

@@ -21,7 +21,7 @@ export const Title = styled.Text`
   margin-bottom: 20px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
-    font-size: ${theme.FONT_SIZE.LG};
+    font-size: ${theme.FONT_SIZE.XLL};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
