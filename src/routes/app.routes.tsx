@@ -6,10 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@hooks/useAuth';
 import { useTheme } from 'styled-components';
 import { ChampionPage } from '@pages/ChampionPage';
-import { RankingRoutes } from '@pages/Ranking/ranking.routes';
+import { PSOP } from '@pages/PSOP';
 import { Games } from '@pages/Games';
 import { Gallery } from '@pages/Gallery';
-import { HallOfFame } from '@pages/HallOfFame';
+import { StatisticsRoutes } from '@pages/Statistics/statistics.routes';
 import { Profile } from '@pages/Profile';
 import { ManagerRoutes } from '@pages/Manager/manager.routes';
 import { TermsOfUse } from '@pages/TermsOfUse';
@@ -51,12 +51,25 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
-        name="Ranking"
-        component={RankingRoutes}
+        name="PSOP"
+        component={PSOP}
         options={{
           drawerIcon: ({color}) => (
             <MaterialCommunityIcons 
               name='star-outline'
+              size={20}
+              color={color}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen 
+        name="Statistics" 
+        component={StatisticsRoutes}
+        options={{
+          drawerIcon: ({color}) => (
+            <MaterialCommunityIcons 
+              name='crown-outline'
               size={20}
               color={color}
             />
@@ -83,19 +96,6 @@ export function AppRoutes() {
           drawerIcon: ({color}) => (
             <Fontisto 
               name='photograph'
-              size={20}
-              color={color}
-            />
-          )
-        }}
-      />
-      <Drawer.Screen 
-        name="Hall Of Fame" 
-        component={HallOfFame}
-        options={{
-          drawerIcon: ({color}) => (
-            <MaterialCommunityIcons 
-              name='crown-outline'
               size={20}
               color={color}
             />

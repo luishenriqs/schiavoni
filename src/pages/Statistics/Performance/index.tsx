@@ -13,7 +13,7 @@ import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
 import { Container, Content, Title } from './styles';
 
-export function GameLevel({navigation}: {navigation: any}) {
+export function Performance({navigation}: {navigation: any}, name: string) {
   const { user } = useAuth();
   const { level, setLevelContext } = useChampion();
   const { setAllPlayersContext } = useAllPlayers();
@@ -69,31 +69,15 @@ export function GameLevel({navigation}: {navigation: any}) {
   return (
     <Container>
       <Header
-        title='Game Level'
+        title='Performance'
         text={`Últimas 3 Temporadas`}
         picture={user.profile ? user.profile : anonymousURL}
         headerSize={'small'}
-        onPress={() => navigation.openDrawer()}
+        icon={'keyboard-backspace'}
+        onPress={() => navigation.goBack()}
       />
       <Content>
         <Title>Escolha um jogador</Title>
-        <LabelPlayers />
-        {level.length > 0
-          ?
-            <FlatList
-              data={level as any}
-              keyExtractor={(item, index) => item + index}
-              renderItem={({ item }) => (
-                <CardPerformance 
-                  name={item.player}
-                  power={item.power}
-                  percent={item.percent}
-                  avatar={item.avatar}
-                />
-              )}
-            />
-          : <Loading />
-        }
       </Content>
     </Container>
   );

@@ -20,16 +20,18 @@ import {
     percent: number;
     name: string;
     avatar: string;
+    onPress: () => void
 };
 
 export function CardPerformance({
-    power,
-    percent,
-    name,
-    avatar,
-    ...rest
-}: IProps) {
-
+        power,
+        percent,
+        name,
+        avatar,
+        onPress,
+        ...rest
+    }: IProps
+) {
 
     const powerSize = (power: number) => {
         switch(power) {
@@ -57,7 +59,7 @@ export function CardPerformance({
     return (
         <Container
             name={name}
-            onPress={() => console.log('NAME ', name)}
+            onPress={onPress}
             {...rest}
         >
             <PlayerContainer>
