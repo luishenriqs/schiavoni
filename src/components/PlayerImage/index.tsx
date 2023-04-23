@@ -1,8 +1,12 @@
 import React from 'react';
 import { Container } from './styles';
 
-export function PsopImage() {
+export function PlayerImage({url}: any) {
+
+    const profileUrl = url
+    const anonymousURL = 'anonymousURL';
+
     return (
-        <Container source={require('@assets/logoOficial/PSOPLogo.jpg')}/>
+        <Container source={{uri: url ? url : anonymousURL}}/>
     );
 }

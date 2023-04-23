@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { FlatList } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
@@ -7,11 +6,10 @@ import { useChampion } from '@hooks/useChampion';
 import { getLevel } from '@services/levelServices';
 import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
-import { CardPerformance } from "@components/CardPerformance";
-import { LabelPlayers } from "@components/LabelPlayers";
+import { PlayerImage } from '@components/PlayerImage';
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
-import { Container, Content, Title } from './styles';
+import { Container, Content, Title, Imagem } from './styles';
 
 export function Performance({route, navigation}: any) {
   const { user } = useAuth();
@@ -21,6 +19,8 @@ export function Performance({route, navigation}: any) {
   const anonymousURL = 'anonymousURL';
 
   const { name } = route.params;
+
+  const url = "https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Luis%C3%A3o%20.jpeg?alt=media&token=02178a5b-484e-4b44-9ac5-6b5579612b58";
 
   useEffect(() => {
     getAllPlayers();
@@ -74,10 +74,13 @@ export function Performance({route, navigation}: any) {
         title='Performance'
         text={`Últimas 3 Temporadas`}
         picture={user.profile ? user.profile : anonymousURL}
-        headerSize={'small'}
+        headerSize={'big'}
         icon={'keyboard-backspace'}
         onPress={() => navigation.goBack()}
       />
+        <Imagem 
+          source={{uri: url ? url : anonymousURL}}
+        />
       <Content>
         <Title>{name}</Title>
       </Content>
