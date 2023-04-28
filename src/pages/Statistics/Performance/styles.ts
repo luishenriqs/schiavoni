@@ -29,10 +29,9 @@ export const Title = styled.Text`
 `;
 
 export const Imagem = styled(Image)`
-  width: ${RFValue(130)}px;
-  height: ${RFValue(130)}px;
+  width: ${RFValue(250)}px;
+  height: ${RFValue(250)}px;
   margin: -65px 10px 0;
   align-self: center;
   border-radius: 8px;
-  margin-bottom: 5px;
 `;

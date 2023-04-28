@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useAllPlayers } from '@hooks/useAllPlayers';
@@ -7,8 +7,10 @@ import { getLevel } from '@services/levelServices';
 import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
 import { PlayerImage } from '@components/PlayerImage';
+import { processStatistics } from '@services/levelServices';
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
+import { StatisticsDTO } from '@dtos/RankingDTO';
 import { Container, Content, Title, Imagem } from './styles';
 
 export function Performance({route, navigation}: any) {
@@ -16,21 +18,30 @@ export function Performance({route, navigation}: any) {
   const { level, setLevelContext } = useChampion();
   const { setAllPlayersContext } = useAllPlayers();
 
+  const [player, setPlayer] = useState({} as UserDTO);
+  const [games, setGames] = useState([] as GameDTO[]);
+  const [statistics, setStatistics] = useState({} as StatisticsDTO);
+  
   const anonymousURL = 'anonymousURL';
+  const url = player.profile && player.profile;
+
 
   const { name } = route.params;
 
-  const url = "https://firebasestorage.googleapis.com/v0/b/schiavoni-8efc7.appspot.com/o/ProfileImage%2FProfile_Image_Luis%C3%A3o%20.jpeg?alt=media&token=02178a5b-484e-4b44-9ac5-6b5579612b58";
-
   useEffect(() => {
-    getAllPlayers();
+    getPlayer();
   }, []);
 
-  //==> RECUPERA TODOS OS JOGADORES E PERSISTE NO CONTEXTO
+  useEffect(() => {
+    console.log('######## ', statistics);
+  }, [statistics]);
+
+  //==> RECUPERA O PLAYER
   //==> CHAMA GET ALL GAMES
-  const getAllPlayers = () => {
+  const getPlayer = () => {
     const subscribe: any = firestore()
     .collection('players')
+    .where('name', '==', name)
     .onSnapshot({
       error: (e) => console.error(e),
       next: (querySnapshot) => {
@@ -40,18 +51,18 @@ export function Performance({route, navigation}: any) {
           ...doc.data()
           }
         }) as UserDTO[]
-        setAllPlayersContext(data);
-        getAllGames(data);
+        setPlayer(data[0]);
+        getAllGames(data[0]);
       },
     }) 
     return () => subscribe()
   };
 
   //==> RECUPERA TODOS OS JOGOS
-  //==> PROCESSA E PERSISTE LEVEL NO CONTEXTO
-  const getAllGames = (allPlayers: UserDTO[]) => {
+  const getAllGames = (player: UserDTO) => {
     const subscribe = firestore()
     .collection('game_result')
+    .where('name', '==', player.name)
     .onSnapshot({
       error: (e) => console.error(e),
       next: (querySnapshot) => {
@@ -61,11 +72,16 @@ export function Performance({route, navigation}: any) {
           ...doc.data()
           }
         }) as GameDTO[]
-          const { level } = getLevel(data, allPlayers);
-          level && setLevelContext(level);
+          setGames(data);
+          getStatistcs(data, player);
       },
     }) 
     return () => subscribe();
+  };
+
+  const getStatistcs = (games: GameDTO[], player: UserDTO) => {
+    const statistics: StatisticsDTO = processStatistics(games, player);
+    statistics && setStatistics(statistics)
   };
 
   return (
@@ -78,9 +94,11 @@ export function Performance({route, navigation}: any) {
         icon={'keyboard-backspace'}
         onPress={() => navigation.goBack()}
       />
-        <Imagem 
-          source={{uri: url ? url : anonymousURL}}
-        />
+      {
+        url 
+          ? <Imagem source={{uri: url}}/> 
+          : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+      }
       <Content>
         <Title>{name}</Title>
       </Content>

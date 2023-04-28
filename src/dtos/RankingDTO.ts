@@ -11,9 +11,21 @@ export type RankingDTO = {
 };
 
 export type PercentPerformanceDTO = {
+  appearances: number;
   totalPoints: number;
-  games: number;
+  playerName: string;
+};
+
+export type playerPerformanceDTO = {
   player: string;
+  percent: number;
+  power: number;
+};
+
+export type StatisticsDTO = {
+  totalPoints: number;
+  appearances: number;
+  playerPerformance: playerPerformanceDTO;
 };
 
 export type LevelProps = {

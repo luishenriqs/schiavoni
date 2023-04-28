@@ -5,9 +5,21 @@ import { UserDTO } from '@dtos/UserDTO';
 
 const anonymousURL = 'anonymousURL';
 
+//==> SOMA TODOS OS PONTOS DE UM PLAYER
+const sumPoints = (games: GameDTO[]) => {
+    const points = games.map((game) => {
+        return game.points
+    })
+    let totalPoints = 0;
+    for(var i = 0; i < points.length; i++) {
+        totalPoints += points[i];
+    };
+    return totalPoints;
+};
+
 //==> CALCULA PERCENTUAL DE APROVEITAMENTO DO PLAYER
 const performance = (data: PercentPerformanceDTO) => {
-    const percent = data.totalPoints / ((data.games * 25) / 100);
+    const percent = data.totalPoints / ((data.appearances * 25) / 100);
 
     let power = 0;
     if (percent >= 65) power = 5;
@@ -18,7 +30,7 @@ const performance = (data: PercentPerformanceDTO) => {
     if (percent < 20) power = 0;
     
     const performance = {
-        player: data.player,
+        player: data.playerName,
         percent: Number(percent.toFixed(2)),
         power,
     }
@@ -30,18 +42,11 @@ const processLevel = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
     const resultsObjects: any = []
     //==> RETORNA PLAYER E LEVEL
     const result = results.map((item) => {
-        const games = item.results.length;
-        const points = item.results.map((game) => {
-            return game.points
-        })
-        const player = item.player
+        const playerName = item.player
+        const appearances = item.results.length;
+        const totalPoints = sumPoints(item.results);
 
-        let totalPoints = 0;
-        for(var i = 0; i < points.length; i++) {
-            totalPoints += points[i];
-        };
-
-        const perform = performance({player, totalPoints, games});
+        const perform = performance({playerName, totalPoints, appearances});
 
         return perform;
     });
@@ -97,4 +102,15 @@ export const getLevel = (
     const level = results && processLevel(results, allPlayers);
 
     return { level, results };
+};
+
+//==> RETORNA ESTATÍSTICAS
+export const processStatistics = (games: GameDTO[], player: UserDTO) => {
+
+    const playerName = player.name;
+    const appearances = games.length;
+    const totalPoints = sumPoints(games);
+    const playerPerformance = performance({totalPoints, appearances, playerName});
+
+    return { appearances, totalPoints, playerPerformance };
 };
