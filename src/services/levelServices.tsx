@@ -107,10 +107,26 @@ export const getLevel = (
 //==> RETORNA ESTATÍSTICAS
 export const processStatistics = (games: GameDTO[], player: UserDTO) => {
 
+    const firstPlace = games.filter(item => item.position === 1 && item.position);
+    const secondPlace = games.filter(item => item.position === 2 && item.position);
+    const thirdPlace = games.filter(item => item.position === 3 && item.position);
+
     const playerName = player.name;
     const appearances = games.length;
     const totalPoints = sumPoints(games);
+    const pointsAverage = (totalPoints / appearances).toFixed(2);
     const playerPerformance = performance({totalPoints, appearances, playerName});
+    const gold = firstPlace.length;
+    const silver = secondPlace.length;
+    const bronze = thirdPlace.length;
 
-    return { appearances, totalPoints, playerPerformance };
+    return {
+        appearances, 
+        totalPoints, 
+        playerPerformance, 
+        pointsAverage,
+        gold,
+        silver,
+        bronze
+    };
 };

@@ -58,7 +58,7 @@ export function Performance({route, navigation}: any) {
     return () => subscribe()
   };
 
-  //==> RECUPERA TODOS OS JOGOS
+  //==> RECUPERA TODOS OS JOGOS DO PLAYER
   const getAllGames = (player: UserDTO) => {
     const subscribe = firestore()
     .collection('game_result')
