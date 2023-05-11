@@ -1,8 +1,7 @@
 import { Image } from "react-native";
 import styled, { css } from "styled-components/native";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
-import { RFPercentage } from "react-native-responsive-fontsize";
-import { RFValue } from "react-native-responsive-fontsize";
+import { TouchableOpacity } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export const Container = styled.View`
   flex: 1;
@@ -10,28 +9,48 @@ export const Container = styled.View`
   background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
-export const Content = styled.View`
+export const Imagem = styled(Image)`
   flex: 1;
   width: 100%;
-  height: ${getStatusBarHeight() + RFPercentage(9)}px;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 25px 8px 10px;
+  align-self: center;
+  border-radius: 8px;
+`;
+
+export const BackButton = styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
+  align-self: flex-end;
+  margin: 10px 10px 0 0;
+`;
+
+export const Icon = styled(MaterialIcons)`
+  align-self: center;
+  justify-self: center;
+  color: ${({ theme }) => theme.COLORS.gray_200};
+`;
+
+export const Content = styled.ScrollView`
+  flex: 1;
+  width: 100%;
+  padding: 0px 25px 10px;
+  margin-top: -25px;
 `;
 
 export const Title = styled.Text`
-  margin-bottom: 20px;
+  margin: 20px 0 10px;
+  align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
     font-size: ${theme.FONT_SIZE.XXL};
-    font-family: ${theme.FONT_FAMILY.medium};
+    font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
 
-export const Imagem = styled(Image)`
-  width: ${RFValue(250)}px;
-  height: ${RFValue(250)}px;
-  margin: -65px 10px 0;
-  align-self: center;
-  border-radius: 8px;
+export const Text = styled.Text`
+  margin-top: 5px;
+  ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.XL};
+    font-family: ${theme.FONT_FAMILY.regular};
+    color: ${theme.COLORS.white};
+  `};
 `;

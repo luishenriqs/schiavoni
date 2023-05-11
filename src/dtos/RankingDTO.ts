@@ -22,10 +22,27 @@ export type playerPerformanceDTO = {
   power: number;
 };
 
+type ResultsDTO = {
+  first: number;
+  second: number;
+  third: number;
+  fourth: number;
+  fifth: number;
+  sixth: number;
+  seventh: number;
+  eighth: number;
+  ninth: number;
+  tenth: number;
+  eleventh: number;
+  twelfth: number;
+};
+
 export type StatisticsDTO = {
-  totalPoints: number;
   appearances: number;
   playerPerformance: playerPerformanceDTO;
+  pointsAverage: string;
+  results: ResultsDTO;
+  totalPoints: number;
 };
 
 export type LevelProps = {

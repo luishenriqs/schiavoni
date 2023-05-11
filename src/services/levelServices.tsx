@@ -106,27 +106,46 @@ export const getLevel = (
 
 //==> RETORNA ESTATÍSTICAS
 export const processStatistics = (games: GameDTO[], player: UserDTO) => {
-
-    const firstPlace = games.filter(item => item.position === 1 && item.position);
-    const secondPlace = games.filter(item => item.position === 2 && item.position);
-    const thirdPlace = games.filter(item => item.position === 3 && item.position);
-
+ 
     const playerName = player.name;
     const appearances = games.length;
     const totalPoints = sumPoints(games);
     const pointsAverage = (totalPoints / appearances).toFixed(2);
     const playerPerformance = performance({totalPoints, appearances, playerName});
-    const gold = firstPlace.length;
-    const silver = secondPlace.length;
-    const bronze = thirdPlace.length;
 
+    const firstPlace = games.filter(item => item.position === 1 && item.position);
+    const secondPlace = games.filter(item => item.position === 2 && item.position);
+    const thirdPlace = games.filter(item => item.position === 3 && item.position);
+    const fourthPlace = games.filter(item => item.position === 4 && item.position);
+    const fifthPlace = games.filter(item => item.position === 5 && item.position);
+    const sixthPlace = games.filter(item => item.position === 6 && item.position);
+    const seventhPlace = games.filter(item => item.position === 7 && item.position);
+    const eighthPlace = games.filter(item => item.position === 8 && item.position);
+    const ninthPlace = games.filter(item => item.position === 9 && item.position);
+    const tenthPlace = games.filter(item => item.position === 10 && item.position);
+    const eleventhPlace = games.filter(item => item.position === 11 && item.position);
+    const twelfthPlace = games.filter(item => item.position === 12 && item.position);
+
+    const results = {
+        first: firstPlace.length,
+        second: secondPlace.length,
+        third: thirdPlace.length,
+        fourth: fourthPlace.length,
+        fifth: fifthPlace.length,
+        sixth: sixthPlace.length,
+        seventh: seventhPlace.length,
+        eighth: eighthPlace.length,
+        ninth: ninthPlace.length,
+        tenth: tenthPlace.length,
+        eleventh: eleventhPlace.length,
+        twelfth: twelfthPlace.length,
+    }
+ 
     return {
         appearances, 
         totalPoints, 
         playerPerformance, 
         pointsAverage,
-        gold,
-        silver,
-        bronze
+        results
     };
 };
