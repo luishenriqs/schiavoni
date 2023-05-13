@@ -165,7 +165,8 @@ export function NewGame({navigation}: {navigation: any}) {
   //==> REGISTRA UM NOVO RESULTADO
   const handleAddResult = () => {
     let points = 0;
-    switch (Number(position)) {
+    const positionNumber = Number(position);
+    switch (positionNumber) {
       case 1:
         points = 25;
         break;

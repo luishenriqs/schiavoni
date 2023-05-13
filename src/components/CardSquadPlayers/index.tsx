@@ -116,14 +116,14 @@ export function CardSquadPlayers({
             <ButtonBox>
                 <ButtonEditable 
                     title='Admin'
-                    type={isAdmin ? 'GREEN-BUTTON' : 'GRAY-BUTTON'}
+                    type={isAdmin ? 'GREEN-700-BUTTON' : 'GRAY-400-BUTTON'}
                     width={50}
                     height={100}
                     onPress={() => handleUpdateAdmin(name, isAdmin)}
                 />
                 <ButtonEditable 
                     title={name === 'Dú Schiavoni' ? '-------' : 'Remover'}
-                    type='RED-BUTTON'
+                    type='RED-200-BUTTON'
                     width={50}
                     height={100}
                     onPress={openModal}

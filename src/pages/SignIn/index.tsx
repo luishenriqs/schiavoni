@@ -159,7 +159,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
                       />
                       <Button
                           title="Entrar"
-                          type='GRAY-BUTTON'
+                          type='GRAY-400-BUTTON'
                           onPress={getUser}
                       />
                       <ButtonText 

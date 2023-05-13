@@ -84,7 +84,7 @@ export function Wellcome({navigation}: {navigation: any}) {
               <Title>Since 2017</ Title>
               <Button
                   title="Let's Play"
-                  type='GRAY-BUTTON'
+                  type='GRAY-400-BUTTON'
                   onPress={() => navigation.navigate('signIn')}
               />
           </Content>

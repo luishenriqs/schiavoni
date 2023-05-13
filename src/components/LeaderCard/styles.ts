@@ -30,7 +30,7 @@ export const Title = styled.Text`
 export const LeadersName = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XLL};
+    font-size: ${theme.FONT_SIZE.XML};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

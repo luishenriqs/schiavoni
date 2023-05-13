@@ -1,39 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import { useAuth } from '@hooks/useAuth';
-import { useAllPlayers } from '@hooks/useAllPlayers';
 import { useChampion } from '@hooks/useChampion';
-import { getLevel } from '@services/levelServices';
 import { Loading } from '@components/Loading';
-import { Header } from '@components/Header';
-import { PlayerImage } from '@components/PlayerImage';
 import { processStatistics } from '@services/levelServices';
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
 import { StatisticsDTO } from '@dtos/RankingDTO';
+import { ButtonEditable } from '@components/ButtonEditable';
 import { 
   Container,
+  Content, 
+  StatisticsHeader,
+  Empty,
   BackButton,
   Icon,
-  Content, 
+  ButtonsContainer,
   Title, 
+  Stats,
+  Positions,
   Text, 
+  GreenText,
+  RedText,
+  YellowText,
   Imagem 
 } from './styles';
 
 export function Performance({route, navigation}: any) {
-  const { user } = useAuth();
-  const { level, setLevelContext } = useChampion();
-  const { setAllPlayersContext } = useAllPlayers();
+  const { currentSeason } = useChampion();
 
   const [isLoading, setIsLoading] = useState(true);
   const [player, setPlayer] = useState({} as UserDTO);
   const [games, setGames] = useState([] as GameDTO[]);
   const [statistics, setStatistics] = useState({} as StatisticsDTO);
+  const [searchCurrentSeason, setSearchCurrentSeason] = useState(false);
   
-  const anonymousURL = 'anonymousURL';
   const url = player.profile && player.profile;
-
 
   const { name } = route.params;
 
@@ -88,11 +89,25 @@ export function Performance({route, navigation}: any) {
     return () => subscribe();
   };
 
+  const handleSearchLastSeasons = () => {
+    const statistics: StatisticsDTO = processStatistics(games, player);
+    statistics && setStatistics(statistics)
+    setSearchCurrentSeason(false);
+  };
+
+  const handleSearchCurrentSeason = () => {
+    const currentGames = games.filter((item) => {
+      if (item.season === currentSeason.season) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    statistics && setStatistics(statistics)
+    setSearchCurrentSeason(true);
+  };
+
   const getStatistcs = (games: GameDTO[], player: UserDTO) => {
     const statistics: StatisticsDTO = processStatistics(games, player);
     statistics && setStatistics(statistics)
   };
-
 
   return (
     <Container>
@@ -101,33 +116,55 @@ export function Performance({route, navigation}: any) {
           ? <Imagem source={{uri: url}}/> 
           : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
       }
-      <BackButton onPress={() => navigation.goBack()}>
-        <Icon name='arrow-back' size={30}/>
-      </BackButton>
+      <StatisticsHeader>
+        <BackButton onPress={() => navigation.goBack()}>
+          <Icon name='arrow-back' size={25}/>
+        </BackButton>
+        <Title>{name}</Title>
+        <Empty />
+      </StatisticsHeader>
+        
+      <ButtonsContainer>
+        <ButtonEditable 
+          title='Últimas temporadas'
+          width={49}
+          height={100}
+          type={!searchCurrentSeason ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+          onPress={() => handleSearchLastSeasons()}
+        />
+        <ButtonEditable 
+          title={`${currentSeason.season}º Temporada`}
+          width={49}
+          height={100}
+          type={searchCurrentSeason ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+          onPress={() => handleSearchCurrentSeason()}
+        />
+      </ButtonsContainer>
       {
         isLoading 
           ? <Loading/>
           :
             <Content>
-              <Title>{name}</Title>
-              <>
+              <Stats>
                 <Text>Participações: {statistics.appearances}</Text>
-                {statistics?.results?.first !== 0 && <Text>Vitórias: {statistics?.results?.first}</Text>}
-                {statistics?.results?.second !== 0 && <Text>Segundos Lugares: {statistics?.results?.second}</Text>}
-                {statistics?.results?.third !== 0 && <Text>Terceiros Lugares: {statistics?.results?.third}</Text>}
-                {statistics?.results?.fourth !== 0 && <Text>Quartos Lugares: {statistics?.results?.fourth}</Text>}
-                {statistics?.results?.fifth !== 0 && <Text>Quintos Lugares: {statistics?.results?.fifth}</Text>}
-                {statistics?.results?.sixth !== 0 && <Text>Sextos Lugares: {statistics?.results?.sixth}</Text>}
-                {statistics?.results?.seventh !== 0 && <Text>Sétimos Lugares: {statistics?.results?.seventh}</Text>}
-                {statistics?.results?.eighth !== 0 && <Text>Oitavos Lugares: {statistics?.results?.eighth}</Text>}
-                {statistics?.results?.ninth !== 0 && <Text>Nonos Lugares: {statistics?.results?.ninth}</Text>}
-                {statistics?.results?.tenth !== 0 && <Text>Décimos Lugares: {statistics?.results?.tenth}</Text>}
-                {statistics?.results?.eleventh !== 0 && <Text>Décimos Primeiros Lugares: {statistics?.results?.eleventh}</Text>}
-                {statistics?.results?.twelfth !== 0 && <Text>Décimos Segundos Lugares: {statistics?.results?.twelfth}</Text>}
                 <Text>Pontos: {statistics.totalPoints}</Text>
-                <Text>Aproveitamento: {statistics?.playerPerformance?.percent}</Text>
                 <Text>Média: {statistics.pointsAverage}</Text>
-              </>
+                <Text>Aproveitamento: {statistics?.playerPerformance?.percent} %</Text>
+              </Stats>
+              <Positions>
+                {statistics?.results?.first !== 0 && <GreenText>Vitórias: {statistics?.results?.first}</GreenText>}
+                {statistics?.results?.second !== 0 && <GreenText>2º Posição: {statistics?.results?.second}</GreenText>}
+                {statistics?.results?.third !== 0 && <GreenText>3º Posição: {statistics?.results?.third}</GreenText>}
+                {statistics?.results?.fourth !== 0 && <YellowText>4º Posição: {statistics?.results?.fourth}</YellowText>}
+                {statistics?.results?.fifth !== 0 && <YellowText>5º Posição: {statistics?.results?.fifth}</YellowText>}
+                {statistics?.results?.sixth !== 0 && <RedText>6º Posição: {statistics?.results?.sixth}</RedText>}
+                {statistics?.results?.seventh !== 0 && <RedText>7º Posição: {statistics?.results?.seventh}</RedText>}
+                {statistics?.results?.eighth !== 0 && <RedText>8º Posição: {statistics?.results?.eighth}</RedText>}
+                {statistics?.results?.ninth !== 0 && <RedText>9º Posição: {statistics?.results?.ninth}</RedText>}
+                {statistics?.results?.tenth !== 0 && <RedText>10º Posição: {statistics?.results?.tenth}</RedText>}
+                {statistics?.results?.eleventh !== 0 && <RedText>11º Posição: {statistics?.results?.eleventh}</RedText>}
+                {statistics?.results?.twelfth !== 0 && <RedText>12º Posição: {statistics?.results?.twelfth}</RedText>}
+              </Positions>
             </Content>
       }
 

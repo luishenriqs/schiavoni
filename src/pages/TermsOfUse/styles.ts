@@ -25,7 +25,7 @@ export const Title = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_600};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -41,7 +41,7 @@ export const SubTitle = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_600};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -50,7 +50,7 @@ export const Text = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_600};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
@@ -67,7 +67,7 @@ export const BulletPoint = styled.Text`
   align-self: flex-start;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_600};
-    font-size: ${theme.FONT_SIZE.XLL};
+    font-size: ${theme.FONT_SIZE.XML};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -77,7 +77,7 @@ export const BulletText = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_600};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

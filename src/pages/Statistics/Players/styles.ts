@@ -30,7 +30,7 @@ export const Text = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

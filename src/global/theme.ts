@@ -36,8 +36,9 @@ export default {
     SM: `${RFValue(14)}px`,
     MD: `${RFValue(16)}px`,
     LG: `${RFValue(18)}px`,
-    XL: `${RFValue(20)}px`,
-    XLL: `${RFValue(25)}px`,
-    XXL: `${RFValue(28)}px`,
+    XM: `${RFValue(20)}px`,
+    XL: `${RFValue(22)}px`,
+    XML: `${RFValue(25)}px`,
+    XXM: `${RFValue(28)}px`,
   },
 };

@@ -106,7 +106,7 @@ export const getLevel = (
 
 //==> RETORNA ESTATÍSTICAS
 export const processStatistics = (games: GameDTO[], player: UserDTO) => {
- 
+
     const playerName = player.name;
     const appearances = games.length;
     const totalPoints = sumPoints(games);
@@ -139,7 +139,7 @@ export const processStatistics = (games: GameDTO[], player: UserDTO) => {
         tenth: tenthPlace.length,
         eleventh: eleventhPlace.length,
         twelfth: twelfthPlace.length,
-    }
+    };
  
     return {
         appearances, 

@@ -34,7 +34,7 @@ export const Text = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
-    font-size: ${theme.FONT_SIZE.XXL};
+    font-size: ${theme.FONT_SIZE.XXM};
     font-family: ${theme.FONT_FAMILY.bold};
     margin-bottom: 20px;
   `};

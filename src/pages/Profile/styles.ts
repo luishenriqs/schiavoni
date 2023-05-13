@@ -32,7 +32,7 @@ export const LabelContainer = styled.View`
 export const Label = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_700};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
   align-self: center;
@@ -65,7 +65,7 @@ export const Progress = styled.Text`
   margin-right: 25px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_300};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

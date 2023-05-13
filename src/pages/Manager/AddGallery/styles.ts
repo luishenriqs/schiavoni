@@ -19,7 +19,7 @@ export const Progress = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_300};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

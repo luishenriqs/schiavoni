@@ -24,7 +24,7 @@ export const Title = styled.Text`
   margin-top: 15px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XLL};
+    font-size: ${theme.FONT_SIZE.XML};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -34,7 +34,7 @@ export const Text = styled.Text`
   margin-bottom: 5px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;
