@@ -33,6 +33,7 @@ export function ChampionPage({navigation}: {navigation: any}) {
 
   useEffect(() => {
     getChampion();
+    console.log('HALL DE CAMPEÕES: ', hallOfChampions);
   }, []);
 
   //==> RECUPERA DADOS DO CAMPEÃO
@@ -90,7 +91,6 @@ export function ChampionPage({navigation}: {navigation: any}) {
       next: (querySnapshot) => {
         const data = querySnapshot.docs.map(doc => {
           return {
-            doc_id: doc.id,
           ...doc.data()
           }
         }) as HallOfChampionsDTO[]
@@ -110,7 +110,6 @@ export function ChampionPage({navigation}: {navigation: any}) {
     const hallOfChampionData = {
       player: 'Anonymous Player',
       season: 0,
-      doc_id: '',
     };
 
     firestore()

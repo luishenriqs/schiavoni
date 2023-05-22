@@ -10,7 +10,7 @@ import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
 import { getPlayersNames } from '@services/playersServices';
-import { UserDTO, SquadOfPlayersDTO } from '@dtos/userDTO';
+import { UserDTO, SquadOfPlayersDTO } from '@dtos/UserDTO';
 import { GameDTO } from '@dtos/GameDTO';
 import { 
   Container,
@@ -130,6 +130,17 @@ export function NewChampion({navigation}: {navigation: any}) {
         setNewCurrentSeason();
       })
       .catch((error) => console.error(error));
+
+      const hallOfChampionData = {
+        player: name,
+        season: Number(currentSeason.season),
+      };
+
+      firestore()
+      .collection('hall_of_champions')
+      .doc(`Season ${currentSeason.season}`)
+      .set(hallOfChampionData)
+      .catch((error) => console.error(error))
     }
   };
 

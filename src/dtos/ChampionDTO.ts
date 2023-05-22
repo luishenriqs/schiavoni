@@ -10,5 +10,4 @@ export type ChampionDTO = {
 export type HallOfChampionsDTO = {
   player: string;
   season: number;
-  doc_id: string;
 };
