@@ -28,7 +28,7 @@ export const InfoBox = styled.View<Props>`
     `};
 
   ${({ positionStatus, theme }) =>
-    positionStatus <= 3 &&
+    positionStatus <= 1 &&
     css`
       border: 1px solid ${theme.COLORS.green_500};
       background: ${theme.COLORS.gray_700};
@@ -59,7 +59,7 @@ export const NameBox = styled.View<Props>`
     `};
 
   ${({ positionStatus, theme }) =>
-    positionStatus <= 3 &&
+    positionStatus <= 1 &&
     css`
       border: 1px solid ${theme.COLORS.green_500};
       background: ${theme.COLORS.gray_700};

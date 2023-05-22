@@ -6,3 +6,9 @@ export type ChampionDTO = {
   doc_id: string;
   season: number;
 };
+
+export type HallOfChampionsDTO = {
+  player: string;
+  season: number;
+  doc_id: string;
+};
