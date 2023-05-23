@@ -11,6 +11,7 @@ import { Games } from '@pages/Games';
 import { Gallery } from '@pages/Gallery';
 import { StatisticsRoutes } from '@pages/Statistics/statistics.routes';
 import { Profile } from '@pages/Profile';
+import { HallOfFame } from '@pages/HallOfFame';
 import { ManagerRoutes } from '@pages/Manager/manager.routes';
 import { TermsOfUse } from '@pages/TermsOfUse';
 import { CustomDrawer } from '@components/CustomDrawer';
@@ -105,6 +106,19 @@ export function AppRoutes() {
       <Drawer.Screen 
         name="Profile" 
         component={Profile}
+        options={{
+          drawerIcon: ({color}) => (
+            <MaterialCommunityIcons 
+              name='account-outline'
+              size={20}
+              color={color}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen 
+        name="HallOfFame" 
+        component={HallOfFame}
         options={{
           drawerIcon: ({color}) => (
             <MaterialCommunityIcons 

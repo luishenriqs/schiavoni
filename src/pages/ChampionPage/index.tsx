@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
@@ -22,7 +23,6 @@ export function ChampionPage({navigation}: {navigation: any}) {
   const { 
     champion, 
     setChampionContext, 
-    hallOfChampions,
     setHallOfChampionsContext,
     setCurrentSeasonContext, 
     setGameResultContext 
@@ -33,7 +33,6 @@ export function ChampionPage({navigation}: {navigation: any}) {
 
   useEffect(() => {
     getChampion();
-    console.log('HALL DE CAMPEÕES: ', hallOfChampions);
   }, []);
 
   //==> RECUPERA DADOS DO CAMPEÃO
@@ -231,15 +230,21 @@ export function ChampionPage({navigation}: {navigation: any}) {
               headerSize={'big'}
               onPress={() => navigation.openDrawer()}
             />
-            <PsopImage />
-            <Content>
-              <Title>Campeão PSOP!</Title>
-              <Text>{champion.name}</Text>
-              {champion.profile
-                ? <Imagem source={{uri: champion.profile}} />
-                : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-              }
-            </Content>
+            <ImageBackground 
+              source={require('@assets/wallpapers/poker-cards.jpg')} 
+              resizeMode='cover'
+              style={{flex: 1, alignItems: 'center', maxWidth: 500, minWidth: 500}}
+            >
+              <PsopImage />
+              <Content>
+                <Title>Campeão PSOP!</Title>
+                <Text>{champion.name}</Text>
+                {champion.profile
+                  ? <Imagem source={{uri: champion.profile}} />
+                  : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+                }
+              </Content>
+            </ImageBackground>
           </Container>
       }
     </>
