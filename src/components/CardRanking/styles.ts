@@ -15,7 +15,7 @@ export const Container = styled.View`
 `;
 
 export const InfoBox = styled.View<Props>`
-  width: 16%;
+  width: 18%;
   height: 70px;
   align-items: center;
   justify-content: center;
@@ -46,7 +46,7 @@ export const Position = styled.Text`
 export const NameBox = styled.View<Props>`
   flex-direction: row;
   justify-content: flex-start;
-  width: 66%;
+  width: 62%;
   margin: 0 3px;
   height: 70px;
   align-items: center;

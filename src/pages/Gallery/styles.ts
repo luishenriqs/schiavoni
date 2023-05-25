@@ -27,8 +27,8 @@ export const ImageWrapper = styled.View`
 
 export const Imagem = styled(Image)`
   align-self: center;
-  width: 310px;
-  height: 310px;
+  width: 300px;
+  height: 300px;
   border-radius: 8px;
   margin-bottom: 5px;
 `;

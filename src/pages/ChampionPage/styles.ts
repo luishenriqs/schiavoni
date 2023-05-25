@@ -12,14 +12,14 @@ export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
   padding: 0 15%;
-  margin-top: 20px;
+  margin-top: 25px;
 `;
 
 export const Imagem = styled(Image)`
   align-self: center;
   width: 240px;
   height: 240px;
-  margin-top: 50px;
+  margin-top: 80px;
 `;
 
 export const Title = styled.Text`
