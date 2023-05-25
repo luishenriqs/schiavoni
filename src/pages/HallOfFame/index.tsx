@@ -89,9 +89,9 @@ export function HallOfFame({navigation}: {navigation: any}) {
               onPress={() => navigation.openDrawer()}
             />
             <ImageBackground 
-              source={require('@assets/wallpapers/burningPoker01.jpg')} 
+              source={require('@assets/wallpapers/burningPoker03.jpg')} 
               resizeMode='cover'
-              style={{flex: 1, alignItems: 'center', maxWidth: 500, minWidth: 500}}
+              style={{flex: 1, alignItems: 'center', width: 400}}
             >
               <PsopImage />
               <Content>

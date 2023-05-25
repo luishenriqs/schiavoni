@@ -123,7 +123,7 @@ export function CardSquadPlayers({
                 />
                 <ButtonEditable 
                     title={name === 'Dú Schiavoni' ? '-------' : 'Remover'}
-                    type='RED-200-BUTTON'
+                    type='RED-400-BUTTON'
                     width={50}
                     height={100}
                     onPress={openModal}

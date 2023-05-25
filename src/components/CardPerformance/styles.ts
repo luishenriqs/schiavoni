@@ -55,7 +55,7 @@ export const NameContainer = styled.View`
 export const Name = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XM};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

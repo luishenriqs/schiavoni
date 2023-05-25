@@ -18,7 +18,7 @@ export const Title = styled.Text`
   margin: 25px 0 10px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
-    font-size: ${theme.FONT_SIZE.XXM};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -28,7 +28,7 @@ export const Label = styled.Text`
   margin-bottom: 15px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_400};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;
@@ -37,7 +37,7 @@ export const Text = styled.Text`
   align-self: flex-start;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XML};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

@@ -27,7 +27,7 @@ export const Name = styled.Text`
   margin-left: 12px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.MD};
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

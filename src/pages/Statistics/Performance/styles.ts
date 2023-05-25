@@ -75,7 +75,7 @@ export const Positions = styled.View`
 
 export const Text = styled.Text`
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.XM};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.white};
   `};
@@ -83,7 +83,7 @@ export const Text = styled.Text`
 
 export const GreenText = styled.Text`
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.XM};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.green_500};
   `};
@@ -91,7 +91,7 @@ export const GreenText = styled.Text`
 
 export const RedText = styled.Text`
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.XM};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.red_200};
   `};
@@ -99,7 +99,7 @@ export const RedText = styled.Text`
 
 export const YellowText = styled.Text`
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.XM};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.gold};
   `};

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components/native";
 
 export type ButtonTypeStyleProps =
   | "GREEN-700-BUTTON"
-  | "RED-200-BUTTON"
+  | "RED-400-BUTTON"
   | "GRAY-400-BUTTON"
   | "GRAY-500-BUTTON"
   | "GRAY-900-BUTTON";
@@ -40,9 +40,9 @@ export const Container = styled(TouchableOpacity)<Props>`
     `};
 
   ${({ type, theme }) =>
-    type === "RED-200-BUTTON" &&
+    type === "RED-400-BUTTON" &&
     css`
-      background-color: ${theme.COLORS.red_200};
+      background-color: ${theme.COLORS.red_400};
     `};
 
   ${({ type, theme }) =>

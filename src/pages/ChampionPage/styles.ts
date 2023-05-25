@@ -12,13 +12,13 @@ export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
   padding: 0 15%;
-  margin-top: 25px;
+  margin-top: 20px;
 `;
 
 export const Imagem = styled(Image)`
   align-self: center;
-  width: 270px;
-  height: 270px;
+  width: 240px;
+  height: 240px;
   margin-top: 50px;
 `;
 
