@@ -231,18 +231,19 @@ export function ChampionPage({navigation}: {navigation: any}) {
               onPress={() => navigation.openDrawer()}
             />
             <ImageBackground 
-              source={require('@assets/wallpapers/poker-cards.jpg')} 
+              source={require('@assets/wallpapers/royal01.jpg')} 
               resizeMode='cover'
-              style={{flex: 1, alignItems: 'center', maxWidth: 500, minWidth: 500}}
+              style={{flex: 1, alignItems: 'center', maxWidth: 1200, minWidth: 500}}
             >
               <PsopImage />
               <Content>
-                <Title>Campeão PSOP!</Title>
-                <Text>{champion.name}</Text>
+
                 {champion.profile
                   ? <Imagem source={{uri: champion.profile}} />
                   : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                 }
+                <Title>Campeão PSOP!</Title>
+                <Text>{champion.name}</Text>
               </Content>
             </ImageBackground>
           </Container>

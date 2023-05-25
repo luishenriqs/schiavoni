@@ -44,7 +44,8 @@ let orderedResult = orderedSeasons.map((el) => {
     return ordered[0];
 });
 
-orderedResult.splice(0,1)
+orderedResult.splice(0,1);
+orderedResult.reverse();
 
 return orderedResult;
 };

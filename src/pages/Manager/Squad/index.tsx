@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FlatList } from "react-native";
+import { FlatList, ImageBackground } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Header } from '@components/Header';
@@ -46,30 +46,36 @@ export function Squad({navigation}: {navigation: any}) {
   });
 
   return (
-    <Container>
-      <Header
-        title='Player Squad'
-        text={'Seleção ' + String(year)}
-        headerSize={'big'}
-        onPress={() => navigation.openDrawer()}
-      />
-      <PsopImage />
-      <Content>
-        <Title>Seleção dos jogadores</Title>
-        {allPlayers &&
-          <FlatList
-            data={allPlayers as any}
-            keyExtractor={(item, index) => index + item.name}
-            renderItem={({ item }) => (
-              <CardSquadPlayers 
-                name={item.name}
-                isAdmin={item.isAdmin}
-                profile={item.profile ? item.profile : anonymousURL}
-              />
-            )}
-          />
-        }
-      </Content>
-    </Container>
+    <ImageBackground 
+      source={require('@assets/wallpapers/blackWallpaper03.jpg')} 
+      resizeMode='cover'
+      style={{flex: 1, alignItems: 'center'}}
+    >
+      <Container>
+        <Header
+          title='Player Squad'
+          text={'Seleção ' + String(year)}
+          headerSize={'big'}
+          onPress={() => navigation.openDrawer()}
+        />
+        <PsopImage />
+        <Content>
+          <Title>Seleção dos jogadores</Title>
+          {allPlayers &&
+            <FlatList
+              data={allPlayers as any}
+              keyExtractor={(item, index) => index + item.name}
+              renderItem={({ item }) => (
+                <CardSquadPlayers 
+                  name={item.name}
+                  isAdmin={item.isAdmin}
+                  profile={item.profile ? item.profile : anonymousURL}
+                />
+              )}
+            />
+          }
+        </Content>
+      </Container>
+    </ImageBackground>
   );
 };

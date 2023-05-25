@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
 import { Header } from '@components/Header';
-import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { format } from 'date-fns';
 import RNPickerSelect from 'react-native-picker-select';
@@ -241,60 +241,66 @@ export function NewGame({navigation}: {navigation: any}) {
   };
 
   return (
-    <Container>
-      <Header
-        title='New Game'
-        text={`${currentSeason.season}º Temporada`}
-        headerSize={'big'}
-        onPress={() => navigation.openDrawer()}
-      />
-      <PsopImage />
-      <Content>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          style={{ flex: 1 }}
-        >
-          <Title>Registre um novo resultado</Title>
-          <RNPickerSelect
-            placeholder={gamePlaceholder}
-            onValueChange={(value) => setGame(value)}
-            style={pickerSelectStyles}
-            items={games}
-            value={game}
-          />
-          <RNPickerSelect
-            placeholder={squad && playersPlaceholder}
-            onValueChange={(value) => setName(value)}
-            style={pickerSelectStyles}
-            items={squad}
-            value={name}
-          />
-          <RNPickerSelect
-            placeholder={positionsPlaceholder}
-            onValueChange={(value) => setPosition(value)}
-            style={pickerSelectStyles}
-            items={positions}
-            value={position}
-          />
-          <Button 
-            title='Enviar'
-            onPress={() => setModalVisible(!modalVisible)}
-          />
-        </KeyboardAvoidingView>
-      </Content>
+    <ImageBackground 
+      source={require('@assets/wallpapers/blackWallpaper03.jpg')} 
+      resizeMode='cover'
+      style={{flex: 1, alignItems: 'center'}}
+    >
+      <Container>
+        <Header
+          title='New Game'
+          text={`${currentSeason.season}º Temporada`}
+          headerSize={'big'}
+          onPress={() => navigation.openDrawer()}
+        />
+          <PsopImage />
+          <Content>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+              style={{ flex: 1 }}
+            >
+              <Title>Registre um novo resultado</Title>
+              <RNPickerSelect
+                placeholder={gamePlaceholder}
+                onValueChange={(value) => setGame(value)}
+                style={pickerSelectStyles}
+                items={games}
+                value={game}
+              />
+              <RNPickerSelect
+                placeholder={squad && playersPlaceholder}
+                onValueChange={(value) => setName(value)}
+                style={pickerSelectStyles}
+                items={squad}
+                value={name}
+              />
+              <RNPickerSelect
+                placeholder={positionsPlaceholder}
+                onValueChange={(value) => setPosition(value)}
+                style={pickerSelectStyles}
+                items={positions}
+                value={position}
+              />
+              <Button 
+                title='Enviar'
+                onPress={() => setModalVisible(!modalVisible)}
+              />
+            </KeyboardAvoidingView>
+          </Content>
 
-      <ModalComponent
-        title={`Novo Resultado`}
-        text={`Temporada: ${currentSeason.season}`}
-        text2={`Etapa: ${game}`}
-        text3={`Player: ${name}`}
-        text4={`Posição: ${position}`}
-        modalVisible={modalVisible}
-        greenButtonText={`Confirmar`}
-        redButtonText='Cancelar'
-        onPressGreenButton={handleAddResult}
-        onPressRedButton={() => setModalVisible(!modalVisible)}
-      />
-    </Container>
+          <ModalComponent
+            title={`Novo Resultado`}
+            text={`Temporada: ${currentSeason.season}`}
+            text2={`Etapa: ${game}`}
+            text3={`Player: ${name}`}
+            text4={`Posição: ${position}`}
+            modalVisible={modalVisible}
+            greenButtonText={`Confirmar`}
+            redButtonText='Cancelar'
+            onPressGreenButton={handleAddResult}
+            onPressRedButton={() => setModalVisible(!modalVisible)}
+          />
+      </Container>
+    </ImageBackground>
   );
 };

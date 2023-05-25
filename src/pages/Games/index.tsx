@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
@@ -110,17 +111,23 @@ export function Games({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage />
-      <Content>
-        {!!results['game_1'] && renderResults(results['game_1'], 1)}
-        {!!results['game_2'] && renderResults(results['game_2'], 2)}
-        {!!results['game_3'] && renderResults(results['game_3'], 3)}
-        {!!results['game_4'] && renderResults(results['game_4'], 4)}
-        {!!results['game_5'] && renderResults(results['game_5'], 5)}
-        {!!results['game_6'] && renderResults(results['game_6'], 6)}
-        {!!results['game_7'] && renderResults(results['game_7'], 7)}
-        {!!results['game_8'] && renderResults(results['game_8'], 8)}
-      </Content>
+      <ImageBackground 
+        source={require('@assets/wallpapers/background02.jpg')} 
+        resizeMode='cover'
+        style={{flex: 1, alignItems: 'center', maxWidth: 1200, minWidth: 500}}
+      >
+        <PsopImage />
+        <Content>
+          {!!results['game_1'] && renderResults(results['game_1'], 1)}
+          {!!results['game_2'] && renderResults(results['game_2'], 2)}
+          {!!results['game_3'] && renderResults(results['game_3'], 3)}
+          {!!results['game_4'] && renderResults(results['game_4'], 4)}
+          {!!results['game_5'] && renderResults(results['game_5'], 5)}
+          {!!results['game_6'] && renderResults(results['game_6'], 6)}
+          {!!results['game_7'] && renderResults(results['game_7'], 7)}
+          {!!results['game_8'] && renderResults(results['game_8'], 8)}
+        </Content>
+      </ImageBackground>
     </Container>
   );
 };

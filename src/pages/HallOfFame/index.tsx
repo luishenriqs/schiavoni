@@ -89,7 +89,7 @@ export function HallOfFame({navigation}: {navigation: any}) {
               onPress={() => navigation.openDrawer()}
             />
             <ImageBackground 
-              source={require('@assets/wallpapers/burning-poker.jpg')} 
+              source={require('@assets/wallpapers/burningPoker01.jpg')} 
               resizeMode='cover'
               style={{flex: 1, alignItems: 'center', maxWidth: 500, minWidth: 500}}
             >

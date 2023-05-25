@@ -27,8 +27,8 @@ export const ImageWrapper = styled.View`
 
 export const Imagem = styled(Image)`
   align-self: center;
-  width: 300px;
-  height: 300px;
+  width: 310px;
+  height: 310px;
   border-radius: 8px;
   margin-bottom: 5px;
 `;
@@ -37,7 +37,7 @@ export const Legend = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.LG};
-    font-family: ${theme.FONT_FAMILY.medium};
+    font-family: ${theme.FONT_FAMILY.bold};
   `};
   align-self: center;
 `;

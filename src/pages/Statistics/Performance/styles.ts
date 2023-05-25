@@ -16,6 +16,13 @@ export const Imagem = styled(Image)`
   border-radius: 8px;
 `;
 
+export const StatisticsHeader = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
@@ -23,17 +30,10 @@ export const Content = styled.ScrollView`
   margin-top: -25px;
 `;
 
-export const StatisticsHeader = styled.View`
-  height: 50px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 export const Title = styled.Text`
   align-self: center;
   ${({ theme }) => css`
-    color: ${theme.COLORS.black};
+    color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.XL};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
@@ -53,7 +53,7 @@ export const BackButton = styled(TouchableOpacity)`
 export const Icon = styled(MaterialIcons)`
   align-self: center;
   justify-self: center;
-  color: ${({ theme }) => theme.COLORS.black};
+  color: ${({ theme }) => theme.COLORS.gray_100};
 `;
 
 export const ButtonsContainer = styled.View`

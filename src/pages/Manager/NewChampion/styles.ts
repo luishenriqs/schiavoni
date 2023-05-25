@@ -4,7 +4,6 @@ export const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  background: ${({ theme }) => theme.COLORS.gray_600};
 `;
 
 export const Content = styled.ScrollView`
@@ -16,7 +15,7 @@ export const Content = styled.ScrollView`
 
 export const Title = styled.Text`
   align-self: center;
-  margin-bottom: 30px;
+  margin-bottom: 70px;
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.LG};

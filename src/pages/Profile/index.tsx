@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -200,71 +200,77 @@ export function Profile({navigation}: {navigation: any}) {
         headerSize={'small'}
         onPress={() => navigation.openDrawer()}
       />
-      <Content>
-        <ImageContainer>
-          <LabelContainer>
-            <Label>Perfil</Label>
-          </LabelContainer>
-          <ImageWrapper>
-            {user.profile
-              ? <ImageContent>
-                  <ImageProfileAndAvatar source={{uri: user.profile}}/>
-                </ImageContent>
-              : <ImageContent>
-                  <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-                </ImageContent>
-            }
-            <ImageContent>
-              <Photo 
-                uri={profileImage} 
-                onPress={handlePickProfileImage}
-                text='Selecione sua imagem de perfil'
-                size={130}
-              />
-            </ImageContent>
-          </ImageWrapper>
-          <Button
-            title="Atualize sua imagem de perfil"
-            onPress={handleProfileImageUpload}
-          />
-          <Status>
-            <Progress>{progressProfileImage}%</Progress>
-            <Transferred>'{bytesTransferredProfileImage}'</Transferred>
-          </Status>
-        </ImageContainer>
-        
-        <ImageContainer>
-          <LabelContainer>
-            <Label>Avatar</Label>
-          </LabelContainer>
-          <ImageWrapper>
-            {user.avatar
-              ? <ImageContent>
-                  <ImageProfileAndAvatar source={{uri: user.avatar}}/>
-                </ImageContent>
-              : <ImageContent>
-                  <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-                </ImageContent>
-            }
-            <ImageContent>
-              <Photo 
-                uri={avatar} 
-                onPress={handlePickAvatar}
-                text='Selecione seu novo avatar'
-                size={130}
-              />
-            </ImageContent>
-          </ImageWrapper>
-          <Button
-            title="Atualize seu avatar"
-            onPress={handleProfileAvatarUpload}
-          />
-          <Status>
-            <Progress>{progressAvatar}%</Progress>
-            <Transferred>'{bytesTransferredAvatar}'</Transferred>
-          </Status>
-        </ImageContainer>
-      </Content>
+      <ImageBackground 
+        source={require('@assets/wallpapers/blackWallpaper01.jpg')} 
+        resizeMode='cover'
+        style={{flex: 1, alignItems: 'center', maxWidth: 1200, minWidth: 500}}
+      >
+        <Content>
+          <ImageContainer>
+            <LabelContainer>
+              <Label>Perfil</Label>
+            </LabelContainer>
+            <ImageWrapper>
+              {user.profile
+                ? <ImageContent>
+                    <ImageProfileAndAvatar source={{uri: user.profile}}/>
+                  </ImageContent>
+                : <ImageContent>
+                    <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+                  </ImageContent>
+              }
+              <ImageContent>
+                <Photo 
+                  uri={profileImage} 
+                  onPress={handlePickProfileImage}
+                  text='Selecione sua imagem de perfil'
+                  size={130}
+                />
+              </ImageContent>
+            </ImageWrapper>
+            <Button
+              title="Atualize sua imagem de perfil"
+              onPress={handleProfileImageUpload}
+            />
+            <Status>
+              <Progress>{progressProfileImage}%</Progress>
+              <Transferred>'{bytesTransferredProfileImage}'</Transferred>
+            </Status>
+          </ImageContainer>
+          
+          <ImageContainer>
+            <LabelContainer>
+              <Label>Avatar</Label>
+            </LabelContainer>
+            <ImageWrapper>
+              {user.avatar
+                ? <ImageContent>
+                    <ImageProfileAndAvatar source={{uri: user.avatar}}/>
+                  </ImageContent>
+                : <ImageContent>
+                    <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+                  </ImageContent>
+              }
+              <ImageContent>
+                <Photo 
+                  uri={avatar} 
+                  onPress={handlePickAvatar}
+                  text='Selecione seu novo avatar'
+                  size={130}
+                />
+              </ImageContent>
+            </ImageWrapper>
+            <Button
+              title="Atualize seu avatar"
+              onPress={handleProfileAvatarUpload}
+            />
+            <Status>
+              <Progress>{progressAvatar}%</Progress>
+              <Transferred>'{bytesTransferredAvatar}'</Transferred>
+            </Status>
+          </ImageContainer>
+        </Content>
+      </ImageBackground>
     </Container>
   );
 };

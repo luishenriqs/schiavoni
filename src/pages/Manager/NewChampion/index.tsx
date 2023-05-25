@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { KeyboardAvoidingView, Platform, Alert, ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTheme } from 'styled-components';
@@ -206,43 +206,49 @@ export function NewChampion({navigation}: {navigation: any}) {
   };
 
   return (
-    <Container>
-      <Header
-        title='New Champion'
-        text={`Final da ${currentSeason.season}º Temporada`}
-        headerSize={'big'}
-        onPress={() => navigation.openDrawer()}
-      />
-      <PsopImage />
-      <Content>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          style={{ flex: 1 }}
-        >
-          <Title>Novo Campeão do PSOP</Title>
-          <RNPickerSelect
-            placeholder={playersPlaceholder}
-            onValueChange={(value) => setName(value)}
-            style={pickerSelectStyles}
-            items={squad}
-            value={name}
-          />
-          <Button 
-            title='Campeão do PSOP'
-            onPress={openModal}
-          />
-        </KeyboardAvoidingView>
-      </Content>
+    <ImageBackground 
+      source={require('@assets/wallpapers/blackWallpaper01.jpg')} 
+      resizeMode='cover'
+      style={{flex: 1, alignItems: 'center'}}
+    >
+      <Container>
+        <Header
+          title='New Champion'
+          text={`Final da ${currentSeason.season}º Temporada`}
+          headerSize={'big'}
+          onPress={() => navigation.openDrawer()}
+        />
+          <PsopImage />
+          <Content>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+              style={{ flex: 1 }}
+            >
+              <Title>Registre um novo campeão</Title>
+              <RNPickerSelect
+                placeholder={playersPlaceholder}
+                onValueChange={(value) => setName(value)}
+                style={pickerSelectStyles}
+                items={squad}
+                value={name}
+              />
+              <Button 
+                title='Enviar'
+                onPress={openModal}
+              />
+            </KeyboardAvoidingView>
+          </Content>
 
-      <ModalComponent
-        title={`${name} é o novo PSOP Champion!`}
-        text={`${currentSeason.season}º Temporada`}
-        modalVisible={modalVisible}
-        greenButtonText={`${name} CHAMPION`}
-        redButtonText='Cancelar'
-        onPressGreenButton={handleAddNewChampion}
-        onPressRedButton={() => setModalVisible(!modalVisible)}
-      />
-    </Container>
+          <ModalComponent
+            title={`${name} é o novo PSOP Champion!`}
+            text={`${currentSeason.season}º Temporada`}
+            modalVisible={modalVisible}
+            greenButtonText={`${name} CHAMPION`}
+            redButtonText='Cancelar'
+            onPressGreenButton={handleAddNewChampion}
+            onPressRedButton={() => setModalVisible(!modalVisible)}
+          />
+      </Container>
+    </ImageBackground>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { KeyboardAvoidingView, Platform, Alert, ImageBackground } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useAllPlayers } from '@hooks/useAllPlayers';
@@ -11,7 +11,8 @@ import ModalComponent from '@components/ModalComponent';
 import { UserDTO } from '@dtos/UserDTO';
 import {
   Container, 
-  Content
+  Content,
+  Title
 } from './styles';
 
 export function NewPlayer({navigation}: {navigation: any}) {
@@ -98,49 +99,56 @@ export function NewPlayer({navigation}: {navigation: any}) {
   };
 
   return (
-    <Container>
-      <Header
-        title='New Player'
-        text='Cadastre um novo jogador'
-        headerSize={'big'}
-        onPress={() => navigation.openDrawer()}
-      />
-      <PsopImage />
-      <Content>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          style={{ flex: 1 }}
-        >
-          <Input 
-            placeholder='Nome'
-            autoCorrect={false}
-            onChangeText={(value) => setName(value)}
-            value={name}
-          />
-          <Input 
-            placeholder='E-mail'
-            keyboardType='email-address'
-            autoCorrect={false}
-            autoCapitalize='none'
-            onChangeText={(value) => setEmail(value)}
-            value={email}
-          />
-          <Button 
-            title='Novo Player'
-            onPress={handleCreateUserAccount}
-          />
-        </KeyboardAvoidingView>
-      </Content>
+    <ImageBackground 
+      source={require('@assets/wallpapers/blackWallpaper02.jpg')} 
+      resizeMode='cover'
+      style={{flex: 1, alignItems: 'center'}}
+    >
+      <Container>
+        <Header
+          title='New Player'
+          text='Cadastre um novo jogador'
+          headerSize={'big'}
+          onPress={() => navigation.openDrawer()}
+        />
+          <PsopImage />
+          <Content>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+              style={{ flex: 1 }}
+            >
+              <Title>Registre um novo jogador</Title>
+              <Input 
+                placeholder='Nome'
+                autoCorrect={false}
+                onChangeText={(value) => setName(value)}
+                value={name}
+              />
+              <Input 
+                placeholder='E-mail'
+                keyboardType='email-address'
+                autoCorrect={false}
+                autoCapitalize='none'
+                onChangeText={(value) => setEmail(value)}
+                value={email}
+              />
+              <Button 
+                title='Enviar'
+                onPress={handleCreateUserAccount}
+              />
+            </KeyboardAvoidingView>
+          </Content>
 
-      <ModalComponent
-        title={`Email Existente!`}
-        text={`O email ${email} já foi usado uma vez em nosso sistema, deseja prosseguir com um recadastro?`}
-        modalVisible={modalVisible}
-        greenButtonText={`Cadastrar Novamente`}
-        redButtonText='Cancelar'
-        onPressGreenButton={createNewPlayerFirestore}
-        onPressRedButton={() => setModalVisible(!modalVisible)}
-      />
-    </Container>
+          <ModalComponent
+            title={`Email Existente!`}
+            text={`O email ${email} já foi usado uma vez em nosso sistema, deseja prosseguir com um recadastro?`}
+            modalVisible={modalVisible}
+            greenButtonText={`Cadastrar Novamente`}
+            redButtonText='Cancelar'
+            onPressGreenButton={createNewPlayerFirestore}
+            onPressRedButton={() => setModalVisible(!modalVisible)}
+          />
+      </Container>
+    </ImageBackground>
   );
 };
