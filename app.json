@@ -9,6 +9,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
     },
+    "ios": {
+      "bundleIdentifier": "com.schiavoni"
+    },
     "android": {
       "package": "com.schiavoni_poker_house",
       "versionCode": 1,
@@ -24,6 +27,12 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
         }
       ]
     ],

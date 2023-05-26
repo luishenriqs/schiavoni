@@ -4,6 +4,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
+import OneSignal from 'react-native-onesignal';
 import auth from '@react-native-firebase/auth';
 import { Routes } from '@routes/index.routes';
 import { Loading } from '@components/Loading';
@@ -13,6 +14,8 @@ import { AllPlayersContextProvider } from '@contexts/allPlayersContext';
 import { ThemeProvider } from 'styled-components';
 import { useFonts, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import theme from '@global/theme';
+
+OneSignal.setAppId("0e70af8a-a881-4e52-8e1a-40bdeb84c8fd");
 
 export default function App() {
   const [initializing, setInitializing] = useState(true);

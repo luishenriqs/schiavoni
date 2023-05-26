@@ -57,7 +57,7 @@ export function AppRoutes() {
         options={{
           drawerIcon: ({color}) => (
             <MaterialCommunityIcons 
-              name='star-outline'
+              name='cards-outline'
               size={20}
               color={color}
             />
@@ -122,7 +122,7 @@ export function AppRoutes() {
         options={{
           drawerIcon: ({color}) => (
             <MaterialCommunityIcons 
-              name='account-outline'
+              name='star-outline'
               size={20}
               color={color}
             />
