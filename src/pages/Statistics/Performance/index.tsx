@@ -106,46 +106,46 @@ export function Performance({route, navigation}: any) {
   };
 
   const handleSearchPenultimateSeason = () => {
-    const currentGames = games.filter((item) => {
+    const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 1) return item;
     });
-    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(3)
   };
 
   const handleSearchAntiPenultimateSeason = () => {
-    const currentGames = games.filter((item) => {
+    const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 2) return item;
     });
-    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(4)
   };
 
   const handleSearchThirdOldestSeason = () => {
-    const currentGames = games.filter((item) => {
+    const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 3) return item;
     });
-    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(5)
   };
 
   const handleSearchSecondOldestSeason = () => {
-    const currentGames = games.filter((item) => {
+    const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 4) return item;
     });
-    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(6)
   };
 
   const handleSearchOlderSeason = () => {
-    const currentGames = games.filter((item) => {
+    const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 5) return item;
     });
-    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(7)
   };
