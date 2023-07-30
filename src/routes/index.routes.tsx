@@ -23,7 +23,6 @@ export function Routes() {
 
   useEffect(() => {
     const unsubscribe = OneSignal.setNotificationWillShowInForegroundHandler((notificationReceivedEvent: NotificationReceivedEvent) => {
-      console.log(notificationReceivedEvent);
       const response = notificationReceivedEvent.getNotification();
       setNotification(response);
     });

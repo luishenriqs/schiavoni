@@ -33,7 +33,7 @@ export function Performance({route, navigation}: any) {
   const [player, setPlayer] = useState({} as UserDTO);
   const [games, setGames] = useState([] as GameDTO[]);
   const [statistics, setStatistics] = useState({} as StatisticsDTO);
-  const [searchCurrentSeason, setSearchCurrentSeason] = useState(false);
+  const [focusedSeason, setFocusedSeason] = useState(1);
 
   const url = !!player.profile && player.profile;
 
@@ -93,7 +93,7 @@ export function Performance({route, navigation}: any) {
   const handleSearchLastSeasons = () => {
     const statistics: StatisticsDTO = processStatistics(games, player);
     statistics && setStatistics(statistics)
-    setSearchCurrentSeason(false);
+    setFocusedSeason(1)
   };
 
   const handleSearchCurrentSeason = () => {
@@ -102,7 +102,52 @@ export function Performance({route, navigation}: any) {
     });
     const statistics: StatisticsDTO = processStatistics(currentGames, player);
     statistics && setStatistics(statistics)
-    setSearchCurrentSeason(true);
+    setFocusedSeason(2)
+  };
+
+  const handleSearchPenultimateSeason = () => {
+    const currentGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 1) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(3)
+  };
+
+  const handleSearchAntiPenultimateSeason = () => {
+    const currentGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 2) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(4)
+  };
+
+  const handleSearchThirdOldestSeason = () => {
+    const currentGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 3) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(5)
+  };
+
+  const handleSearchSecondOldestSeason = () => {
+    const currentGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 4) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(6)
+  };
+
+  const handleSearchOlderSeason = () => {
+    const currentGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 5) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(currentGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(7)
   };
 
   const getStatistcs = (games: GameDTO[], player: UserDTO) => {
@@ -118,7 +163,7 @@ export function Performance({route, navigation}: any) {
           : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
       }
       <ImageBackground 
-        source={require('@assets/wallpapers/hands02.jpg')} 
+        source={require('@assets/wallpapers/hands03.jpg')} 
         resizeMode='cover'
         style={{flex: 1, alignItems: 'center'}}
       >
@@ -132,18 +177,43 @@ export function Performance({route, navigation}: any) {
           
         <ButtonsContainer>
           <ButtonEditable 
-            title='Últimas temporadas'
-            width={49}
+            title='Últimas 4 temporadas'
+            width={98}
             height={100}
-            type={!searchCurrentSeason ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            type={focusedSeason === 1 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
             onPress={() => handleSearchLastSeasons()}
           />
+        </ButtonsContainer>
+        <ButtonsContainer>
           <ButtonEditable 
-            title={`${currentSeason.season}º Temporada`}
+            title={`Temporada Atual`}
             width={49}
             height={100}
-            type={searchCurrentSeason ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            type={focusedSeason === 2 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
             onPress={() => handleSearchCurrentSeason()}
+          />
+          <ButtonEditable 
+            title={`${currentSeason.season - 1}º Temporada`}
+            width={49}
+            height={100}
+            type={focusedSeason === 3 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            onPress={() => handleSearchPenultimateSeason()}
+          />
+        </ButtonsContainer>
+        <ButtonsContainer>
+          <ButtonEditable 
+            title={`${currentSeason.season - 2}º Temporada`}
+            width={49}
+            height={100}
+            type={focusedSeason === 4 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            onPress={() => handleSearchAntiPenultimateSeason()}
+          />
+          <ButtonEditable 
+            title={`${currentSeason.season - 3}º Temporada`}
+            width={49}
+            height={100}
+            type={focusedSeason === 5 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            onPress={() => handleSearchThirdOldestSeason()}
           />
         </ButtonsContainer>
         {

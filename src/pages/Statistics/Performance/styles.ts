@@ -27,7 +27,6 @@ export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
   padding: 0px 25px 10px;
-  margin-top: -25px;
 `;
 
 export const Title = styled.Text`
@@ -61,7 +60,7 @@ export const ButtonsContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0 8px 35px;
+  margin: 0 8px 6px;
 `;
 
 export const Stats = styled.View`
