@@ -36,7 +36,7 @@ export const HeaderContent = styled.View`
 export const Title = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XLL};
+    font-size: ${theme.FONT_SIZE.XXL};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

@@ -11,7 +11,7 @@ import { LeaderCard } from '@components/LeaderCard';
 import { CardRanking }from '@components/CardRanking';
 import { LabelPSOP } from "@components/LabelPSOP";
 import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import { Container, Content, Title, Text, Imagem } from './styles';
 
 export function PSOP({navigation}: {navigation: any}) {

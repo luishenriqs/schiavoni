@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '@components/Button';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import {
     Header,
     WellcomeText,
@@ -84,7 +84,7 @@ export function Wellcome({navigation}: {navigation: any}) {
               <Title>Since 2017</ Title>
               <Button
                   title="Let's Play"
-                  type='GRAY-BUTTON'
+                  type='GRAY-400-BUTTON'
                   onPress={() => navigation.navigate('signIn')}
               />
           </Content>

@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native";
 import styled, { css } from "styled-components/native";
 
-export type ButtonTypeStyleProps = "GREEN-BUTTON" | "GRAY-BUTTON";
+export type ButtonTypeStyleProps = "GREEN-700-BUTTON" | "GRAY-400-BUTTON";
 
 type Props = {
   type: ButtonTypeStyleProps;
@@ -10,20 +10,20 @@ type Props = {
 export const Container = styled(TouchableOpacity)<Props>`
   flex: 1;
   width: 100%;
-  min-height: 56px;
-  max-height: 56px;
+  min-height: 54px;
+  max-height: 54px;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
 
   ${({ type, theme }) =>
-    type === "GREEN-BUTTON" &&
+    type === "GREEN-700-BUTTON" &&
     css`
       background-color: ${theme.COLORS.green_700};
     `};
 
   ${({ type, theme }) =>
-    type === "GRAY-BUTTON" &&
+    type === "GRAY-400-BUTTON" &&
     css`
       background-color: ${theme.COLORS.gray_400};
     `};

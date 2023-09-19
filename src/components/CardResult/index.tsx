@@ -31,6 +31,7 @@ export function CardResult({
 
     const [gameToUpdate, setGameToUpdate] = useState<GameDTO[]>({} as GameDTO[]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [newPlayer, setNewPlayer] = useState('');
     const [newPosition, setNewPosition] = useState(0);
 
     //==> SETA GAME A SER ATUALIZADO E ABRE MODAL
@@ -46,9 +47,9 @@ export function CardResult({
     };
 
     //==> ATUALIZA RESULTADO DA ETAPA NO FIREBASE
-    const updateGame = (newPosition: number) => {
-        if (newPosition === 0) {
-            Alert.alert('Selecione um nova posição!')
+    const updateGame = (newPlayer: string, newPosition: number) => {
+        if (newPlayer === '' || newPosition === 0) {
+            Alert.alert('Selecione um player e uma posição!')
         } else {
             let pointsUpdated = 0;
             switch (Number(newPosition)) {
@@ -94,6 +95,7 @@ export function CardResult({
                 .collection('game_result')
                 .doc(gameToUpdate[0].doc_id)
                 .update({
+                    name: newPlayer,
                     position: newPosition,
                     points: pointsUpdated
                 })
@@ -151,14 +153,15 @@ export function CardResult({
             </Container>
             <ModalGameUpdate
                 title='Atualizar'
-                text={`Deseja atualizar a posição do ${name} na etapa ${gameNumber} da ${currentSeason.season}º Temporada?`}
-                text2={`Nova posição ${newPosition}`}
+                text={`Deseja atualizar o resultado: ${name} posição ${position}?`}
+                text2={`Selecione o novo resultado:`}
                 modalVisible={modalVisible}
                 greenButtonText='Atualizar'
                 redButtonText='Cancelar'
-                onPressGreenButton={() => updateGame(newPosition)}
+                onPressGreenButton={() => updateGame(newPlayer, newPosition)}
                 onPressRedButton={() => setModalVisible(!modalVisible)}
-                callBackFunction={(newPosition: number) =>  setNewPosition(newPosition)}
+                callBackPlayer={(newPlayer: string) =>  setNewPlayer(newPlayer)}
+                callBackPosition={(newPosition: number) =>  setNewPosition(newPosition)}
             />
         </>
     );

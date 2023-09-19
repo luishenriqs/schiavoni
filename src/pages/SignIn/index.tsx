@@ -15,7 +15,7 @@ import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ButtonText } from '@components/ButtonText';
 import LogoSvg from '../../assets/logoOficial/schiavoniOficial.svg';
-import { UserDTO } from '@dtos/userDTO'
+import { UserDTO } from '@dtos/UserDTO'
 import {
     Container,
     Header,
@@ -159,7 +159,7 @@ export function SignIn({navigation}: {navigation: any}, { }: Props) {
                       />
                       <Button
                           title="Entrar"
-                          type='GRAY-BUTTON'
+                          type='GRAY-400-BUTTON'
                           onPress={getUser}
                       />
                       <ButtonText 

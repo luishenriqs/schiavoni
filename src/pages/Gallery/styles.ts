@@ -37,7 +37,7 @@ export const Legend = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
     font-size: ${theme.FONT_SIZE.LG};
-    font-family: ${theme.FONT_FAMILY.medium};
+    font-family: ${theme.FONT_FAMILY.bold};
   `};
   align-self: center;
 `;

@@ -1,15 +1,12 @@
 import React from 'react';
-import { LabelContainer, LabelPlayer, LabelPower, LabelText } from './styles';
+import { LabelContainer, LabelPlayer, LabelText } from './styles';
 
 export function LabelPlayers() {
   return (
     <LabelContainer>
       <LabelPlayer>
-        <LabelText>Jogador / Aproveitamento de pontos</LabelText>
+        <LabelText>Jogador / Aproveitamento de pontos / Força</LabelText>
       </LabelPlayer>
-      <LabelPower>
-        <LabelText>Força</LabelText>
-      </ LabelPower>
     </LabelContainer>
   );
 };

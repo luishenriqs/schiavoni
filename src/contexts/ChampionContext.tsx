@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createContext, ReactNode } from 'react';
-import { ChampionDTO } from '@dtos/ChampionDTO';
+import { ChampionDTO, HallOfChampionsDTO } from '@dtos/ChampionDTO';
 import { RankingDTO, LevelDTO } from '@dtos/RankingDTO';
 import { CurrentSeasonDTO } from '@dtos/CurrentSeasonDTO';
 import { GameDTO } from '@dtos/GameDTO';
@@ -9,6 +9,8 @@ import { GameDTO } from '@dtos/GameDTO';
 export type ChampionContextDataProps = {
     champion: ChampionDTO;
     setChampionContext: (championData: ChampionDTO) => void;
+    hallOfChampions: HallOfChampionsDTO[];
+    setHallOfChampionsContext: (hallOfChampionData: HallOfChampionsDTO[]) => void;
     ranking: RankingDTO;
     setRankingContext: (rankingData: RankingDTO) => void;
     level: LevelDTO;
@@ -31,6 +33,9 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   const [champion, setChampion] = useState<ChampionDTO>({} as ChampionDTO);
 
   //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
+  const [hallOfChampions, setHallOfChampions] = useState<HallOfChampionsDTO[]>({} as HallOfChampionsDTO[]);
+
+  //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
   const [ranking, setRanking] = useState<RankingDTO>({} as RankingDTO);
 
   //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
@@ -42,9 +47,14 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   //==> ESTADO DO CONTEXTO A SER COMPARTILHADO
   const [gameResult, setGameResult] = useState<GameDTO[]>([] as GameDTO[]);
 
-    //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
+  //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
   function setChampionContext(championData: ChampionDTO) {
     setChampion(championData);
+  };
+
+  //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
+  function setHallOfChampionsContext(hallOfChampionData: HallOfChampionsDTO[]) {
+    setHallOfChampions(hallOfChampionData);
   };
 
   //==> FUNÇÃO QUE SETA UM NOVO VALOR NO CONTEXTO
@@ -71,7 +81,9 @@ export function ChampionContextProvider({ children }: ChampionContextProviderPro
   return (
     <ChampionContext.Provider value={{ 
       champion, 
-      setChampionContext, 
+      setChampionContext,
+      hallOfChampions, 
+      setHallOfChampionsContext,
       ranking, 
       setRankingContext,
       level,

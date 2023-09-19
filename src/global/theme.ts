@@ -23,6 +23,7 @@ export default {
     gray_800: "#202024",
     gray_900: "#1C1C1C",
     gray_1000: "#121214",
+    gray_900_rgba: "rgba(28, 28, 28, 0.5)",
   },
 
   FONT_FAMILY: {
@@ -36,8 +37,10 @@ export default {
     SM: `${RFValue(14)}px`,
     MD: `${RFValue(16)}px`,
     LG: `${RFValue(18)}px`,
-    XL: `${RFValue(20)}px`,
-    XLL: `${RFValue(25)}px`,
-    XXL: `${RFValue(28)}px`,
+    XM: `${RFValue(20)}px`,
+    XL: `${RFValue(22)}px`,
+    XML: `${RFValue(25)}px`,
+    XXM: `${RFValue(28)}px`,
+    XXX: `${RFValue(30)}px`,
   },
 };

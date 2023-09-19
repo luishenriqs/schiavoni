@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useAllPlayers } from '@hooks/useAllPlayers';
 import { ButtonEditable } from '@components/ButtonEditable';
 import ModalComponent from '@components/ModalComponent';
-import { UserDTO } from '@dtos/userDTO';
+import { UserDTO } from '@dtos/UserDTO';
 import {
     Container,
     NameBox,
@@ -116,14 +116,14 @@ export function CardSquadPlayers({
             <ButtonBox>
                 <ButtonEditable 
                     title='Admin'
-                    type={isAdmin ? 'GREEN-BUTTON' : 'GRAY-BUTTON'}
+                    type={isAdmin ? 'GREEN-700-BUTTON' : 'GRAY-400-BUTTON'}
                     width={50}
                     height={100}
                     onPress={() => handleUpdateAdmin(name, isAdmin)}
                 />
                 <ButtonEditable 
                     title={name === 'Dú Schiavoni' ? '-------' : 'Remover'}
-                    type='RED-BUTTON'
+                    type='RED-400-BUTTON'
                     width={50}
                     height={100}
                     onPress={openModal}

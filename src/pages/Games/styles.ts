@@ -9,7 +9,7 @@ export const Container = styled.View`
 
 export const Content = styled.ScrollView`
   flex: 1;
-  width: 100%;
+  width: 85%;
   padding: 0 10%;
   margin-top: 25px;
 `;
@@ -40,7 +40,7 @@ export const SeasonBox = styled.View`
 export const Season = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_100};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
 `;

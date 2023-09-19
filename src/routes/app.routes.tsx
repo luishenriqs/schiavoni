@@ -6,10 +6,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@hooks/useAuth';
 import { useTheme } from 'styled-components';
 import { ChampionPage } from '@pages/ChampionPage';
-import { RankingRoutes } from '@pages/Ranking/ranking.routes';
+import { PSOP } from '@pages/PSOP';
 import { Games } from '@pages/Games';
-import { Profile } from '@pages/Profile';
 import { Gallery } from '@pages/Gallery';
+import { StatisticsRoutes } from '@pages/Statistics/statistics.routes';
+import { Profile } from '@pages/Profile';
+import { HallOfFame } from '@pages/HallOfFame';
 import { ManagerRoutes } from '@pages/Manager/manager.routes';
 import { TermsOfUse } from '@pages/TermsOfUse';
 import { CustomDrawer } from '@components/CustomDrawer';
@@ -50,12 +52,25 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
-        name="Ranking"
-        component={RankingRoutes}
+        name="PSOP"
+        component={PSOP}
         options={{
           drawerIcon: ({color}) => (
             <MaterialCommunityIcons 
-              name='star-outline'
+              name='cards-outline'
+              size={20}
+              color={color}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen 
+        name="Statistics" 
+        component={StatisticsRoutes}
+        options={{
+          drawerIcon: ({color}) => (
+            <MaterialCommunityIcons 
+              name='trending-up'
               size={20}
               color={color}
             />
@@ -76,6 +91,19 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
+        name="Gallery" 
+        component={Gallery}
+        options={{
+          drawerIcon: ({color}) => (
+            <Fontisto 
+              name='photograph'
+              size={20}
+              color={color}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen 
         name="Profile" 
         component={Profile}
         options={{
@@ -89,12 +117,12 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
-        name="Gallery" 
-        component={Gallery}
+        name="HallOfFame" 
+        component={HallOfFame}
         options={{
           drawerIcon: ({color}) => (
-            <Fontisto 
-              name='photograph'
+            <MaterialCommunityIcons 
+              name='star-outline'
               size={20}
               color={color}
             />

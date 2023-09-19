@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { KeyboardAvoidingView, Platform, Alert, ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTheme } from 'styled-components';
@@ -10,7 +10,7 @@ import { Button } from '@components/Button';
 import { PsopImage } from '@components/PsopImage';
 import ModalComponent from '@components/ModalComponent';
 import { getPlayersNames } from '@services/playersServices';
-import { UserDTO, SquadOfPlayersDTO } from '@dtos/userDTO';
+import { UserDTO, SquadOfPlayersDTO } from '@dtos/UserDTO';
 import { GameDTO } from '@dtos/GameDTO';
 import { 
   Container,
@@ -130,6 +130,17 @@ export function NewChampion({navigation}: {navigation: any}) {
         setNewCurrentSeason();
       })
       .catch((error) => console.error(error));
+
+      const hallOfChampionData = {
+        player: name,
+        season: Number(currentSeason.season),
+      };
+
+      firestore()
+      .collection('hall_of_champions')
+      .doc(`Season ${currentSeason.season}`)
+      .set(hallOfChampionData)
+      .catch((error) => console.error(error))
     }
   };
 
@@ -172,7 +183,7 @@ export function NewChampion({navigation}: {navigation: any}) {
   //==> MANTEM APENAS OS RESULTADOS DAS ÚLTIMAS 3 TEMPORADAS
   const removeOldSeason = (allGames: GameDTO[]) => {
     const gamesFromOldSeasons: GameDTO[] = allGames.filter((item) => {
-      if (item.season < currentSeason.season - 2) {
+      if (item.season < currentSeason.season - 6) {
         return item;
       }
     });
@@ -195,43 +206,49 @@ export function NewChampion({navigation}: {navigation: any}) {
   };
 
   return (
-    <Container>
-      <Header
-        title='New Champion'
-        text={`Final da ${currentSeason.season}º Temporada`}
-        headerSize={'big'}
-        onPress={() => navigation.openDrawer()}
-      />
-      <PsopImage />
-      <Content>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          style={{ flex: 1 }}
-        >
-          <Title>Novo Campeão do PSOP</Title>
-          <RNPickerSelect
-            placeholder={playersPlaceholder}
-            onValueChange={(value) => setName(value)}
-            style={pickerSelectStyles}
-            items={squad}
-            value={name}
-          />
-          <Button 
-            title='Campeão do PSOP'
-            onPress={openModal}
-          />
-        </KeyboardAvoidingView>
-      </Content>
+    <ImageBackground 
+      source={require('@assets/wallpapers/blackWallpaper01.jpg')} 
+      resizeMode='cover'
+      style={{flex: 1, alignItems: 'center'}}
+    >
+      <Container>
+        <Header
+          title='New Champion'
+          text={`Final da ${currentSeason.season}º Temporada`}
+          headerSize={'big'}
+          onPress={() => navigation.openDrawer()}
+        />
+          <PsopImage />
+          <Content>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+              style={{ flex: 1 }}
+            >
+              <Title>Registre um novo campeão</Title>
+              <RNPickerSelect
+                placeholder={playersPlaceholder}
+                onValueChange={(value) => setName(value)}
+                style={pickerSelectStyles}
+                items={squad}
+                value={name}
+              />
+              <Button 
+                title='Enviar'
+                onPress={openModal}
+              />
+            </KeyboardAvoidingView>
+          </Content>
 
-      <ModalComponent
-        title={`${name} é o novo PSOP Champion!`}
-        text={`${currentSeason.season}º Temporada`}
-        modalVisible={modalVisible}
-        greenButtonText={`${name} CHAMPION`}
-        redButtonText='Cancelar'
-        onPressGreenButton={handleAddNewChampion}
-        onPressRedButton={() => setModalVisible(!modalVisible)}
-      />
-    </Container>
+          <ModalComponent
+            title={`${name} é o novo PSOP Champion!`}
+            text={`${currentSeason.season}º Temporada`}
+            modalVisible={modalVisible}
+            greenButtonText={`${name} CHAMPION`}
+            redButtonText='Cancelar'
+            onPressGreenButton={handleAddNewChampion}
+            onPressRedButton={() => setModalVisible(!modalVisible)}
+          />
+      </Container>
+    </ImageBackground>
   );
 };

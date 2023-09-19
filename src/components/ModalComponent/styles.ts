@@ -18,7 +18,7 @@ export const ModalView = styled.View`
 export const ModalTitle = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_800};
-    font-size: ${theme.FONT_SIZE.XXL};
+    font-size: ${theme.FONT_SIZE.XXM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
   text-align: center;
@@ -28,7 +28,7 @@ export const ModalTitle = styled.Text`
 export const ModalText = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gray_800};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
   text-align: center;

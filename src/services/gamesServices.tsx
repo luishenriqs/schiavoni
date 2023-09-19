@@ -1,6 +1,6 @@
 import { GameDTO, GamesResultsDTO } from '@dtos/GameDTO';
 
-//==> RECUPERA NOMES DE TODOS OS PLAYERS
+//==> RECUPERA TODOS OS JOGOS DA TEMPORADA
 export const gamesServices = (results: GameDTO[]) => {
 
     const game_1: GameDTO[] = [];

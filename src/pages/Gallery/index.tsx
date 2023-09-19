@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Alert } from 'react-native';
+import { FlatList, Alert, ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { useAuth } from '@hooks/useAuth';
@@ -129,45 +129,51 @@ export function Gallery({navigation}: {navigation: any}) {
         headerSize={'big'}
         onPress={() => navigation.openDrawer()}
       />
-      <PsopImage />
-      <Content>
-        <FlatList
-          data={gallery}
-          keyExtractor={item => item.doc_id}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.1}
-          renderItem={({ item }) => (
-            <Memory>
-              <ImageWrapper>
-                <Imagem 
-                  source={{uri: item.url ? item.url : anonymousURL}}
-                  progressiveRenderingEnabled
-                />
-                {user.isAdmin &&
-                  <ButtonIcon 
-                    onPress={() => handleDelete(item)}
-                    style={{
-                      flexDirection: 'row-reverse',
-                      marginLeft: 20,
-                      marginTop: -50
-                    }}
+      <ImageBackground 
+        source={require('@assets/wallpapers/blackWallpaper01.jpg')} 
+        resizeMode='cover'
+        style={{flex: 1, alignItems: 'center'}}
+      >
+        <PsopImage />
+        <Content>
+          <FlatList
+            data={gallery}
+            keyExtractor={item => item.doc_id}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.1}
+            renderItem={({ item }) => (
+              <Memory>
+                <ImageWrapper>
+                  <Imagem 
+                    source={{uri: item.url ? item.url : anonymousURL}}
+                    progressiveRenderingEnabled
                   />
-                }
-              </ImageWrapper>
-              <Legend>{item.legend}</Legend>
-            </Memory>
-          )}
+                  {user.isAdmin &&
+                    <ButtonIcon 
+                      onPress={() => handleDelete(item)}
+                      style={{
+                        flexDirection: 'row-reverse',
+                        marginLeft: 20,
+                        marginTop: -50
+                      }}
+                    />
+                  }
+                </ImageWrapper>
+                <Legend>{item.legend}</Legend>
+              </Memory>
+            )}
+          />
+        </Content>
+        <ModalComponent
+          title='Deletar'
+          text='Deseja deletar essa imagem?'
+          modalVisible={modalVisible}
+          greenButtonText='Deletar'
+          redButtonText='Cancelar'
+          onPressGreenButton={deleteImage}
+          onPressRedButton={() => setModalVisible(!modalVisible)}
         />
-      </Content>
-      <ModalComponent
-        title='Deletar'
-        text='Deseja deletar essa imagem?'
-        modalVisible={modalVisible}
-        greenButtonText='Deletar'
-        redButtonText='Cancelar'
-        onPressGreenButton={deleteImage}
-        onPressRedButton={() => setModalVisible(!modalVisible)}
-      />
+      </ImageBackground>
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { useChampion } from '@hooks/useChampion';
@@ -6,8 +7,8 @@ import { useAllPlayers } from '@hooks/useAllPlayers';
 import { Loading } from '@components/Loading';
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
-import { UserDTO } from '@dtos/userDTO'
-import { ChampionDTO } from '@dtos/ChampionDTO';
+import { UserDTO } from '@dtos/UserDTO'
+import { ChampionDTO, HallOfChampionsDTO } from '@dtos/ChampionDTO';
 import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
 import {
   Container, 
@@ -22,6 +23,7 @@ export function ChampionPage({navigation}: {navigation: any}) {
   const { 
     champion, 
     setChampionContext, 
+    setHallOfChampionsContext,
     setCurrentSeasonContext, 
     setGameResultContext 
   } = useChampion();
@@ -49,7 +51,8 @@ export function ChampionPage({navigation}: {navigation: any}) {
         if (data.length === 0) {
           createChampion();
         } else {
-          persistChampionData(data[0]);
+          setChampionContext(data[0]);
+          getHallOfChampions();
         };
       },
     }) 
@@ -71,13 +74,56 @@ export function ChampionPage({navigation}: {navigation: any}) {
     .collection('champion')
     .doc('newChampion')
     .set(championData)
-    .then(() => persistChampionData(championData))
+    .then(() => {
+      setChampionContext(championData)
+      getHallOfChampions();
+    })
     .catch((error) => console.error(error));
   };
 
-  //==> PERSISTE DADOS DO CAMPEÃO NO CONTEXTO
-  const persistChampionData = (championData: ChampionDTO) => {
-    setChampionContext(championData);
+  //==> RECUPERA DADOS DO HALL DE CAMPEÕES
+  const getHallOfChampions = () => {
+    const subscribe = firestore()
+    .collection('hall_of_champions')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+          ...doc.data()
+          }
+        }) as HallOfChampionsDTO[]
+        if (data.length === 0) {
+          createHallOfChampions();
+        } else {
+          setHallOfChampionsContext(data);
+          finishLoading();
+        };
+      },
+    }) 
+    return () => subscribe()
+  };
+
+  //==> CRIA DOC HALL OF CHAMPIONS NO FIRESTORE CASO NÃO EXISTA
+  const createHallOfChampions = () => {
+    const hallOfChampionData = {
+      player: 'Anonymous Player',
+      season: 0,
+    };
+
+    firestore()
+    .collection('hall_of_champions')
+    .doc('Season 0')
+    .set(hallOfChampionData)
+    .then(() => {
+      setHallOfChampionsContext([hallOfChampionData]);
+      finishLoading();
+    })
+    .catch((error) => console.error(error))
+  };
+
+  //==> ENCERRA O LOADING E VERIFICA TERMOS DE USO
+  const finishLoading = () => {
     setIsLoading(false);
     if (!user.termsOfUse) navigation.navigate('Terms Of Use');
     getAllPlayers();
@@ -184,15 +230,22 @@ export function ChampionPage({navigation}: {navigation: any}) {
               headerSize={'big'}
               onPress={() => navigation.openDrawer()}
             />
-            <PsopImage />
-            <Content>
-              <Title>Campeão PSOP!</Title>
-              <Text>{champion.name}</Text>
-              {champion.profile
-                ? <Imagem source={{uri: champion.profile}} />
-                : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-              }
-            </Content>
+            <ImageBackground 
+              source={require('@assets/wallpapers/royal01.jpg')} 
+              resizeMode='cover'
+              style={{flex: 1, alignItems: 'center', maxWidth: 1200, minWidth: 500}}
+            >
+              <PsopImage />
+              <Content>
+
+                {champion.profile
+                  ? <Imagem source={{uri: champion.profile}} />
+                  : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
+                }
+                <Title>Campeão PSOP!</Title>
+                <Text>{champion.name}</Text>
+              </Content>
+            </ImageBackground>
           </Container>
       }
     </>

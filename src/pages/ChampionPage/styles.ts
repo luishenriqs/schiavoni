@@ -17,8 +17,9 @@ export const Content = styled.ScrollView`
 
 export const Imagem = styled(Image)`
   align-self: center;
-  width: 300px;
-  height: 300px;
+  width: 240px;
+  height: 240px;
+  margin-top: 80px;
 `;
 
 export const Title = styled.Text`
@@ -34,8 +35,7 @@ export const Text = styled.Text`
   align-self: center;
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
-    font-size: ${theme.FONT_SIZE.XXL};
+    font-size: ${theme.FONT_SIZE.XXX};
     font-family: ${theme.FONT_FAMILY.bold};
-    margin-bottom: 20px;
   `};
 `;

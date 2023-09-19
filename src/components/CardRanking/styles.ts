@@ -15,7 +15,7 @@ export const Container = styled.View`
 `;
 
 export const InfoBox = styled.View<Props>`
-  width: 17%;
+  width: 18%;
   height: 70px;
   align-items: center;
   justify-content: center;
@@ -28,7 +28,7 @@ export const InfoBox = styled.View<Props>`
     `};
 
   ${({ positionStatus, theme }) =>
-    positionStatus <= 3 &&
+    positionStatus <= 1 &&
     css`
       border: 1px solid ${theme.COLORS.green_500};
       background: ${theme.COLORS.gray_700};
@@ -46,7 +46,7 @@ export const Position = styled.Text`
 export const NameBox = styled.View<Props>`
   flex-direction: row;
   justify-content: flex-start;
-  width: 64%;
+  width: 62%;
   margin: 0 3px;
   height: 70px;
   align-items: center;
@@ -59,7 +59,7 @@ export const NameBox = styled.View<Props>`
     `};
 
   ${({ positionStatus, theme }) =>
-    positionStatus <= 3 &&
+    positionStatus <= 1 &&
     css`
       border: 1px solid ${theme.COLORS.green_500};
       background: ${theme.COLORS.gray_700};

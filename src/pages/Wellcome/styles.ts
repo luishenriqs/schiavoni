@@ -12,7 +12,7 @@ export const Header = styled.View`
 export const WellcomeText = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.gold};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.bold};
   `};
 `;

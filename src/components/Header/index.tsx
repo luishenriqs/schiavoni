@@ -16,6 +16,7 @@ interface HeaderProps {
   picture?: string;
   title: string;
   text?: string;
+  icon?: string;
   headerSize: 'big' | 'small';
   onPress(): void;
 };
@@ -24,10 +25,13 @@ export function Header({
   picture,
   title, 
   text, 
-  headerSize, 
+  headerSize,
+  icon = 'menu',
   onPress
 }: HeaderProps) {
   const { user } = useAuth();
+
+  const iconName = !user.termsOfUse ? "logout" : icon;
 
   return (
     <Container>
@@ -43,7 +47,7 @@ export function Header({
           <IconContainer>
             <Icon 
               size={30} 
-              name={user.termsOfUse ? "menu" : "logout"}
+              name={iconName}
               onPress={onPress} 
             />
           </IconContainer>

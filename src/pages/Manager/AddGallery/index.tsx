@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, ImageBackground } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
@@ -86,6 +86,11 @@ export function AddGallery({navigation}: {navigation: any}) {
   };
 
   return (
+  <ImageBackground 
+    source={require('@assets/wallpapers/blackWallpaper02.jpg')} 
+    resizeMode='cover'
+    style={{flex: 1, alignItems: 'center'}}
+  >
     <Container>
       <Header
         title='Add to Gallery'
@@ -115,5 +120,6 @@ export function AddGallery({navigation}: {navigation: any}) {
         <Transferred>'{bytesTransferred}'</Transferred>
       </Content>
     </Container>
+  </ImageBackground>
   );
 };
