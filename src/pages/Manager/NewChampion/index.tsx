@@ -183,7 +183,7 @@ export function NewChampion({navigation}: {navigation: any}) {
   //==> MANTEM APENAS OS RESULTADOS DAS ÚLTIMAS 3 TEMPORADAS
   const removeOldSeason = (allGames: GameDTO[]) => {
     const gamesFromOldSeasons: GameDTO[] = allGames.filter((item) => {
-      if (item.season < currentSeason.season - 5) {
+      if (item.season < currentSeason.season - 6) {
         return item;
       }
     });

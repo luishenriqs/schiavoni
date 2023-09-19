@@ -105,7 +105,7 @@ export function Performance({route, navigation}: any) {
     setFocusedSeason(2)
   };
 
-  const handleSearchPenultimateSeason = () => {
+  const handleSearchLastSeason = () => {
     const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 1) return item;
     });
@@ -113,26 +113,26 @@ export function Performance({route, navigation}: any) {
     statistics && setStatistics(statistics)
     setFocusedSeason(3)
   };
+  
+    const handleSearchAntiPenultimateSeason = () => {
+      const seasonGames = games.filter((item) => {
+        if (item.season === currentSeason.season - 3) return item;
+      });
+      const statistics: StatisticsDTO = processStatistics(seasonGames, player);
+      statistics && setStatistics(statistics)
+      setFocusedSeason(4)
+    };
 
-  const handleSearchAntiPenultimateSeason = () => {
+  const handleSearchPenultimateSeason = () => {
     const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 2) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(4)
-  };
-
-  const handleSearchThirdOldestSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 3) return item;
     });
     const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(5)
   };
 
-  const handleSearchSecondOldestSeason = () => {
+  const handleSearchThirdOldestSeason = () => {
     const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 4) return item;
     });
@@ -141,13 +141,22 @@ export function Performance({route, navigation}: any) {
     setFocusedSeason(6)
   };
 
-  const handleSearchOlderSeason = () => {
+  const handleSearchSecondOldestSeason = () => {
     const seasonGames = games.filter((item) => {
       if (item.season === currentSeason.season - 5) return item;
     });
     const statistics: StatisticsDTO = processStatistics(seasonGames, player);
     statistics && setStatistics(statistics)
     setFocusedSeason(7)
+  };
+
+  const handleSearchOldestSeason = () => {
+    const seasonGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 6) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(8)
   };
 
   const getStatistcs = (games: GameDTO[], player: UserDTO) => {
@@ -157,16 +166,16 @@ export function Performance({route, navigation}: any) {
 
   return (
     <Container>
+      <ImageBackground 
+        source={require('@assets/wallpapers/hands04.jpg')} 
+        resizeMode='cover'
+        style={{flex: 1, alignItems: 'center'}}
+      >
       {
         url 
           ? <Imagem source={{uri: url}}/> 
           : <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
       }
-      <ImageBackground 
-        source={require('@assets/wallpapers/hands03.jpg')} 
-        resizeMode='cover'
-        style={{flex: 1, alignItems: 'center'}}
-      >
         <StatisticsHeader>
           <BackButton onPress={() => navigation.goBack()}>
             <Icon name='arrow-back' size={25}/>
@@ -177,7 +186,7 @@ export function Performance({route, navigation}: any) {
           
         <ButtonsContainer>
           <ButtonEditable 
-            title='Últimas 4 temporadas'
+            title='Últimas 6 temporadas'
             width={98}
             height={100}
             type={focusedSeason === 1 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
@@ -187,20 +196,20 @@ export function Performance({route, navigation}: any) {
         <ButtonsContainer>
           <ButtonEditable 
             title={`Temporada Atual`}
-            width={49}
+            width={98}
             height={100}
             type={focusedSeason === 2 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
             onPress={() => handleSearchCurrentSeason()}
           />
+        </ButtonsContainer>
+        <ButtonsContainer>
           <ButtonEditable 
             title={`${currentSeason.season - 1}º Temporada`}
             width={49}
             height={100}
             type={focusedSeason === 3 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchPenultimateSeason()}
+            onPress={() => handleSearchLastSeason()}
           />
-        </ButtonsContainer>
-        <ButtonsContainer>
           <ButtonEditable 
             title={`${currentSeason.season - 2}º Temporada`}
             width={49}
@@ -208,12 +217,37 @@ export function Performance({route, navigation}: any) {
             type={focusedSeason === 4 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
             onPress={() => handleSearchAntiPenultimateSeason()}
           />
+        </ButtonsContainer>
+        <ButtonsContainer>
           <ButtonEditable 
             title={`${currentSeason.season - 3}º Temporada`}
             width={49}
             height={100}
             type={focusedSeason === 5 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            onPress={() => handleSearchPenultimateSeason()}
+          />
+          <ButtonEditable 
+            title={`${currentSeason.season - 4}º Temporada`}
+            width={49}
+            height={100}
+            type={focusedSeason === 6 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
             onPress={() => handleSearchThirdOldestSeason()}
+          />
+        </ButtonsContainer>
+        <ButtonsContainer>
+          <ButtonEditable 
+            title={`${currentSeason.season - 5}º Temporada`}
+            width={49}
+            height={100}
+            type={focusedSeason === 7 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            onPress={() => handleSearchSecondOldestSeason()}
+          />
+          <ButtonEditable 
+            title={`${currentSeason.season - 6}º Temporada`}
+            width={49}
+            height={100}
+            type={focusedSeason === 8 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
+            onPress={() => handleSearchOldestSeason()}
           />
         </ButtonsContainer>
         {
