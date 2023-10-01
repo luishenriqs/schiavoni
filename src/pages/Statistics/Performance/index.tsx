@@ -17,13 +17,16 @@ import {
   Icon,
   ButtonsContainer,
   Title, 
+  Columns,
   Stats,
   Positions,
   Text, 
   GreenText,
   RedText,
   YellowText,
-  Imagem 
+  Imagem,
+  WarningContainer,
+  Warning,
 } from './styles';
 
 export function Performance({route, navigation}: any) {
@@ -166,11 +169,6 @@ export function Performance({route, navigation}: any) {
 
   return (
     <Container>
-      <ImageBackground 
-        source={require('@assets/wallpapers/hands04.jpg')} 
-        resizeMode='cover'
-        style={{flex: 1, alignItems: 'center'}}
-      >
       {
         url 
           ? <Imagem source={{uri: url}}/> 
@@ -255,29 +253,38 @@ export function Performance({route, navigation}: any) {
             ? <Loading/>
             :
               <Content>
-                <Stats>
-                  <Text>Participações: {statistics.appearances}</Text>
-                  <Text>Pontos: {statistics.totalPoints}</Text>
-                  <Text>Média: {statistics.pointsAverage}</Text>
-                  <Text>Aproveitamento: {statistics?.playerPerformance?.percent} %</Text>
-                </Stats>
-                <Positions>
-                  {statistics?.results?.first !== 0 && <GreenText>Vitórias: {statistics?.results?.first}</GreenText>}
-                  {statistics?.results?.second !== 0 && <GreenText>2º Posição: {statistics?.results?.second}</GreenText>}
-                  {statistics?.results?.third !== 0 && <GreenText>3º Posição: {statistics?.results?.third}</GreenText>}
-                  {statistics?.results?.fourth !== 0 && <YellowText>4º Posição: {statistics?.results?.fourth}</YellowText>}
-                  {statistics?.results?.fifth !== 0 && <YellowText>5º Posição: {statistics?.results?.fifth}</YellowText>}
-                  {statistics?.results?.sixth !== 0 && <RedText>6º Posição: {statistics?.results?.sixth}</RedText>}
-                  {statistics?.results?.seventh !== 0 && <RedText>7º Posição: {statistics?.results?.seventh}</RedText>}
-                  {statistics?.results?.eighth !== 0 && <RedText>8º Posição: {statistics?.results?.eighth}</RedText>}
-                  {statistics?.results?.ninth !== 0 && <RedText>9º Posição: {statistics?.results?.ninth}</RedText>}
-                  {statistics?.results?.tenth !== 0 && <RedText>10º Posição: {statistics?.results?.tenth}</RedText>}
-                  {statistics?.results?.eleventh !== 0 && <RedText>11º Posição: {statistics?.results?.eleventh}</RedText>}
-                  {statistics?.results?.twelfth !== 0 && <RedText>12º Posição: {statistics?.results?.twelfth}</RedText>}
-                </Positions>
+                {statistics.appearances !== 0
+                  ?
+                    <Columns>
+                      <Stats>
+                        <Text>Desempenho: {statistics?.playerPerformance?.percent} %</Text>
+                        <Text>Participações: {statistics.appearances}</Text>
+                        <Text>Pontos: {statistics.totalPoints}</Text>
+                        <Text>Média: {statistics.pointsAverage}</Text>
+                      </Stats>
+                      <Positions>
+                        {statistics?.results?.first !== 0 && <GreenText>Vitórias:  {statistics?.results?.first}</GreenText>}
+                        {statistics?.results?.second !== 0 && <GreenText>2º Posição:  {statistics?.results?.second}</GreenText>}
+                        {statistics?.results?.third !== 0 && <GreenText>3º Posição:  {statistics?.results?.third}</GreenText>}
+                        {statistics?.results?.fourth !== 0 && <YellowText>4º Posição:  {statistics?.results?.fourth}</YellowText>}
+                        {statistics?.results?.fifth !== 0 && <YellowText>5º Posição:  {statistics?.results?.fifth}</YellowText>}
+                        {statistics?.results?.sixth !== 0 && <RedText>6º Posição:  {statistics?.results?.sixth}</RedText>}
+                        {statistics?.results?.seventh !== 0 && <RedText>7º Posição:  {statistics?.results?.seventh}</RedText>}
+                        {statistics?.results?.eighth !== 0 && <RedText>8º Posição:  {statistics?.results?.eighth}</RedText>}
+                        {statistics?.results?.ninth !== 0 && <RedText>9º Posição:  {statistics?.results?.ninth}</RedText>}
+                        {statistics?.results?.tenth !== 0 && <RedText>10º Posição:  {statistics?.results?.tenth}</RedText>}
+                        {statistics?.results?.eleventh !== 0 && <RedText>11º Posição:  {statistics?.results?.eleventh}</RedText>}
+                        {statistics?.results?.twelfth !== 0 && <RedText>12º Posição:  {statistics?.results?.twelfth}</RedText>}
+                      </Positions>
+                    </Columns>
+                  : 
+                    <WarningContainer>
+                        <Warning>NENHUM DADO</Warning>
+                        <Warning>REGISTRADO</Warning>
+                    </WarningContainer>
+                }
               </Content>
         }
-      </ImageBackground>
     </Container>
   );
 };

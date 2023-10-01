@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 export const Container = styled.View`
   flex: 1;
   width: 100%;
-  background: ${({ theme }) => theme.COLORS.gray_600};
+  background: ${({ theme }) => theme.COLORS.black};
 `;
 
 export const Imagem = styled(Image)`
@@ -26,7 +26,7 @@ export const StatisticsHeader = styled.View`
 export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
-  padding: 0px 25px 10px;
+  padding: 25px 25px 10px;
 `;
 
 export const Title = styled.Text`
@@ -63,24 +63,33 @@ export const ButtonsContainer = styled.View`
   margin: 0 8px 6px;
 `;
 
+export const Columns = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 export const Stats = styled.View`
   margin-top: 15px;
+  justify-content: center;
 `;
 
 export const Positions = styled.View`
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin: 15px 0px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Text = styled.Text`
+  margin-bottom: 5px;
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.MD};
-    font-family: ${theme.FONT_FAMILY.regular};
+    font-size: ${theme.FONT_SIZE.LG};
+    font-family: ${theme.FONT_FAMILY.bold};
     color: ${theme.COLORS.white};
   `};
 `;
 
 export const GreenText = styled.Text`
+  margin-bottom: 5px;
   ${({ theme }) => css`
     font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
@@ -89,6 +98,7 @@ export const GreenText = styled.Text`
 `;
 
 export const RedText = styled.Text`
+  margin-bottom: 5px;
   ${({ theme }) => css`
     font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
@@ -97,9 +107,25 @@ export const RedText = styled.Text`
 `;
 
 export const YellowText = styled.Text`
+  margin-bottom: 5px;
   ${({ theme }) => css`
     font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.gold};
+  `};
+`;
+
+export const WarningContainer = styled.View`
+  flex: 1;
+  height: 250px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Warning = styled.Text`
+  ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.XML};
+    font-family: ${theme.FONT_FAMILY.bold};
+    color: ${theme.COLORS.red_700};
   `};
 `;
