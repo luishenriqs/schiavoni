@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useChampion } from '@hooks/useChampion';
 import { Loading } from '@components/Loading';

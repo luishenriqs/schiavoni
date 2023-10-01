@@ -102,8 +102,8 @@ export const ImageContent = styled.View`
 `;
 
 export const ImageProfileAndAvatar = styled.Image`
-  width: ${RFValue(70)}px;
-  height: ${RFValue(70)}px;
+  width: ${RFValue(62)}px;
+  height: ${RFValue(62)}px;
   border-radius: 5px;
 `;
 
