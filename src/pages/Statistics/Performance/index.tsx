@@ -114,14 +114,14 @@ export function Performance({route, navigation}: any) {
     setFocusedSeason(3)
   };
   
-    const handleSearchAntiPenultimateSeason = () => {
-      const seasonGames = games.filter((item) => {
-        if (item.season === currentSeason.season - 3) return item;
-      });
-      const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-      statistics && setStatistics(statistics)
-      setFocusedSeason(4)
-    };
+  const handleSearchAntiPenultimateSeason = () => {
+    const seasonGames = games.filter((item) => {
+      if (item.season === currentSeason.season - 3) return item;
+    });
+    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
+    statistics && setStatistics(statistics)
+    setFocusedSeason(4)
+  };
 
   const handleSearchPenultimateSeason = () => {
     const seasonGames = games.filter((item) => {
