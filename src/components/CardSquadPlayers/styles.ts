@@ -37,8 +37,8 @@ export const ImageContent = styled.View`
 `;
 
 export const ImageProfileAndAvatar = styled.Image`
-  width: ${RFValue(65)}px;
-  height: ${RFValue(70)}px;
+  width: ${RFValue(68)}px;
+  height: ${RFValue(68)}px;
   border-radius: 5px;
 `;
 

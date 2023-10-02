@@ -85,18 +85,18 @@ export const ModalGameUpdate: React.FC<Props> = ({
 
   //==> POSIÇÕES POSSÍVEIS PARA O SELECT
   const positions = [
-    { label: '1 - Primeiro Colocado', value: '1' },
-    { label: '2 - Segundo Colocado', value: '2' },
-    { label: '3 - Terceiro Colocado', value: '3' },
-    { label: '4 - Quarto Colocado', value: '4' },
-    { label: '5 - Quinto Colocado', value: '5' },
-    { label: '6 - Sexto Colocado', value: '6' },
-    { label: '7 - Sétimo Colocado', value: '7' },
-    { label: '8 - Oitavo Colocado', value: '8' },
-    { label: '9 - Nono Colocado', value: '9' },
-    { label: '10 - Décimo Colocado', value: '10' },
-    { label: '11 - Décimo Primeiro Colocado', value: '11' },
-    { label: '12 - Décimo Segundo Colocado', value: '12' }
+    { label: '1 - Primeiro Colocado', value: 1 },
+    { label: '2 - Segundo Colocado', value: 2 },
+    { label: '3 - Terceiro Colocado', value: 3 },
+    { label: '4 - Quarto Colocado', value: 4 },
+    { label: '5 - Quinto Colocado', value: 5 },
+    { label: '6 - Sexto Colocado', value: 6 },
+    { label: '7 - Sétimo Colocado', value: 7 },
+    { label: '8 - Oitavo Colocado', value: 8 },
+    { label: '9 - Nono Colocado', value: 9 },
+    { label: '10 - Décimo Colocado', value: 10 },
+    { label: '11 - Décimo Primeiro Colocado', value: 11 },
+    { label: '12 - Décimo Segundo Colocado', value: 12 }
   ];
 
   useEffect(() => {
