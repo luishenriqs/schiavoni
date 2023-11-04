@@ -96,9 +96,6 @@ export function Performance({route, navigation}: any) {
   };
 
   const handleSearchSeason = () => {
-
-    console.log('Season ---> ', currentSeason.season + index)
-
     if (index === 1) {
       const statistics: StatisticsDTO = processStatistics(games, player);
       statistics && setStatistics(statistics)
