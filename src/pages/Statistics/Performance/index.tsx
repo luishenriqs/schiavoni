@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useChampion } from '@hooks/useChampion';
 import { Loading } from '@components/Loading';
+import { ButtonIcon } from '@components/ButtonIcon';
 import { processStatistics } from '@services/levelServices';
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
@@ -15,6 +16,7 @@ import {
   BackButton,
   Icon,
   ButtonsContainer,
+  SeasonLabel,
   Title, 
   Columns,
   Stats,
@@ -36,6 +38,7 @@ export function Performance({route, navigation}: any) {
   const [games, setGames] = useState([] as GameDTO[]);
   const [statistics, setStatistics] = useState({} as StatisticsDTO);
   const [focusedSeason, setFocusedSeason] = useState(1);
+  const [index, setIndex] = useState(1);
 
   const url = !!player.profile && player.profile;
 
@@ -92,74 +95,25 @@ export function Performance({route, navigation}: any) {
     return () => subscribe();
   };
 
-  const handleSearchLastSeasons = () => {
-    const statistics: StatisticsDTO = processStatistics(games, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(1)
+  const handleSearchSeason = () => {
+
+    console.log('Season ---> ', currentSeason.season + index)
+
+    if (index === 1) {
+      const statistics: StatisticsDTO = processStatistics(games, player);
+      statistics && setStatistics(statistics)
+    } else {
+      const seasonGames = games.filter((item) => {
+        if (item.season === currentSeason.season + index) return item;
+      });
+      const statistics: StatisticsDTO = processStatistics(seasonGames, player);
+      statistics && setStatistics(statistics)
+    }
   };
 
-  const handleSearchCurrentSeason = () => {
-    const currentGames = games.filter((item) => {
-      if (item.season === currentSeason.season) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(currentGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(2)
-  };
-
-  const handleSearchLastSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 1) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(3)
-  };
-  
-  const handleSearchAntiPenultimateSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 3) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(4)
-  };
-
-  const handleSearchPenultimateSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 2) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(5)
-  };
-
-  const handleSearchThirdOldestSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 4) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(6)
-  };
-
-  const handleSearchSecondOldestSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 5) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(7)
-  };
-
-  const handleSearchOldestSeason = () => {
-    const seasonGames = games.filter((item) => {
-      if (item.season === currentSeason.season - 6) return item;
-    });
-    const statistics: StatisticsDTO = processStatistics(seasonGames, player);
-    statistics && setStatistics(statistics)
-    setFocusedSeason(8)
-  };
+  useEffect(() => {
+    handleSearchSeason();
+  }, [index]);
 
   const getStatistcs = (games: GameDTO[], player: UserDTO) => {
     const statistics: StatisticsDTO = processStatistics(games, player);
@@ -180,72 +134,40 @@ export function Performance({route, navigation}: any) {
           <Title>{name}</Title>
           <Empty />
         </StatisticsHeader>
-          
-        <ButtonsContainer>
-          <ButtonEditable 
-            title='Últimas 6 temporadas'
-            width={98}
-            height={100}
-            type={focusedSeason === 1 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchLastSeasons()}
-          />
-        </ButtonsContainer>
-        <ButtonsContainer>
-          <ButtonEditable 
-            title={`Temporada Atual`}
-            width={98}
-            height={100}
-            type={focusedSeason === 2 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchCurrentSeason()}
-          />
-        </ButtonsContainer>
-        <ButtonsContainer>
-          <ButtonEditable 
-            title={`${currentSeason.season - 1}º Temporada`}
-            width={49}
-            height={100}
-            type={focusedSeason === 3 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchLastSeason()}
-          />
-          <ButtonEditable 
-            title={`${currentSeason.season - 2}º Temporada`}
-            width={49}
-            height={100}
-            type={focusedSeason === 4 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchAntiPenultimateSeason()}
-          />
-        </ButtonsContainer>
-        <ButtonsContainer>
-          <ButtonEditable 
-            title={`${currentSeason.season - 3}º Temporada`}
-            width={49}
-            height={100}
-            type={focusedSeason === 5 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchPenultimateSeason()}
-          />
-          <ButtonEditable 
-            title={`${currentSeason.season - 4}º Temporada`}
-            width={49}
-            height={100}
-            type={focusedSeason === 6 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchThirdOldestSeason()}
-          />
-        </ButtonsContainer>
-        <ButtonsContainer>
-          <ButtonEditable 
-            title={`${currentSeason.season - 5}º Temporada`}
-            width={49}
-            height={100}
-            type={focusedSeason === 7 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchSecondOldestSeason()}
-          />
-          <ButtonEditable 
-            title={`${currentSeason.season - 6}º Temporada`}
-            width={49}
-            height={100}
-            type={focusedSeason === 8 ? 'GRAY-500-BUTTON' : 'GRAY-900-BUTTON'}
-            onPress={() => handleSearchOldestSeason()}
-          />
+
+        <ButtonsContainer style={{ marginTop: 10, paddingLeft: 60, paddingRight: 60 }}>
+          {index < 0
+            ?
+              <ButtonIcon 
+                onPress={() => setIndex(index + 1)}
+                name={'chevron-left'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : index === 0
+              ?
+                <ButtonIcon 
+                  onPress={() => setIndex(1)}
+                  name={'chevron-double-left'}
+                  size={30}
+                  style={{ marginRight: 15 }}
+                />
+              : <Empty />   
+          }
+          {index === 1
+            ? <SeasonLabel>Desde a 30° Temporada</SeasonLabel>
+            : <SeasonLabel>Temporada {currentSeason.season + index}</SeasonLabel>
+          }
+          {currentSeason.season + index > 30
+            ?
+              <ButtonIcon 
+                onPress={() => setIndex(index - 1)}
+                name={'chevron-right'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : <Empty />
+          }
         </ButtonsContainer>
         {
           isLoading 
@@ -277,10 +199,7 @@ export function Performance({route, navigation}: any) {
                       </Positions>
                     </Columns>
                   : 
-                    <WarningContainer>
-                        <Warning>NENHUM DADO</Warning>
-                        <Warning>REGISTRADO</Warning>
-                    </WarningContainer>
+                    <Empty />  
                 }
               </Content>
         }

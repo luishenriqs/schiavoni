@@ -26,7 +26,7 @@ export const StatisticsHeader = styled.View`
 export const Content = styled.ScrollView`
   flex: 1;
   width: 100%;
-  padding: 25px 25px 10px;
+  padding: 25px 15px 10px;
 `;
 
 export const Title = styled.Text`
@@ -63,6 +63,14 @@ export const ButtonsContainer = styled.View`
   margin: 0 8px 6px;
 `;
 
+export const SeasonLabel = styled.Text`
+  ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.MD};
+    font-family: ${theme.FONT_FAMILY.bold};
+    color: ${theme.COLORS.gold};
+  `};
+`;
+
 export const Columns = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -71,18 +79,20 @@ export const Columns = styled.View`
 export const Stats = styled.View`
   margin-top: 15px;
   justify-content: center;
+  width: 60%;
 `;
 
 export const Positions = styled.View`
   margin: 15px 0px;
   justify-content: center;
   align-items: center;
+  width: 40%;
 `;
 
 export const Text = styled.Text`
   margin-bottom: 5px;
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.LG};
+    font-size: ${theme.FONT_SIZE.MD};
     font-family: ${theme.FONT_FAMILY.bold};
     color: ${theme.COLORS.white};
   `};
@@ -91,7 +101,7 @@ export const Text = styled.Text`
 export const GreenText = styled.Text`
   margin-bottom: 5px;
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.MD};
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.green_500};
   `};
@@ -100,7 +110,7 @@ export const GreenText = styled.Text`
 export const RedText = styled.Text`
   margin-bottom: 5px;
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.MD};
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.red_200};
   `};
@@ -109,7 +119,7 @@ export const RedText = styled.Text`
 export const YellowText = styled.Text`
   margin-bottom: 5px;
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.MD};
+    font-size: ${theme.FONT_SIZE.SM};
     font-family: ${theme.FONT_FAMILY.regular};
     color: ${theme.COLORS.gold};
   `};
