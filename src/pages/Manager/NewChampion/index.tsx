@@ -180,10 +180,10 @@ export function NewChampion({navigation}: {navigation: any}) {
     return () => subscribe();
   };
 
-  //==> MANTEM APENAS OS RESULTADOS DAS ÚLTIMAS 3 TEMPORADAS
+  //==> MANTEM APENAS OS RESULTADOS DAS ÚLTIMAS 12 TEMPORADAS
   const removeOldSeason = (allGames: GameDTO[]) => {
     const gamesFromOldSeasons: GameDTO[] = allGames.filter((item) => {
-      if (item.season < currentSeason.season - 6) {
+      if (item.season < currentSeason.season - 12) {
         return item;
       }
     });

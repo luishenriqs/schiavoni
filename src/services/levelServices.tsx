@@ -20,10 +20,11 @@ const sumPoints = (games: GameDTO[]) => {
 //==> CALCULA PERCENTUAL DE APROVEITAMENTO DO PLAYER
 const performance = (data: PercentPerformanceDTO) => {
     const percent = data.totalPoints / ((data.appearances * 25) / 100);
+    const appearances = data.appearances; 
 
     let power = 0;
-    if (percent >= 65) power = 5;
-    if (percent < 65 && percent >= 50) power = 4;
+    if (percent >= 60) power = 5;
+    if (percent < 60 && percent >= 50) power = 4;
     if (percent < 50 && percent >= 40) power = 3;
     if (percent < 40 && percent >= 30) power = 2;
     if (percent < 30 && percent >= 20) power = 1;
@@ -33,6 +34,7 @@ const performance = (data: PercentPerformanceDTO) => {
         player: data.playerName,
         percent: Number(percent.toFixed(2)),
         power,
+        appearances,
     }
     return performance;
 }
@@ -100,7 +102,6 @@ export const getLevel = (
 ) => {
     const results = games && getPlayersResults(games);
     const level = results && processLevel(results, allPlayers);
-
     return { level, results };
 };
 

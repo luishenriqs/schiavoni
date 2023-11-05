@@ -50,8 +50,15 @@ export type LevelProps = {
   power: number;
   profile?: string;
   avatar?: string;
+  percent: number;
+  appearances: number;
 };
 
 export type LevelDTO = {
-  level: LevelProps[];
+  player: string;
+  power: number;
+  profile?: string;
+  avatar?: string;
+  percent: number;
+  appearances: number;
 }[];

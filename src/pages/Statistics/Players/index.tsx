@@ -66,11 +66,25 @@ export function StatisticsPlayers({navigation}: {navigation: any}) {
     return () => subscribe();
   };
 
+
+  useEffect(() => {
+    console.log('level length 1', level.length)
+  }, []);
+
+
+  //==> REMOVE JOGADORES COM MENOS DE 8 JOGOS
+  level.map((item) => {
+    if (item.appearances < 8) {
+      const index = level.indexOf(item);
+      level.splice(index, 1);
+    }
+});
+
   return (
     <Container>
       <Header
         title='Statistics'
-        text={`Últimas 3 Temporadas`}
+        text={`Desde a 30° Temporada`}
         picture={user.profile ? user.profile : anonymousURL}
         headerSize={'small'}
         onPress={() => navigation.openDrawer()}
