@@ -39,7 +39,7 @@ export const Label = styled.Text`
 `;
 
 export const ImageWrapper = styled.View`
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   align-self: center;
 `;
@@ -49,8 +49,8 @@ export const ImageContent = styled.View`
 `;
 
 export const ImageProfileAndAvatar = styled.Image`
-  width: ${RFValue(130)}px;
-  height: ${RFValue(130)}px;
+  width: ${RFValue(230)}px;
+  height: ${RFValue(230)}px;
   margin: 15px 2px;
   border-radius: 5px;
 `;

@@ -30,10 +30,6 @@ export function Profile({navigation}: {navigation: any}) {
   const [progressProfileImage, setProgressProfileImage] = useState('0');
   const [bytesTransferredProfileImage, setBytesTransferredProfileImage] = useState('0 transferido de 0');
   
-  const [avatar, setAvatar] = useState('');
-  const [progressAvatar, setProgressAvatar] = useState('0');
-  const [bytesTransferredAvatar, setBytesTransferredAvatar] = useState('0 transferido de 0');
-
   //==> ATUALIZA PROFILE URL NO FIRESTORE
   const updateProfileImageURL = async (url: string) => {
     url && (
@@ -42,18 +38,6 @@ export function Profile({navigation}: {navigation: any}) {
       .doc(user.doc_id)
       .update({
         profile: url 
-      })
-    );
-  };
-
-  //==> ATUALIZA AVATAR URL NO FIRESTORE
-  const updateAvatarURL = async (url: string) => {
-    url && (
-      firestore()
-      .collection('players')
-      .doc(user.doc_id)
-      .update({
-        avatar: url 
       })
     );
   };
@@ -121,23 +105,6 @@ export function Profile({navigation}: {navigation: any}) {
     }
   }; 
 
-  //==> SELECIONA NOVO AVATAR
-  const handlePickAvatar = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status == 'granted') {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        aspect: [4, 4],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setAvatar(result.assets[0].uri);
-      }
-    }
-  };
-
   //==> ATUALIZA NOVA IMAGEM DO PERFIL
   const handleProfileImageUpload = async () => {
     if (profileImage) {
@@ -165,33 +132,6 @@ export function Profile({navigation}: {navigation: any}) {
     };
   };
   
-  //==> ATUALIZA NOVO AVATAR
-  const handleProfileAvatarUpload = async () => {
-    if(avatar) {
-      const fileName = 'Avatar_' + user.name;
-      const MIME = avatar.match(/\.(?:.(?!\.))+$/);
-      const reference = storage().ref(`/Avatar/${fileName}${MIME}`);
-  
-      const uploadTask = reference.putFile(avatar);
-  
-      uploadTask.on('state_changed', taskSnapshot => {
-        const percentage = ((taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100).toFixed(0);
-        setProgressAvatar(percentage);
-        
-        setBytesTransferredAvatar(`${taskSnapshot.bytesTransferred} transferido de ${taskSnapshot.totalBytes}`);
-      });
-      uploadTask.then(async () => {
-        const url = await reference.getDownloadURL();
-        await updateAvatarURL(url);
-        await getUserFirestore()
-        Alert.alert('Atualização realizada com sucesso!');
-      });
-      uploadTask.catch(error => console.error(error));
-    } else {
-      Alert.alert('Selecione um novo avatar!');
-    };
-  };
-
   return (
     <Container>
       <Header
@@ -224,7 +164,7 @@ export function Profile({navigation}: {navigation: any}) {
                   uri={profileImage} 
                   onPress={handlePickProfileImage}
                   text='Selecione sua imagem de perfil'
-                  size={130}
+                  size={180}
                 />
               </ImageContent>
             </ImageWrapper>
@@ -235,38 +175,6 @@ export function Profile({navigation}: {navigation: any}) {
             <Status>
               <Progress>{progressProfileImage}%</Progress>
               <Transferred>'{bytesTransferredProfileImage}'</Transferred>
-            </Status>
-          </ImageContainer>
-          
-          <ImageContainer>
-            <LabelContainer>
-              <Label>Avatar</Label>
-            </LabelContainer>
-            <ImageWrapper>
-              {user.avatar
-                ? <ImageContent>
-                    <ImageProfileAndAvatar source={{uri: user.avatar}}/>
-                  </ImageContent>
-                : <ImageContent>
-                    <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-                  </ImageContent>
-              }
-              <ImageContent>
-                <Photo 
-                  uri={avatar} 
-                  onPress={handlePickAvatar}
-                  text='Selecione seu novo avatar'
-                  size={130}
-                />
-              </ImageContent>
-            </ImageWrapper>
-            <Button
-              title="Atualize seu avatar"
-              onPress={handleProfileAvatarUpload}
-            />
-            <Status>
-              <Progress>{progressAvatar}%</Progress>
-              <Transferred>'{bytesTransferredAvatar}'</Transferred>
             </Status>
           </ImageContainer>
         </Content>
