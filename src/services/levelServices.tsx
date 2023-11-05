@@ -1,6 +1,6 @@
 import { getPlayersResults } from '@services/resultServices';
 import { GameDTO, ResultsDTO } from '@dtos/GameDTO';
-import { LevelProps, PercentPerformanceDTO } from '@dtos/RankingDTO';
+import { LevelDTO, LevelProps, PercentPerformanceDTO } from '@dtos/RankingDTO';
 import { UserDTO } from '@dtos/UserDTO';
 
 const anonymousURL = 'anonymousURL';
@@ -101,7 +101,7 @@ export const getLevel = (
     allPlayers: UserDTO[]
 ) => {
     const results = games && getPlayersResults(games);
-    const level = results && processLevel(results, allPlayers);
+    const level: LevelDTO = results && processLevel(results, allPlayers);
     return { level, results };
 };
 

@@ -171,9 +171,9 @@ export function Profile({navigation}: {navigation: any}) {
   //==> BUSCA A IMAGEM DE PERFIL DO JOGADOR SELECIONADO
   useEffect(() => {
     const player = allPlayers.filter(item => {
-      if (item.name === selectedName) return item
+      if (item.name === selectedName) return item;
     })
-    setSelectedProfile(player[0].profile)
+    player.length !== 0 && setSelectedProfile(player[0].profile);
   }, [selectedName]);
 
   //==> ATUALIZA NOVA IMAGEM DO PERFIL

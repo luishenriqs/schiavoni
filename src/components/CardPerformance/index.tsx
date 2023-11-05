@@ -19,7 +19,7 @@ import {
     power: number;
     percent: number;
     name: string;
-    avatar: string;
+    profile: string;
     onPress: () => void
 };
 
@@ -27,7 +27,7 @@ export function CardPerformance({
         power,
         percent,
         name,
-        avatar,
+        profile,
         onPress,
         ...rest
     }: IProps
@@ -64,8 +64,8 @@ export function CardPerformance({
         >
             <PlayerContainer>
                 <ImageContent>
-                    {avatar !== 'anonymousURL'
-                        ? <ImageProfileAndAvatar source={{uri: avatar}}/>
+                    {profile !== 'anonymousURL'
+                        ? <ImageProfileAndAvatar source={{uri: profile}}/>
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>

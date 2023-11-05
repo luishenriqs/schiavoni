@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
@@ -11,12 +11,15 @@ import { CardPerformance } from "@components/CardPerformance";
 import { LabelPlayers } from "@components/LabelPlayers";
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
+import { LevelDTO } from '@dtos/RankingDTO';
 import { Container, Content, Title } from './styles';
 
 export function StatisticsPlayers({navigation}: {navigation: any}) {
   const { user } = useAuth();
   const { level, setLevelContext } = useChampion();
   const { setAllPlayersContext } = useAllPlayers();
+
+  const [playersToShow, setPlayersToShow] = useState<LevelDTO>([]);
 
   const anonymousURL = 'anonymousURL';
 
@@ -66,19 +69,16 @@ export function StatisticsPlayers({navigation}: {navigation: any}) {
     return () => subscribe();
   };
 
-
-  useEffect(() => {
-    console.log('level length 1', level.length)
-  }, []);
-
-
   //==> REMOVE JOGADORES COM MENOS DE 8 JOGOS
-  level.map((item) => {
-    if (item.appearances < 8) {
-      const index = level.indexOf(item);
-      level.splice(index, 1);
-    }
-});
+  useEffect(() => {
+    level.length !== 0 && level.map((item) => {
+      if (item.appearances < 8) {
+        const index = level.indexOf(item);
+        level.splice(index, 1);
+      }
+    });
+    setPlayersToShow(level)
+  }, [level]);
 
   return (
     <Container>
@@ -95,14 +95,14 @@ export function StatisticsPlayers({navigation}: {navigation: any}) {
         {level.length > 0
           ?
             <FlatList
-              data={level as any}
-              keyExtractor={(item, index) => item + index}
+              data={playersToShow}
+              keyExtractor={(item) => item.player}
               renderItem={({ item }) => (
                 <CardPerformance 
                   name={item.player}
                   power={item.power}
                   percent={item.percent}
-                  avatar={item.profile}
+                  profile={item.profile}
                   onPress={(() => {
                     navigation.navigate('Performance', { name: item.player })
                   })}
