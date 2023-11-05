@@ -268,7 +268,7 @@ export function TermsOfUse({navigation}: {navigation: any}) {
         <TextBox>
           <Text>
             10.	O desenvolvimento de cada temporada do PSOP poderá ser acompanhado
-            por meio da página principal deste aplicativo, denominada "Ranking", 
+            por meio da página principal deste aplicativo, denominada "PSOP", 
             esta página será atualizada semanalmente após o fim de cada etapa 
             mostrará imediatamente a classificação do campeonato.
             `.
@@ -277,21 +277,22 @@ export function TermsOfUse({navigation}: {navigation: any}) {
         <BulletBox>
           <BulletPoint>*</BulletPoint>
           <BulletText>
-            A página "Game Level" exibirá a classificação dos jogadores levando 
-            em conta apenas os resultados válidos de cada jogador nas últimas 
-            3 temporadas realizadas, e contará com o seguinte critério: 
+            A página "Statístics" exibirá a classificação dos jogadores levando 
+            em conta os resultados válidos de cada jogador em todas as temporadas
+            realizadas e ainda salvas nos servidores deste serviço, e contará com o 
+            seguinte critério: 
           </BulletText>
         </BulletBox>
         <BulletBox>
           <BulletPoint>*</BulletPoint>
           <BulletText>
-            Aproveitamento acima de 65% dos pontos será igual a 5 estrelas.
+            Aproveitamento acima de 60% dos pontos será igual a 5 estrelas.
           </BulletText>
         </BulletBox>
         <BulletBox>
           <BulletPoint>*</BulletPoint>
           <BulletText>
-            Aproveitamento entre 65% e 50% dos pontos será igual a 4 estrelas.
+            Aproveitamento entre 60% e 50% dos pontos será igual a 4 estrelas.
           </BulletText>
         </BulletBox>
         <BulletBox>
@@ -405,14 +406,37 @@ export function TermsOfUse({navigation}: {navigation: any}) {
         <TextBox>
           <Text>
             16.	Ao acessar este aplicativo, informações específicas sobre o 
-            Usuário, como nome, apelido foto de perfil e avatar serão 
+            Usuário, como nome, apelido, e foto de perfil serão 
             armazenadas nos servidores da Schiavoni Poker House. Tais 
-            informações serão estritamente usadas apenas para fins estatísticos 
-            e gozatórios e não serão publicadas para acesso geral fora da 
+            informações serão estritamente usadas para a identificação dos 
+            usuários e não serão publicadas para acesso geral fora da 
             plataforma. A Schiavoni Poker House, no entanto, não assume 
             nenhuma responsabilidade pela segurança dessas informações.
           </Text>
         </TextBox>
+        <BulletBox>
+          <BulletPoint>*</BulletPoint>
+          <BulletText style={{ color: '#ff0000' }}>
+            Todos os usuários deverão ter a sua foto de perfil atualizada e
+            publicada no aplicativo.
+          </BulletText>
+        </BulletBox>
+        <BulletBox>
+          <BulletPoint>*</BulletPoint>
+          <BulletText style={{ color: '#ff0000' }}>
+            Os administradores do aplicativo poderão cadastrar fotos de perfil dos 
+            usuários. Para isso usarão fotos públicas, exemplo ('Perfil do whatsapp',
+            'Instagram' ou 'Facebook') ou fotos que sirvam como identificador
+            fornecidas pelo próprio usuário.
+          </BulletText>
+        </BulletBox>
+        <BulletBox>
+          <BulletPoint>*</BulletPoint>
+          <BulletText style={{ color: '#ff0000' }}>
+            Não serão admitidas para fotos de perfil de usuário imagens abstratas,
+            ou outras, que não sirvam para a identificação visual do mesmo.
+          </BulletText>
+        </BulletBox>
         <TextBox>
           <Text>
             17.	O aplicativo é fornecido com todas as responsabilidades e 
