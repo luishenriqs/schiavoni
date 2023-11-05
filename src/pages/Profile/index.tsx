@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, ImageBackground } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '@hooks/useAuth';
+import { useAllPlayers } from '@hooks/useAllPlayers';
+import { useTheme } from 'styled-components';
 import { Header } from '@components/Header';
 import { Photo } from '@components/Photo';
 import { Button } from '@components/Button';
-import { UserDTO } from '@dtos/UserDTO'
+import { getPlayersNames } from '@services/playersServices';
+import { UserDTO, SquadOfPlayersDTO } from '@dtos/UserDTO';
 import {
   Container,
   Content,
@@ -17,6 +21,7 @@ import {
   ImageContent,
   LabelContainer,
   Label,
+  SelectContainer,
   ImageProfileAndAvatar, 
   Status,
   Progress,
@@ -25,10 +30,68 @@ import {
 
 export function Profile({navigation}: {navigation: any}) {
   const { user, setUserContext } = useAuth();
+  const { allPlayers, setAllPlayersContext } = useAllPlayers();
+  const theme = useTheme();
  
+  const [squad, setSquad] = useState<SquadOfPlayersDTO[]>([] as SquadOfPlayersDTO[]);
+  const [selectedName, setSelectedName] = useState('');
+  const [selectedProfile, setSelectedProfile] = useState('')
   const [profileImage, setProfileImage] = useState('');
   const [progressProfileImage, setProgressProfileImage] = useState('0');
   const [bytesTransferredProfileImage, setBytesTransferredProfileImage] = useState('0 transferido de 0');
+
+  //==> SELECT STYLE
+  const pickerSelectStyles = {
+    inputIOS: {
+      marginBottom: 10,
+      backgroundColor: theme.COLORS.gray_700,
+      color: theme.COLORS.white,
+    },
+    inputAndroid: {
+      marginBottom: 10,
+      backgroundColor: theme.COLORS.gray_700,
+      color: theme.COLORS.white,
+    },
+  };
+
+  const playersPlaceholder = {
+    label: 'Selecione um player:',
+    value: null,
+  };
+
+  useEffect(() => {
+    if (allPlayers.length === 0) {
+      getAllPlayers();
+    } else {
+      loadSquadOfPlayers(allPlayers);
+    };
+  }, []);
+
+  //==> ATUALIZA TODOS OS JOGADORES NO CONTEXTO SE VAZIO
+  const getAllPlayers = () => {
+    const subscribe: any = firestore()
+    .collection('players')
+    .onSnapshot({
+      error: (e) => console.error(e),
+      next: (querySnapshot) => {
+        const data = querySnapshot.docs.map(doc => {
+          return {
+            doc_id: doc.id,
+          ...doc.data()
+          }
+        }) as UserDTO[]
+          setAllPlayersContext(data);
+          loadSquadOfPlayers(data);
+      },
+    }) 
+    return () => subscribe();
+  };
+
+  //==> PLAYERS POSSÍVEIS PARA O SELECT
+  const loadSquadOfPlayers = (allPlayers: UserDTO[]) => {
+    const squadOfPlayers = getPlayersNames(allPlayers);
+    squadOfPlayers && setSquad(squadOfPlayers);
+  };
   
   //==> ATUALIZA PROFILE URL NO FIRESTORE
   const updateProfileImageURL = async (url: string) => {
@@ -103,12 +166,20 @@ export function Profile({navigation}: {navigation: any}) {
         setProfileImage(result.assets[0].uri);
       }
     }
-  }; 
+  };
+
+  //==> BUSCA A IMAGEM DE PERFIL DO JOGADOR SELECIONADO
+  useEffect(() => {
+    const player = allPlayers.filter(item => {
+      if (item.name === selectedName) return item
+    })
+    setSelectedProfile(player[0].profile)
+  }, [selectedName]);
 
   //==> ATUALIZA NOVA IMAGEM DO PERFIL
   const handleProfileImageUpload = async () => {
     if (profileImage) {
-      const fileName = 'Profile_Image_' + user.name;
+      const fileName = 'Profile_Image_' + selectedName;
       const MIME = profileImage.match(/\.(?:.(?!\.))+$/);
       const reference = storage().ref(`/ProfileImage/${fileName}${MIME}`);
   
@@ -146,14 +217,26 @@ export function Profile({navigation}: {navigation: any}) {
         style={{flex: 1, alignItems: 'center', maxWidth: 1200, minWidth: 500}}
       >
         <Content>
+          <SelectContainer>
+            <LabelContainer style={{ marginTop: 30, marginBottom: 15 }}>
+              <Label>Selecione um jogador</Label>
+            </LabelContainer>
+            <RNPickerSelect
+              placeholder={playersPlaceholder}
+              onValueChange={(value) => setSelectedName(value)}
+              style={pickerSelectStyles}
+              items={squad}
+              value={selectedName}
+            />
+          </SelectContainer>
           <ImageContainer>
             <LabelContainer>
-              <Label>Perfil</Label>
+              <Label>{selectedName} Profile</Label>
             </LabelContainer>
             <ImageWrapper>
-              {user.profile
+              {selectedProfile
                 ? <ImageContent>
-                    <ImageProfileAndAvatar source={{uri: user.profile}}/>
+                    <ImageProfileAndAvatar source={{uri: selectedProfile}}/>
                   </ImageContent>
                 : <ImageContent>
                     <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
@@ -163,13 +246,13 @@ export function Profile({navigation}: {navigation: any}) {
                 <Photo 
                   uri={profileImage} 
                   onPress={handlePickProfileImage}
-                  text='Selecione sua imagem de perfil'
-                  size={180}
+                  text='Selecione a imagem de perfil'
+                  size={130}
                 />
               </ImageContent>
             </ImageWrapper>
             <Button
-              title="Atualize sua imagem de perfil"
+              title="Atualize a imagem de perfil"
               onPress={handleProfileImageUpload}
             />
             <Status>
