@@ -104,19 +104,6 @@ export function AppRoutes() {
         }}
       />
       <Drawer.Screen 
-        name="Profile" 
-        component={Profile}
-        options={{
-          drawerIcon: ({color}) => (
-            <MaterialCommunityIcons 
-              name='account-outline'
-              size={20}
-              color={color}
-            />
-          )
-        }}
-      />
-      <Drawer.Screen 
         name="HallOfFame" 
         component={HallOfFame}
         options={{
@@ -130,19 +117,34 @@ export function AppRoutes() {
         }}
       />
       {user.isAdmin &&
-        <Drawer.Screen 
-          name="Manager" 
-          component={ManagerRoutes}
-          options={{
-            drawerIcon: ({color}) => (
-              <Ionicons 
-                name='md-settings-outline'
-                size={20}
-                color={color}
-              />
-            )
-          }}
-        />
+        <>
+          <Drawer.Screen 
+            name="Profile" 
+            component={Profile}
+            options={{
+              drawerIcon: ({color}) => (
+                <MaterialCommunityIcons 
+                  name='account-outline'
+                  size={20}
+                  color={color}
+                />
+              )
+            }}
+          />
+          <Drawer.Screen 
+            name="Manager" 
+            component={ManagerRoutes}
+            options={{
+              drawerIcon: ({color}) => (
+                <Ionicons 
+                  name='md-settings-outline'
+                  size={20}
+                  color={color}
+                />
+              )
+            }}
+          />
+        </>
       }
       <Drawer.Screen 
         name="Terms Of Use" 
