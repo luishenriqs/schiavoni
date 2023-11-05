@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components/native";
+import { TouchableOpacity } from "react-native";
 
 export const Container = styled.View`
   flex: 1;
@@ -11,7 +12,7 @@ export const Content = styled.ScrollView`
   flex: 1;
   width: 85%;
   padding: 0 10%;
-  margin-top: 25px;
+  margin-top: 15px;
 `;
 
 export const GameWrapper = styled.View`
@@ -43,4 +44,25 @@ export const Season = styled.Text`
     font-size: ${theme.FONT_SIZE.XM};
     font-family: ${theme.FONT_FAMILY.medium};
   `};
+`;
+
+export const ButtonsContainer = styled.View`
+  height: 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 8px 6px;
+`;
+
+export const SeasonLabel = styled.Text`
+  ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.MD};
+    font-family: ${theme.FONT_FAMILY.bold};
+    color: ${theme.COLORS.gold};
+  `};
+`;
+
+export const Empty = styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
 `;

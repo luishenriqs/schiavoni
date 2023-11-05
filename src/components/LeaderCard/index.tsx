@@ -13,7 +13,7 @@ import {
 interface IProps {
     title: string;
     leadersName: string;
-    avatar: string;
+    profile: string;
     Season: string;
     Game: string;
 }
@@ -21,16 +21,16 @@ interface IProps {
 export function LeaderCard({
     title,
     leadersName,
-    avatar,
+    profile,
     Season,
     Game
 }: IProps) {
     const { COLORS } = useTheme();
     return (
         <Container>
-            {avatar === 'anonymousURL'
+            {profile === 'anonymousURL'
                 ? <Imagem source={require('@assets/anonymousImage/AnonymousImage.png')}/>
-                : <Imagem source={{uri: avatar}} />
+                : <Imagem source={{uri: profile}} />
             }
             <LinearGradient
                 colors={[COLORS.gray_700, COLORS.gray_500, COLORS.gray_700]}

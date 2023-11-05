@@ -124,18 +124,3 @@ export const YellowText = styled.Text`
     color: ${theme.COLORS.gold};
   `};
 `;
-
-export const WarningContainer = styled.View`
-  flex: 1;
-  height: 250px;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const Warning = styled.Text`
-  ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.XML};
-    font-family: ${theme.FONT_FAMILY.bold};
-    color: ${theme.COLORS.red_700};
-  `};
-`;

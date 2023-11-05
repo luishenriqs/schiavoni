@@ -141,13 +141,13 @@ export function CardResult({
                     <Name>{name}</Name>
                     {user.isAdmin
                         ?
-                        <ButtonIcon 
-                            onPress={() => handleUpdate(position, gameNumber)}
-                            name={'account-edit-outline'}
-                            size={20}
-                            style={{ marginRight: 15 }}
-                        />
-                        : <Empty/>
+                            <ButtonIcon 
+                                onPress={() => handleUpdate(position, gameNumber)}
+                                name={'account-edit-outline'}
+                                size={20}
+                                style={{ marginRight: 15 }}
+                            />
+                        :   <Empty/>
                     }
                 </NameBox>
             </Container>

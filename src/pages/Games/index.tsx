@@ -7,6 +7,7 @@ import { useAllPlayers } from '@hooks/useAllPlayers';
 import { gamesServices } from '@services/gamesServices'
 import { Header } from '@components/Header';
 import { PsopImage } from '@components/PsopImage';
+import { ButtonIcon } from '@components/ButtonIcon';
 import { CardResult } from '@components/CardResult';
 import { getRanking } from '@services/rankingServices';
 import { GameDTO, GamesResultsDTO } from '@dtos/GameDTO';
@@ -16,7 +17,10 @@ import {
   Content,
   GameWrapper,
   SeasonBox,
-  Season
+  Season,
+  ButtonsContainer,
+  SeasonLabel,
+  Empty,
 } from './styles';
 
 export type GamesProps = {
@@ -38,6 +42,7 @@ export function Games({navigation}: {navigation: any}) {
   } = useChampion();
 
   const [results, setResults] = useState<GamesResultsDTO>({} as GamesResultsDTO);
+  const [index, setIndex] = useState(0);
 
   const anonymousURL = 'anonymousURL';
 
@@ -47,7 +52,7 @@ export function Games({navigation}: {navigation: any}) {
       currentSeason.game,
       allPlayers
     );
-  }, []);
+  }, [index]);
 
   //==> RECUPERA E PERSISTE GAME RESULTS NO CONTEXTO
   //==> PROCESSA, ATUALIZA E PERSISTE RANKING NO CONTEXTO
@@ -56,9 +61,10 @@ export function Games({navigation}: {navigation: any}) {
     lastGame: number,
     allPlayers: UserDTO[]
   ) => {
+
     const subscribe = firestore()
     .collection('game_result')
-    .where('season', '==', currentSeason)
+    .where('season', '==', currentSeason + index)
     .onSnapshot({
       error: (e) => console.error(e),
       next: (querySnapshot) => {
@@ -89,9 +95,9 @@ export function Games({navigation}: {navigation: any}) {
           <Season>{'Etapa ' + gameNumber}</Season>
         </SeasonBox>
         {
-          game.map((item) => (
+          game.map((item, index) => (
             <CardResult
-              key={item.name}
+              key={item.name + index}
               position={item.position}
               name={item.name}
               gameNumber={gameNumber}
@@ -117,6 +123,32 @@ export function Games({navigation}: {navigation: any}) {
         style={{flex: 1, alignItems: 'center', maxWidth: 1200, minWidth: 500}}
       >
         <PsopImage />
+        
+        <ButtonsContainer style={{ marginTop: 15, paddingLeft: 60, paddingRight: 60 }}>
+          {currentSeason.season + index > 30
+            ?
+              <ButtonIcon 
+                onPress={() => setIndex(index - 1)}
+                name={'chevron-left'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : <Empty />
+          }
+          <SeasonLabel>Temporada {currentSeason.season + index}</SeasonLabel>
+          {index < 0
+            ?
+              <ButtonIcon 
+                onPress={() => setIndex(index + 1)}
+                name={'chevron-right'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : 
+              <Empty />
+          }
+        </ButtonsContainer>
+
         <Content>
           {!!results['game_1'] && renderResults(results['game_1'], 1)}
           {!!results['game_2'] && renderResults(results['game_2'], 2)}

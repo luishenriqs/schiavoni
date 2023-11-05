@@ -7,7 +7,6 @@ import { processStatistics } from '@services/levelServices';
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
 import { StatisticsDTO } from '@dtos/RankingDTO';
-import { ButtonEditable } from '@components/ButtonEditable';
 import { 
   Container,
   Content, 
@@ -26,8 +25,6 @@ import {
   RedText,
   YellowText,
   Imagem,
-  WarningContainer,
-  Warning,
 } from './styles';
 
 export function Performance({route, navigation}: any) {
@@ -37,7 +34,6 @@ export function Performance({route, navigation}: any) {
   const [player, setPlayer] = useState({} as UserDTO);
   const [games, setGames] = useState([] as GameDTO[]);
   const [statistics, setStatistics] = useState({} as StatisticsDTO);
-  const [focusedSeason, setFocusedSeason] = useState(1);
   const [index, setIndex] = useState(1);
 
   const url = !!player.profile && player.profile;
@@ -133,11 +129,25 @@ export function Performance({route, navigation}: any) {
         </StatisticsHeader>
 
         <ButtonsContainer style={{ marginTop: 10, paddingLeft: 60, paddingRight: 60 }}>
+          {currentSeason.season + index > 30
+            ?
+              <ButtonIcon 
+                onPress={() => setIndex(index - 1)}
+                name={'chevron-left'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : <Empty />
+          }
+          {index === 1
+            ? <SeasonLabel>Desde a 30° Temporada</SeasonLabel>
+            : <SeasonLabel>Temporada {currentSeason.season + index}</SeasonLabel>
+          }
           {index < 0
             ?
               <ButtonIcon 
                 onPress={() => setIndex(index + 1)}
-                name={'chevron-left'}
+                name={'chevron-right'}
                 size={30}
                 style={{ marginRight: 15 }}
               />
@@ -145,25 +155,11 @@ export function Performance({route, navigation}: any) {
               ?
                 <ButtonIcon 
                   onPress={() => setIndex(1)}
-                  name={'chevron-double-left'}
+                  name={'chevron-double-right'}
                   size={30}
                   style={{ marginRight: 15 }}
                 />
               : <Empty />   
-          }
-          {index === 1
-            ? <SeasonLabel>Desde a 30° Temporada</SeasonLabel>
-            : <SeasonLabel>Temporada {currentSeason.season + index}</SeasonLabel>
-          }
-          {currentSeason.season + index > 30
-            ?
-              <ButtonIcon 
-                onPress={() => setIndex(index - 1)}
-                name={'chevron-right'}
-                size={30}
-                style={{ marginRight: 15 }}
-              />
-            : <Empty />
           }
         </ButtonsContainer>
         {

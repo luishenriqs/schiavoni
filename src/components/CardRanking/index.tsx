@@ -15,7 +15,7 @@ interface IProps {
     positionNumber: number;
     name: string;
     points: number;
-    avatar?: string;
+    profile?: string;
 }
 
 export function CardRanking({
@@ -23,7 +23,7 @@ export function CardRanking({
     positionNumber,
     name,
     points,
-    avatar
+    profile
 }: IProps) {
 
     return (
@@ -33,8 +33,8 @@ export function CardRanking({
             </InfoBox>
             <NameBox positionStatus={positionNumber}>
                 <ImageContent>
-                    {avatar !== 'anonymousURL'
-                        ? <ImageProfileAndAvatar source={{uri: avatar}}/>
+                    {profile !== 'anonymousURL'
+                        ? <ImageProfileAndAvatar source={{uri: profile}}/>
                         : <ImageProfileAndAvatar source={require('@assets/anonymousImage/AnonymousImage.png')}/>
                     }
                 </ImageContent>
