@@ -17,6 +17,11 @@ export const Content = styled.View`
   padding: 25px 8px 10px;
 `;
 
+export const ScrollList = styled.ScrollView`
+  flex: 1;
+  width: 100%;
+`;
+
 export const Title = styled.Text`
   margin-bottom: 20px;
   ${({ theme }) => css`

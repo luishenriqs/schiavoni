@@ -12,7 +12,7 @@ import { LabelPlayers } from "@components/LabelPlayers";
 import { GameDTO } from '@dtos/GameDTO';
 import { UserDTO } from '@dtos/UserDTO';
 import { LevelDTO } from '@dtos/RankingDTO';
-import { Container, Content, Title } from './styles';
+import { Container, Content, ScrollList, Title } from './styles';
 
 export function StatisticsPlayers({navigation}: {navigation: any}) {
   const { user } = useAuth();
@@ -71,14 +71,30 @@ export function StatisticsPlayers({navigation}: {navigation: any}) {
 
   //==> REMOVE JOGADORES COM MENOS DE 8 JOGOS
   useEffect(() => {
-    level.length !== 0 && level.map((item) => {
-      if (item.appearances < 8) {
-        const index = level.indexOf(item);
-        level.splice(index, 1);
-      }
-    });
     setPlayersToShow(level)
   }, [level]);
+
+  //==> RETORNA O DESEMPENHO DOS JOGADORES COM MAIS DE 8 JOGOS
+  const renderPlayers = (level: LevelDTO) => {
+    return (
+      level.map((item, index: number) => {
+        if (item.appearances >= 8) {
+          return (
+            <CardPerformance
+              key={index}
+              name={item.player}
+              power={item.power}
+              percent={item.percent}
+              profile={item.profile}
+              onPress={(() => {
+                navigation.navigate('Performance', { name: item.player })
+              })}
+            />
+          )
+        }
+      })
+    );
+  };
 
   return (
     <Container>
@@ -94,21 +110,9 @@ export function StatisticsPlayers({navigation}: {navigation: any}) {
         <LabelPlayers />
         {level.length > 0
           ?
-            <FlatList
-              data={playersToShow}
-              keyExtractor={(item) => item.player}
-              renderItem={({ item }) => (
-                <CardPerformance 
-                  name={item.player}
-                  power={item.power}
-                  percent={item.percent}
-                  profile={item.profile}
-                  onPress={(() => {
-                    navigation.navigate('Performance', { name: item.player })
-                  })}
-                />
-              )}
-            />
+            <ScrollList>
+              {!!level && renderPlayers(level)}
+            </ScrollList>
           : <Loading />
         }
       </Content>
