@@ -155,15 +155,18 @@ export function Profile({navigation}: {navigation: any}) {
   const handlePickProfileImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status == 'granted') {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        aspect: [4, 4],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setProfileImage(result.assets[0].uri);
+    if (!selectedName) {
+      Alert.alert('Selecione um jogador!');
+    } else {
+      if (status == 'granted') {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          aspect: [4, 4],
+          quality: 1,
+        });
+        if (!result.canceled) {
+          setProfileImage(result.assets[0].uri);
+        }
       }
     }
   };
@@ -178,7 +181,7 @@ export function Profile({navigation}: {navigation: any}) {
 
   //==> ATUALIZA NOVA IMAGEM DO PERFIL
   const handleProfileImageUpload = async () => {
-    if (profileImage) {
+    if (profileImage && selectedName) {
       const fileName = 'Profile_Image_' + selectedName;
       const MIME = profileImage.match(/\.(?:.(?!\.))+$/);
       const reference = storage().ref(`/ProfileImage/${fileName}${MIME}`);
