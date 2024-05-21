@@ -94,11 +94,12 @@ export function Profile({navigation}: {navigation: any}) {
   };
   
   //==> ATUALIZA PROFILE URL NO FIRESTORE
-  const updateProfileImageURL = async (url: string) => {
+  const updateProfileImageURL = async (url: string, allPlayers: UserDTO[], selectedName: string) => {
+    const selectedPlayer = allPlayers.find(user => user.name === selectedName);
     url && (
       firestore()
       .collection('players')
-      .doc(user.doc_id)
+      .doc(selectedPlayer?.doc_id)
       .update({
         profile: url 
       })
@@ -196,7 +197,7 @@ export function Profile({navigation}: {navigation: any}) {
       });
       uploadTask.then(async () => {
         const url = await reference.getDownloadURL();
-        await updateProfileImageURL(url);
+        await updateProfileImageURL(url, allPlayers, selectedName);
         await getUserFirestore()
         Alert.alert('Atualização realizada com sucesso!');
       });
