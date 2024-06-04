@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
@@ -10,9 +10,10 @@ import { Header } from '@components/Header';
 import { LeaderCard } from '@components/LeaderCard';
 import { CardRanking }from '@components/CardRanking';
 import { LabelPSOP } from "@components/LabelPSOP";
-import { GameDTO, SeasonDTO } from '@dtos/GameDTO'
+import { GameDTO } from '@dtos/GameDTO'
 import { UserDTO } from '@dtos/UserDTO'
-import { Container, Content, Title, Text, Imagem } from './styles';
+import { Container, Content, Title, Text, Imagem, ChooseSeasonContainer, SeasonText, Empty } from './styles';
+import { ButtonIcon } from '@components/ButtonIcon';
 
 export function PSOP({navigation}: {navigation: any}) {
   const { user } = useAuth();
@@ -21,50 +22,23 @@ export function PSOP({navigation}: {navigation: any}) {
     ranking,
     currentSeason,
     setRankingContext, 
-    setCurrentSeasonContext,
     setGameResultContext
   } = useChampion();
 
+  const [seasonToShow, setSeasonToShow] = useState(currentSeason.season)
+  const [gameToShow, setGameToShow] = useState(currentSeason.game)
+
   const anonymousURL = 'anonymousURL';
-
-  useEffect(() => {
-    getCurrentSeason();;
-  }, []);
-
-  //==> RECUPERA CURRENT SEASON E PERSISTE NO CONTEXTO
-  //==> CHAMA GET GAMES
-  const getCurrentSeason = () => {
-    const subscribe: any = firestore()
-    .collection('current_season')
-    .onSnapshot({
-      error: (e) => console.error(e),
-      next: (querySnapshot) => {
-        const data = querySnapshot.docs.map(doc => {
-          return {
-            doc_id: doc.id,
-          ...doc.data()
-          }
-        }) as SeasonDTO[]
-        const season = data[0].season;
-        const game = data[0].game;
-        const currentSeasonData = { season, game };
-        setCurrentSeasonContext(currentSeasonData);
-        getGames(season, game, allPlayers);
-      },
-    }) 
-    return () => subscribe()
-  };
 
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA E PERSISTE NO CONTEXTO
   //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
   const getGames = (
-    currentSeason: number, 
     lastGame: number,
     allPlayers: UserDTO[]
   ) => {
     const subscribe = firestore()
     .collection('game_result')
-    .where('season', '==', currentSeason)
+    .where('season', '==', seasonToShow)
     .onSnapshot({
       error: (e) => console.error(e),
       next: (querySnapshot) => {
@@ -81,6 +55,15 @@ export function PSOP({navigation}: {navigation: any}) {
     }) 
     return () => subscribe();
   };
+
+  useEffect(() => {
+    getGames(gameToShow, allPlayers);
+    if (seasonToShow === currentSeason.season) {
+      setGameToShow(currentSeason.game)
+    } else {
+      setGameToShow(8)
+    }
+  }, [seasonToShow]);
 
   return (
     <Container>
@@ -102,10 +85,10 @@ export function PSOP({navigation}: {navigation: any}) {
                   ? ranking.orderedRanking[0].profile
                   : anonymousURL
               }   
-              Season={`Temporada ${currentSeason.season}`}
-              Game={`Etapa ${currentSeason.game}`}
+              Season={`Temporada ${seasonToShow}`}
+              Game={`Etapa ${gameToShow}`}
             />
-          : currentSeason.game === 0 
+          : gameToShow === 0 
           ? 
             <>
               <Text>PATOS SERIES OF POKER</Text>
@@ -113,6 +96,29 @@ export function PSOP({navigation}: {navigation: any}) {
             </>
           : <Loading />
         }
+        <ChooseSeasonContainer>
+          {seasonToShow >= 31
+            ? 
+              <ButtonIcon 
+                onPress={() => setSeasonToShow(seasonToShow - 1)}
+                name={'chevron-left'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : <Empty />
+          }
+          <SeasonText>{`${seasonToShow}º Temporada`}</SeasonText>
+          {seasonToShow < currentSeason.season
+            ?
+              <ButtonIcon 
+                onPress={() => setSeasonToShow(seasonToShow + 1)}
+                name={'chevron-right'}
+                size={30}
+                style={{ marginRight: 15 }}
+              />
+            : <Empty />
+          }
+        </ChooseSeasonContainer>
         {ranking.orderedRanking
           ?
             <>
@@ -131,10 +137,10 @@ export function PSOP({navigation}: {navigation: any}) {
                 )}
               />
             </>
-          : currentSeason.game === 0 
+          : gameToShow === 0 
             ? 
               <>
-                <Title>{`${currentSeason.season}º Temporada`}</Title>
+                <Title>{`${seasonToShow}º Temporada`}</Title>
                 <Text>{`Nenhuma etapa registrada`}</Text>
               </>
             : <Loading />

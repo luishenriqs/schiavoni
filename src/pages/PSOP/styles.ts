@@ -1,5 +1,6 @@
 import { Image } from "react-native";
 import styled, { css } from "styled-components/native";
+import { TouchableOpacity } from "react-native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { RFPercentage } from "react-native-responsive-fontsize";
 
@@ -44,4 +45,28 @@ export const Imagem = styled(Image)`
   width: 200px;
   height: 200px;
   border-radius: 8px;
+`;
+
+export const ChooseSeasonContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  background: ${({ theme }) => theme.COLORS.gray_600};
+`;
+
+export const SeasonText = styled.Text`
+  ${({ theme }) => css`
+    color: ${theme.COLORS.gray_100};
+    font-size: ${theme.FONT_SIZE.LG};
+    font-family: ${theme.FONT_FAMILY.bold};
+  `};
+`;
+
+export const Empty = styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
 `;
