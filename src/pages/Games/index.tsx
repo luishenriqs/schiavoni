@@ -75,7 +75,7 @@ export function Games({navigation}: {navigation: any}) {
           }
         }) as GameDTO[];
         data && setGameResultContext(data);
-        const ranking = getRanking(data, lastGame, allPlayers);
+        const ranking = getRanking(data, allPlayers, currentSeason, lastGame);
         ranking && setRankingContext(ranking);
       },
     }) 

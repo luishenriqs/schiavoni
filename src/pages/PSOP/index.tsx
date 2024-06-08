@@ -33,8 +33,9 @@ export function PSOP({navigation}: {navigation: any}) {
   //==> RECUPERA JOGOS DA ATUAL TEMPORADA E PERSISTE NO CONTEXTO
   //==> PROCESSA E PERSISTE RANKING NO CONTEXTO
   const getGames = (
-    lastGame: number,
-    allPlayers: UserDTO[]
+    allPlayers: UserDTO[],
+    season: number,
+    game: number,
   ) => {
     const subscribe = firestore()
     .collection('game_result')
@@ -49,7 +50,7 @@ export function PSOP({navigation}: {navigation: any}) {
           }
         }) as GameDTO[]
           data && setGameResultContext(data);
-          const ranking = getRanking(data, lastGame, allPlayers);
+          const ranking = getRanking(data, allPlayers, season, game);
           ranking && setRankingContext(ranking);
       },
     }) 
@@ -57,12 +58,9 @@ export function PSOP({navigation}: {navigation: any}) {
   };
 
   useEffect(() => {
-    getGames(gameToShow, allPlayers);
-    if (seasonToShow === currentSeason.season) {
-      setGameToShow(currentSeason.game)
-    } else {
-      setGameToShow(8)
-    }
+    const game = seasonToShow === currentSeason.season ? currentSeason.game : 8
+    setGameToShow(game)
+    getGames(allPlayers, seasonToShow, game);
   }, [seasonToShow]);
 
   return (
@@ -75,7 +73,7 @@ export function PSOP({navigation}: {navigation: any}) {
         onPress={() => navigation.openDrawer()}
       />
       <Content>
-        {ranking.lastGame > 0 
+        {ranking.game > 0 
           ?
             <LeaderCard 
               title='LÍDER:'

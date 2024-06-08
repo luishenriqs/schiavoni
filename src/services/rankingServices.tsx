@@ -1,114 +1,64 @@
-import { GameDTO, ResultsDTO } from '@dtos/GameDTO'
+import { GameDTO } from '@dtos/GameDTO'
 import { RankingProps } from '@dtos/RankingDTO'
 import { UserDTO } from '@dtos/UserDTO'
 
-const anonymousURL = 'anonymousURL';
+//==> REMOVE O PIOR RESULTADO A PARTIR DA 37º TEMPORADA E APÓS A 7º ETAPA
+const removeWorstResult = (allPoints: number[], season: number, game: number) => {
+    if (season >= 37 && game >= 7) {
+        const minValue = Math.min(...allPoints);
+        const minIndex = allPoints.indexOf(minValue);
+        allPoints.splice(minIndex, 1);
+        return allPoints;
+    } else {
+        return allPoints;
+    }
+}
 
-//==> RETORNA NOMES DOS PLAYERS
-const findNames = (games: GameDTO[]) => {
-    games.filter((el) => {
-        if (el.season === 0) {
-            const index = games.indexOf(el)
-            games.splice(index, 1);
-        }
-    });
-    const names = games.map((el) => {
-        return el.name
-    });
-    const players = [...new Set(names)];
+//==> PROCESSA O RANKING DA TEMPORADA SELECIONADA
+const getPlayersData = (games: GameDTO[], allPlayers: UserDTO[], season: number, game: number) => {
+    const players = allPlayers.filter(playerInfo => playerInfo.name !== "Anonymous Player"); // Remove "Anonymous Player"
+    const uniquePlayers = players && [...new Set(players.map(player => player.name))];
+    const playersResult = [] as RankingProps[];
 
-    return players;
-};
+    uniquePlayers.forEach(playerName => {
+        const player = allPlayers && allPlayers.find(player => player.name === playerName);
 
-//==> RETORNA PLAYERS E ARRAY COM SEUS RESULTADOS COMPLETOS (GameDTO[])
-const findPlayersResults = (names: string[], games: GameDTO[]) => {
-    return names.map((player) => {
-        const results = games.filter((game) => {
-            if (game.name === player) return game;
-        });
-        const game = {
-            player,
-            results
-        };
-        return game;
-    });
-};
-
-//==> PROCESSA O RANKING
-const processRanking = (results: ResultsDTO[], allPlayers: UserDTO[]) => {
-    const resultsObjects: any = []
-    //==> RETORNA PLAYER E SEUS PONTOS SOMADOS
-    const result = results.map((item) => {
-        const points = item.results.map((game) => {
-            return game.points
-        })
-        const player = item.player
-
+        let allPoints = [] as number[]
         let totalPoints = 0;
-        for(var i = 0; i < points.length; i++) {
-            totalPoints += points[i];
-        };
 
-        return {
-            player,
-            totalPoints,
-        };
+        games.forEach(game => {
+        if (game.name === playerName) {
+            allPoints.push(game.points)
+        }
+        });
+
+        const bestResults = removeWorstResult(allPoints, season, game) // Pode remover pior resultado
+        totalPoints = bestResults.reduce((accumulator, currentValue) => accumulator + currentValue, 0); // Soma os pontos
+
+        playersResult.push({
+        player: playerName,
+        totalPoints,
+        profile: player?.profile || "anonymousURL",
+        avatar: player?.avatar || "anonymousURL",
+        });
     });
 
-    //==> ISOLA APENAS OS PONTOS
-    const onlyPoints = result.map((el) => {
-        return el.totalPoints
-    });
+  // Ordena a classificação dos jogadores
+  playersResult.sort((a, b) => b.totalPoints - a.totalPoints);
 
-    //==> ORDENA OS PONTOS
-    const orderedPoints = onlyPoints.sort(function(a, b) {
-        return a - b;
-    }).reverse();
-
-    //==> ORDENA OS RESULTADOS E TRATA DUPLICIDADES DE PONTOS
-    let orderedResult = orderedPoints.map((el) => {
-        const ordered = result.filter((item) => {
-            if (item.totalPoints === el) {
-                const index = result.indexOf(item);
-                result.splice(index, 1);
-                return item;
-            }
-        })
-        return ordered;
-    });
-
-    //==> LIMPEZA DE DADOS (REMOVE ENCADEAMENTO DESNECESSÁRIO)
-    const resultList = orderedResult.map((elemt) => {
-        elemt.map((item) => {
-            resultsObjects.push(item)
-        })
-        return resultsObjects
-    });
-
-    //==> RECUPERA IMAGE PROFILE E AVATAR
-    resultList[0].map((item: RankingProps) => {
-        const onePlayer = allPlayers.filter((player) => {
-        if (player.name === item.player) return player;
-        })
-        item.profile = onePlayer[0] && onePlayer[0].profile ? onePlayer[0].profile : anonymousURL;
-        item.avatar = onePlayer[0] && onePlayer[0].avatar ? onePlayer[0].avatar : anonymousURL;
-    });
-
-    return resultList[0];
-};
+  return playersResult;
+}
 
 //==> RETORNA RANKING
 export const getRanking = (
     games: GameDTO[], 
-    lastGame: number, 
-    allPlayers: UserDTO[]
+    allPlayers: UserDTO[],
+    season: number,
+    game: number,
 ) => {
-    const players = games.length > 0 && findNames(games);
-    const results = players && findPlayersResults(players, games);
-    const orderedRanking = results && processRanking(results, allPlayers);
-
+    const orderedRanking = games && allPlayers && getPlayersData(games, allPlayers, season, game)
     const ranking = {
-        lastGame,
+        game,
         orderedRanking
     }
     return ranking;
