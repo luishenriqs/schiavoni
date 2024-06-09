@@ -80,7 +80,8 @@ export function NewGame({navigation}: {navigation: any}) {
     { label: '9 - Nono Colocado', value: '9' },
     { label: '10 - Décimo Colocado', value: '10' },
     { label: '11 - Décimo Primeiro Colocado', value: '11' },
-    { label: '12 - Décimo Segundo Colocado', value: '12' }
+    { label: '12 - Décimo Segundo Colocado', value: '12' },
+    { label: '13 - Ausente', value: '13' },
   ];
 
   useEffect(() => {
@@ -201,6 +202,9 @@ export function NewGame({navigation}: {navigation: any}) {
         points = 0;
         break;
       case 12:
+        points = 0;
+        break;
+      case 13:
         points = 0;
         break;
     }

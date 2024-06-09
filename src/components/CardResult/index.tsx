@@ -135,7 +135,7 @@ export function CardResult({
         <>
             <Container>
                 <PositionBox>
-                    <Position>{position}</Position>
+                    <Position>{position !== 13 ? position : 'X'}</Position>
                 </PositionBox>
                 <NameBox>
                     <Name>{name}</Name>
