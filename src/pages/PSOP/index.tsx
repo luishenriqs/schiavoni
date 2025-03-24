@@ -50,7 +50,7 @@ export function PSOP({navigation}: {navigation: any}) {
           }
         }) as GameDTO[]
           data && setGameResultContext(data);
-          const ranking = getRanking(data, allPlayers, season, game);
+          const ranking = getRanking(data, allPlayers, game);
           ranking && setRankingContext(ranking);
       },
     }) 

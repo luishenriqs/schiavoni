@@ -1,43 +1,30 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "jsx": "react",
+    "target": "esnext",
+    "module": "esnext",
+    "jsx": "react-native",
     "strict": true,
     "baseUrl": "./",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
     "paths": {
-      "@routes/*": [
-        "./src/routes/*"
-      ],
-      "@pages/*": [
-        "./src/pages/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "@storage/*": [
-        "./src/storage/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ],
-      "@global/*": [
-        "./src/global/*"
-      ],
-      "@services/*": [
-        "./src/services/*"
-      ],
-      "@contexts/*": [
-        "./src/contexts/*"
-      ],
-      "@hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@dtos/*": [
-        "./src/dtos/*"
-      ]
+      "@routes/*": ["src/routes/*"],
+      "@pages/*": ["src/pages/*"],
+      "@components/*": ["src/components/*"],
+      "@assets/*": ["src/assets/*"],
+      "@storage/*": ["src/storage/*"],
+      "@utils/*": ["src/utils/*"],
+      "@global/*": ["src/global/*"],
+      "@services/*": ["src/services/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@dtos/*": ["src/dtos/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }
